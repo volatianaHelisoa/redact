@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "DeleteCommande";
+}
+
+<div class="popupModal DeletModal">
+    <div class="icone_type">
+        <img src="~/images/icon-warning.png" alt="Photo warning">
+    </div>
+    <div class="pop_content">
+        <h3>Attention !</h3>
+        <span class="ltl-consign"><i class="fa fa-info-circle"></i>Voulez-vous vraiment supprimer la sélection ?</span>
+        <ul class="bouttons_area">
+            <li><button type="submit" class="green_hit" onclick="@("window.location.href='" + @Url.Action("DeleteAllCommandeSelected", "Commandes") + "' ");">Supprimer</button></li>
+            <li><button class="blue_hit" data-dismiss="modal" onclick="DecheckedClick()">Non</button></li>
+        </ul>
+    </div>
+</div>

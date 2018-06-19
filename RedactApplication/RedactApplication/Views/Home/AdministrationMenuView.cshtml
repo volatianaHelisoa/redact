@@ -1,0 +1,7 @@
+﻿ <!-- admin menu -->
+<div class="admin-link-menu">
+    @Html.ActionLink("License informations", "AccueilLicence", new { controller = "Licence" }, new { @class = "admin-link" })
+    @Html.ActionLink("Division management", "GestionDivision", new {controller = "Division"}, new {@class = "admin-link"})
+    <a href="~/Home/ListeUser" class="admin-link active">User management</a>
+</div>
+<!-- end admin menu -->

@@ -1,0 +1,25 @@
+﻿@model CustomerApplication.Models.PROFILViewModel
+@{
+    ViewBag.Title = "Profil";
+}
+<link href="~/Content/bootstrap.css" rel="stylesheet">
+<h2>@ViewBag.Title</h2>
+
+<div class="container" style="width:80%">
+    @using (Html.BeginForm("validerProfil", "Home", FormMethod.Post))
+    {
+
+        @Html.TextBoxFor(x => x.profilCodeClient, new { @class = "form-control", @placeholder = "Code client", @required = true})
+        @Html.TextBoxFor(x => x.profilLicenceClient, new { @class = "form-control", @placeholder = "Licence client", @required = true })
+
+        <br />
+        <input type="submit" value="Valider" class="btn btn-block btn-primary">
+        <br />
+    }
+    @using (Html.BeginForm("annulerValiderProfil", "Home", FormMethod.Post))
+    {
+        <input type="submit" value="Annuler" class="btn btn-block btn-danger">
+    }
+</div>
+
+<script src="~/Scripts/jquery-3.1.0.min.js"></script>

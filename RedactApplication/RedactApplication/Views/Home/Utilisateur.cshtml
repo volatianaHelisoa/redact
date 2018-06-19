@@ -1,0 +1,21 @@
+﻿
+@model CustomerApplication.Models.CLIENTViewModel
+@{
+    ViewBag.Title = "Utilisateur";
+}
+
+<h2>Utilisateur</h2>
+<link href="~/Content/bootstrap.css" rel="stylesheet">
+
+<div class="container">
+    @if (Model != null) {
+        <ul>
+            <li class="list-group-item active">INFORMATION CLIENT</li>
+            <li class="list-group-item">IDENTIFIANT : <b>@Model.clientId</b> </li>
+            <li class="list-group-item">NOM : <b>@Model.clientNom</b> </li>
+            <li class="list-group-item">PRENOMS : <b>@Model.clientPrenom</b> </li>
+            <li class="list-group-item">ADRESSE : <b>@Model.clientAdresse</b> </li>
+            <li class="list-group-item">EMAIL : <b>@Model.clientMail</b> </li>
+        </ul>
+    }
+</div>

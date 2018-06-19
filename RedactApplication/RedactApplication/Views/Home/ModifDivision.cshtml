@@ -1,0 +1,27 @@
+﻿@model CustomerApplication.Models.DIVISIONViewModel
+@{
+    ViewBag.Title = "Creer une division";
+}
+
+<h2>Division</h2>
+<link href="~/Content/bootstrap.css" rel="stylesheet">
+
+<br/>
+<div class="container" style="width:60%;margin-top:2%">
+    @using (Html.BeginForm("saveNewDivision", "Home", FormMethod.Post))
+    {
+
+        @Html.TextBoxFor(x => x.divisionNom, new { @class = "form-control", @placeholder = "Nom",@required = true})
+        @Html.TextBoxFor(x => x.divisionDesc, new { @class = "form-control", @placeholder = "Description", @required = true })
+
+        <br />
+        <input type="submit" value="Sauvegarder" class="btn btn-block btn-primary">
+        <br />
+    }
+
+    @using (Html.BeginForm("cancelNewDivision", "Home", FormMethod.Post))
+    {
+        <input type="submit" value="Annuler" class="btn btn-block btn-danger">
+    }
+</div>
+

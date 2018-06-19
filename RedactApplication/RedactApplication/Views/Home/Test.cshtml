@@ -1,0 +1,34 @@
+﻿@model IEnumerable<CustomerApplication.Models.CLIENTViewModel>
+@{
+    ViewBag.Title = "Test";
+}
+<link href="~/Content/bootstrap.css" rel="stylesheet">
+<h2>@ViewBag.Title.</h2> 
+<h3>@ViewBag.Message</h3>
+
+<div class="container">
+    @if (Model != null){
+        <table class="table table-striped">
+            <tr>
+                <th>IDENTIFIANT</th>
+                <th>NOM</th>
+                <th>PRENOMS</th>
+                <th>EMAIL</th>
+                <th>ADRESSE</th>
+            </tr>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.clientId</td>
+                        <td>@item.clientNom</td>
+                        <td>@item.clientPrenom</td>
+                        <td>@item.clientMail</td>
+                        <td>@item.clientAdresse</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    
+</div>

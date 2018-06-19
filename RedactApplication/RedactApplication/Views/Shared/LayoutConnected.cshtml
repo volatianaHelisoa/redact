@@ -1,0 +1,49 @@
+﻿@model  CustomerApplication.Models.UTILISATEURViewModel
+@{
+    if (Model != null)
+    {
+        ViewBag.Name = Model.userNom;
+        ViewBag.Firstname = Model.userPrenom;
+    }
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/Content/GererPage.css" rel="stylesheet" />
+    <link href="~/Content/style.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.css" rel="stylesheet" />
+    <link rel="shortcut icon" type="image/x-icon" href="~/Content/icon/home.ico" />
+    <title>Mediaclick</title>
+
+    @*<title>@ViewBag.Title</title>*@
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body class="body-layout">
+    <header id="header">
+        <div class="top-panel clear">
+            <div class="left">
+                <span id="pAneltxt">Redact application</span>
+            </div>
+            <div class="right">
+                <div class="user_wlcm">
+                    Welcome, <span>@Session["name"] @Session["surname"] </span>
+                    <a href="javascript:void(0)" onclick="@("window.location.href='" + @Url.Action("LogoutPage", "Login") + "'");"><i class="fa fa-user-circle-o"></i>Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="wrapperpages">
+        <div class="body-content">
+            @RenderBody()
+            <footer></footer>
+        </div>
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @RenderSection("scripts", required: false)
+        <script src="~/Scripts/GestionVue.js"></script>
+    </main>
+</body>
+</html>

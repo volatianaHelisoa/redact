@@ -1,0 +1,264 @@
+﻿@model RedactApplication.Models.UTILISATEURViewModel
+@{
+    ViewBag.Title = "Utilisateur";
+
+    if (Model != null)
+    {
+        ViewBag.userId = Model.userId;
+    }
+
+
+    Layout = "~/Views/Shared/LayoutFullPage.cshtml";
+} 
+@section Scripts{   
+<script>
+    jQuery("div#CheckDivision").hide();
+    $("#checkContact").prop('checked', false);
+    $("#checkCampaign").prop('checked', false);
+    $("#checkClient").prop('checked', false);
+    @if ((@ViewBag.userRole == 1) || (@ViewBag.userRole == 4))
+    {
+        @:jQuery("#checkContact").prop('checked', true);
+    }
+    @if ((@ViewBag.userRole == 2) || (@ViewBag.userRole == 4))
+    {
+        @:jQuery("#checkCampaign").prop('checked', true);
+        @:jQuery("div#CheckDivision").show();
+    }
+    @if (@ViewBag.userRole == 3)
+    {
+        @:jQuery("#checkClient").prop('checked', true);
+    }
+
+
+
+
+</script>
+}
+@if (ViewBag.succes != null)
+{
+    if (ViewBag.succes == 1)
+    {
+        <script>
+            $("#EditUserPopUp").modal();
+            $("div#EditUserPopUp").css("display", "block");
+        </script>
+    }
+}
+<main class="wrapperpages">
+    <div class="page pagesDivision clear">
+     
+
+        <section class="column2 rightDivision fullWidth">
+            <div class="rowpad">
+               
+                <div id="divisionContent">
+                    <div class="breadcrumb">
+                        <span>User management > Edit user</span>
+                        <hr />
+                    </div>
+                    <!-- top panel -->
+                    <div id="inner-top-panel" class="hidepanel clear">
+                        <div class="left search-bloc">
+                            <form method="get" action="" class="usr-srch">
+                                <div class="usr-srch--input-wrapper">
+                                    <input class="usr-srch--input" type="search" placeholder="Search"/>
+                                </div>
+                                <input class="usr-srch--submit" type="submit" value="&#xf002;">
+                            </form>
+                        </div>
+
+                        <div class="right usr-create">
+                            <a href="#" title="Create user" class="green-btn">Edit user</a>
+                        </div>
+                    </div>
+                    <!-- end top panel -->
+
+                    <div class="useredits innerform-container">
+
+                        <div class="dashEdit-user item-container">
+                            <i class="fa fa-3x"><img src="~/images/icon-create-custom.png" alt="Photo icon profil"></i>
+                            <h3>Edit user</h3>
+                            <span class="ltl-consign marg_span"><i class="fa fa-info-circle"></i> Please fill the required fields and press save to update the user data</span>
+
+                            @if (ViewBag.ErrorMail != null)
+                            {
+                                <label class="error-msg ltl-consign">The user mail is already exist.</label>
+                            }
+                            @if (ViewBag.ErrorMessage != null)
+                            {
+                                <label class="error-msg ltl-consign">Server error. Try later.</label>
+                            }
+                            @if (ViewBag.ErrorRole != null)
+                            {
+                                <label class="error-msg ltl-consign">You must choose the user role.</label>
+                            }
+                            @if (ViewBag.ErrorUserValidation != null)
+                            {
+                                <label class="error-msg ltl-consign">This email is not valid.</label>
+                            }
+
+                            @if (Model != null)
+                            {
+                                <div class="center_blc">
+                                    <div class="btn-submit withpad">
+                                        <input type="submit" onclick="@("window.location.href='" + @Url.RouteUrl("Home", new {controller = "Home", action = "sendMailRecovery", hash = @ViewBag.userId}) + "'");" value="Reset password">
+                                    </div>
+
+                                    @using (Html.BeginForm("ModifierUtilisateur", "Home", FormMethod.Post, new {@class = "formfields"}))
+                                    {
+                                        <fieldset>
+                                            <div class="inline-form clr">
+                                                <input type="hidden" value="@Model.userId" name="idUser">
+                                                <div>
+                                                    <label>
+                                                        <span>Nom (*)</span>
+                                                        @Html.TextBoxFor(x => x.userNom, new {@class = "input", @required = true, @name = "name"})
+                                                    </label>
+                                                </div>
+
+                                                <div>
+                                                    <label>
+                                                        <span>Prénom</span>
+                                                        @Html.TextBoxFor(x => x.userPrenom, new {@class = "input",  @name = "name"})
+                                                    </label>
+                                                </div>
+
+                                                <div>
+                                                    <label>
+                                                        <span>Email (*)</span>
+                                                        @Html.TextBoxFor(x => x.userMail, new {@class = "input", @required = true, @name = "name", @type = "email", pattern = "/^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}" })
+                                                    </label>
+                                                </div>
+                                               @if (ViewBag.userRole == 2 ) //if redacteur user
+                                               {
+                                                <div>
+                                                    <label>
+                                                        <span>Skype </span>
+                                                        @Html.TextBoxFor(x => x.redactSkype, new {@class = "input", @required = true,  @name = "name"})
+                                                       
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <label>
+                                                        <span>Téléphone </span>
+                                                        @Html.TextBoxFor(x => x.redactPhone, new {@class = "input",  @name = "name"})
+                                                    
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <label>
+                                                        <span>Volume / jour</span>
+                                                        @Html.TextBoxFor(x => x.redactVolume, new {@class = "input", @required = true, @name = "name"})
+                                                      
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <label>
+                                                        <span>Tarif</span>
+                                                        @Html.TextBoxFor(x => x.redactTarif, new {@class = "input", @required = true, @name = "name"})
+                                                    </label>
+                                                </div>
+
+                                                <div>
+                                                    <label>
+                                                        <span>Thèmes </span>
+                                                        @Html.TextBoxFor(x => x.redactThemes, new {@class = "input", @required = true, @name = "name"})
+                                                       
+                                                    </label>
+                                                </div>
+                                                if (ViewBag.userRoleEdit == "3")
+                                                {
+                                                    <div>
+                                                        <label>
+                                                            <span>Niveau </span>
+                                                            @Html.DropDownListFor(x => x.redactNiveau,
+                                                                new List<SelectListItem> {
+                                                                    new SelectListItem { Value = "Bas" , Text = "Bas" },
+                                                                    new SelectListItem { Value = "Moyen" , Text = "Moyen" },
+                                                                    new SelectListItem { Value = "Avancé" , Text = "Avancé" }
+                                                                },
+                                                                new { @class= "input" })
+                                                        </label>
+                                                    </div>
+                                                }
+
+                                                <div>
+                                                    <label>
+                                                        <span>Référenceur </span>
+                                                        @Html.TextBoxFor(x => x.redactReferenceur, new {@class = "input",  @name = "name"})
+                                                       
+                                                    </label>
+                                                </div>
+                                                    <div>
+                                                        <label>
+                                                            <span>Mode de paiement </span>
+                                                       
+                                                            @Html.DropDownListFor(x => x.redactModePaiement,
+                                                                new List<SelectListItem> {
+                                                                    new SelectListItem { Value = "Chèque" , Text = "Chèque" },
+                                                                    new SelectListItem { Value = "E-money" , Text = "E-money" },
+                                                                    new SelectListItem { Value = "Virement bacaire" , Text = "Virement bacaire" }
+                                                                },
+                                                                new { @class= "input" })
+                                                        </label>
+                                                    </div>
+                                               }
+                                                @if (ViewBag.userRoleEdit == "3")
+                                                {
+                                                    <div class="role">
+                                                        <label class="user-role-label">Role (*)</label>
+                                                        <div class="chkbox edt-chk">
+                                                            <span>
+                                                                <input type="checkbox" name="selectedRole" value="1" id="checkContact"/>
+                                                                <label for="Referenceur">Referenceur</label>
+                                                            </span>
+                                                            <span>
+                                                                <input type="checkbox" name="selectedRole" value="2" id="checkCampaign"/>
+                                                                <label for="Redacteur">Redacteur</label>
+                                                            </span>
+                                                            <span>
+                                                                <input type="checkbox" name="selectedRole" value="3" id="checkClient"/>
+                                                                <label for="Manager">Manager</label>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                <div class="clear"></div>
+                                            
+                                                <div class="btn-submit sav_us1">
+                                                    <button type="submit" value="Save">Save</button>
+                                                    @Html.ActionLink("Cancel", "ListeUser", "Home", new { }, new { @class = "resetbtn cacel_us1 left_b1" })
+                                                </div>
+                                                
+                                            </div>
+                                        </fieldset>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+ <!--  Dialogue succès edit user   -->
+<div id="EditUserPopUp">
+    @Html.Partial("~/Views/Home/EditUserConfirmation.cshtml")
+</div>
+
+
+
+<script>
+    
+
+
+    var GoToListUser = function (userId) {
+        document.location.href = "ListeUser";
+    };
+
+    var gotoSendMail = function () {
+        document.location.href = "sendMailRecovery?currentHash=" + @ViewBag.currentid;
+    }
+</script>

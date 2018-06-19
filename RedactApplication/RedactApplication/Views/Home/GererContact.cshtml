@@ -1,0 +1,97 @@
+﻿@model CustomerApplication.Models.CONTACTViewModel
+@{
+    ViewBag.Title = "Utilisateur";
+}
+<link href="~/Content/bootstrap.css" rel="stylesheet">
+<h2>@ViewBag.Title</h2>
+
+<div class="container" style="width:80%">
+    @using (Html.BeginForm("rechercheContact", "Home", FormMethod.Post))
+    {
+        @Html.DropDownListFor(x => x.contactDivision, ViewBag.DivisionListes as SelectList, "Division", new { @class = "form-control"})
+        @Html.DropDownListFor(x => x.contactSousDivision, ViewBag.SousDivisionListes as SelectList, "Sous-division", new { @class = "form-control"})
+
+        <br />
+        <input type="submit" value="Rechercher" class="btn btn-block btn-primary">
+        <br />
+    }
+</div>
+
+<br /><br />
+
+<div class="container">
+    @if (ViewBag.listeVms != null)
+    {
+        <table class="table table-striped">
+            <tr>
+                <th>IDENTIFIANT</th>
+                <th>NOM</th>
+                <th>PRENOMS</th>
+                <th>PAYS</th>
+                <th></th>
+            </tr>
+            <tbody>
+                @foreach (var item in ViewBag.listeVms)
+                {
+                    <tr>
+                        <td>@item.contactId</td>
+                        <td>@item.contactNom</td>
+                        <td>@item.contactPrenom</td>
+                        <td>@item.contactPays</td>
+                        <td>
+                            <a href="#" onclick="modifUtilisateur(@item.contactId)" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i> </a>
+                            <a href="#" onclick="supprUtilisateur(@item.contactId)" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <br/><br/>
+
+    @using (Html.BeginForm("CreerContact", "Home", FormMethod.Post))
+    {
+        <input type="submit" value="Nouveau contact" class="btn btn-block btn-primary">
+    }
+
+    <input type="hidden" id="DivIdSelected">
+    <input type="hidden" id="DivNomSelected">
+    <input type="hidden" id="DivDescSelected">
+
+</div>
+<script src="~/Scripts/jquery-3.1.0.min.js"></script>
+<script>
+
+    var supprUtilisateur = function (userId) {
+        $("DivIdSelected").val(userId);
+        var r = confirm("Voulez-vous vraiment supprimer?!");
+        if (r == true) {
+            $.ajax({
+                type: 'POST',
+                url: '/Home/supprUtilisateur',
+                data: { userId: userId },
+                success: function () {
+                    document.location.href = "";
+                }
+            })
+        }
+        else {}
+    };
+
+    var modifUtilisateur = function (divisionId) {
+        console.log("passage");
+        console.log(divisionId);
+        var divids = divisionId * 1;
+        alert(divids);
+
+        $.ajax({
+            type: 'POST',
+            url: '/Home/ModifDivision',
+            data: { divid: divisionId },
+            success: function () {
+            }
+        })
+
+    };
+</script>

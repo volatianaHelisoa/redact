@@ -1,0 +1,21 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+@{
+    ViewBag.Title = "Error";
+}
+<div class="popupModal">
+    <div class="icone_type">
+        <img src="~/images/icon-error.png" alt="Photo error">
+    </div>
+    <div class="pop_content">
+        <h3>OUPS !</h3>
+        <span class="ltl-consign"><i class="fa fa-info-circle"></i>An error has occurred<br>An unexpected error occured on our website. The website administrator has been notified.</span>
+        <ul class="bouttons_area">
+            <li><button type="submit" value="Send" class="blue_hit" onclick="redirectPage();">Return to the homepage</button></li>
+        </ul>
+    </div>
+</div>
+<script>
+    function redirectPage(parameters) {
+        window.location.href = "/Login/Accueil";
+    }
+</script>

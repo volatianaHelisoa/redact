@@ -1,0 +1,172 @@
+﻿@model RedactApplication.Models.UTILISATEURViewModel
+
+@{
+    ViewBag.Title = "DetailsRedacteurs";
+}
+
+
+<main class="wrapperpages">
+    <div class="page pagesDivision clear">
+
+        <section class="column2 rightDivision fullWidth">
+            <div class="rowpad">
+                <div>
+                    <div class="admin-link-menu">
+
+                        <a href="~/Home/ListeUser" class="admin-link active">Utilisateurs</a>
+                        <a href="~/Commandes/ListCommandes" class="admin-link ">Commandes</a>
+                    </div>
+                    <!-- end admin menu -->
+                </div>
+                <div id="divisionContent">
+                    <div class="breadcrumb">
+                        <span>Utilisateur > Voir profil</span>
+                        <hr />
+                    </div>
+                    <!-- top panel -->
+                    <div id="inner-top-panel" class="hidepanel clear">
+                        <div class="left search-bloc">
+                            <form method="get" action="" class="usr-srch">
+                                <div class="usr-srch--input-wrapper">
+                                    <input class="usr-srch--input" type="search" placeholder="Search" />
+                                </div>
+                                <input class="usr-srch--submit" type="submit" value="&#xf002;">
+                            </form>
+                        </div>
+
+                        <div class="right usr-create">
+                            <a href="#" title="Create user" class="green-btn">Edit user</a>
+                        </div>
+                    </div>
+                    <!-- end top panel -->
+
+                    <div class="useredits innerform-container">
+
+                        <div class="dashEdit-user item-container">
+                            <i class="fa fa-3x"><img src="~/images/icon-create-custom.png" alt="Photo icon profil"></i>
+                           
+                                @if (@Model.userRole == "1")
+                                {
+                                    <h3>
+                                        Détails du  Référenceur
+                                    </h3>
+                                }
+                                @if (@Model.userRole == "2")
+                                {
+                                    <h3>
+                                        Détails du  Rédacteur
+                                    </h3>
+                                }
+                                @if (@Model.userRole == "3")
+                                {
+                                     <h3>
+                                       Détails du  Manager
+                                       </h3>
+                                }
+                                @if (@Model.userRole == "4")
+                                {
+                                    <h3>
+                                        Détails du  Administrateur
+                                    </h3>
+                                }
+
+                            @if (Model != null)
+                            {
+                                <div class="center_blc">
+                                    
+                                    <fieldset>
+                                        <div class="inline-form clr">
+                                            <input type="hidden" value="@Model.userId" name="idUser">
+                                            <div>
+                                                <label>
+                                                    <span>Nom</span>
+                                                    @Html.DisplayFor(model => model.userNom, new { @class = "input" })
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <label>
+                                                    <span>Prénom</span>
+                                                    @Html.DisplayFor(model => model.userPrenom, new { @class = "input" })
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <label>
+                                                    <span>Email </span>
+                                                    @Html.DisplayFor(model => model.redactSkype, new { @class = "input" })
+                                                </label>
+                                            </div>
+                                            @if (@ViewBag.userRole == 2) //if redacteur user
+                                            {
+                                                <div>
+                                                    <label>
+                                                        <span>Skype </span>
+                                                        @Html.DisplayFor(model => model.redactSkype, new {@class = "input"})
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <label>
+                                                        <span>Téléphone </span>
+                                                        @Html.DisplayFor(model => model.redactPhone, new {@class = "input"})
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <label>
+                                                        <span>Volume / jour</span>
+                                                        @Html.DisplayFor(model => model.redactVolume, new {@class = "input"})
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <label>
+                                                        <span>Tarif</span>
+                                                        @Html.DisplayFor(model => model.redactTarif, new {@class = "input"})
+                                                    </label>
+                                                </div>
+
+                                                <div>
+                                                    <label>
+                                                        <span>Thèmes </span>
+                                                        @Html.DisplayFor(model => model.redactThemes, new {@class = "input"})
+                                                    </label>
+                                                </div>
+
+                                                <div>
+                                                    <label>
+                                                        <span>Niveau </span>
+                                                        @Html.DisplayFor(model => model.redactNiveau, new {@class = "input"})
+                                                    </label>
+                                                </div>
+
+                                                <div>
+                                                    <label>
+                                                        <span>Référenceur </span>
+                                                        @Html.DisplayFor(model => model.redactReferenceur, new {@class = "input"})
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <label>
+                                                        <span>Mode de paiement </span>
+                                                        @Html.DisplayFor(model => model.redactModePaiement, new {@class = "input"})
+                                                    </label>
+                                                </div>
+                                            }
+                                            <div class="clear"></div>
+
+                                            <div class="btn-submit sav_us1">
+                                                @Html.ActionLink("Edit", "EditUser", new { hash = Model.userId }, new { @class = "green-btn" }) 
+                                                @Html.ActionLink("Cancel", "ListeUser", "Home", new { }, new { @class = "resetbtn cacel_us1 left_b1" })
+                                            </div>
+
+                                        </div>
+                                    </fieldset>
+                                   
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+

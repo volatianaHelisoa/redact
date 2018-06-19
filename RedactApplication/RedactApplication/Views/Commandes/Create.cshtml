@@ -1,0 +1,263 @@
+﻿@using RedactApplication.Models
+@model RedactApplication.Models.COMMANDEViewModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+@if (ViewBag.succes != null)
+{
+    if (ViewBag.succes == 1)
+    {
+        <script>
+            $("#addUserPopUp").modal();
+            $("div#addUserPopUp").css("display", "block");
+        </script>
+    }
+    else if (ViewBag.succes == 2)
+    {
+        <script>
+            $("#errorLimitUserPopUp").modal();
+            $("div#errorLimitUserPopUp").css("display", "block");
+        </script>
+    }
+    else if (ViewBag.succes == 3)
+    {
+        <script>
+            $("#errorValidDataUserPopUp").modal();
+            $("div#errorValidDataUserPopUp").css("display", "block");
+        </script>
+    }
+}
+}
+@section Scripts{
+    <link rel="stylesheet" href="~/Content/css/bootstrap-datepicker3.css"/>
+    <script type="text/javascript" src="~/Scripts/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/tinymce.min.js"></script>
+    <script type="text/javascript">
+            tinymce.init({ selector: 'textarea', width: 500 });
+    </script>
+
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            var date_input = $('input[name="date_livraison"]'); //our date input has the name "date"
+            var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+            var options = {
+                format: 'dd/mm/yyyy',
+                container: container,
+                todayHighlight: true,
+                autoclose: true,
+                weekStart: 1
+            };
+            date_input.datepicker(options);
+
+
+            $("#SelectItemTheme").change(function () {
+              
+                var dID = $(this).val();
+                
+                $.getJSON("../Commandes/LoadRedacteurByTheme", { theme: dID },
+                    function (data) {
+                        var select = $("#SelectItemRedacteur");
+                        select.empty();
+                        select.append($('<option/>', {
+                            value: 0,
+                            text: "Selectionner redacteur"
+                        }));
+                        $.each(data, function (index, itemData) {
+                            select.append($('<option/>', {
+                                value: itemData.Value,
+                                text: itemData.Text
+                            }));
+                        });
+                    });
+            });
+        });
+      
+
+        
+    </script>
+}
+
+
+<main class="wrapperpages">
+    <div class="page pagesDivision clear">
+
+
+
+        <section class="column2 rightDivision fullWidth">
+            <div class="rowpad">
+                <div>
+                    <div class="admin-link-menu">
+
+                        <a href="~/Home/ListeUser" class="admin-link ">Utilisateurs</a>
+                        <a href="~/Commandes/ListCommandes" class="admin-link active">Commandes</a>
+                    </div>
+                    <!-- end admin menu -->
+                </div>
+                <div id="divisionContent">
+                    <div class="breadcrumb">
+                        <span>Commandes > Créer commande</span>
+                        <hr />
+                    </div>
+                    <!-- top panel -->
+                    <div id="inner-top-panel" class="hidepanel clear">
+                        <div class="left search-bloc">
+                            <form method="get" action="" class="usr-srch">
+                                <div class="usr-srch--input-wrapper">
+                                    <input class="usr-srch--input" type="search" placeholder="Search" />
+                                </div>
+                                <input class="usr-srch--submit" type="submit" value="&#xf002;">
+                            </form>
+                        </div>
+
+                        <div class="right usr-create">
+                            <a href="#" title="Creer commande" class="green-btn">Créer commande</a>
+                        </div>
+                    </div>
+                    <!-- end top panel -->
+
+                    <div class="useredits innerform-container">
+                        <i class="fa fa-3x"><img src="~/images/icon-create-custom.png" alt="Photo icon profil"></i>
+                        <h3>Créer commande</h3>
+                        <span class="ltl-consign"><i class="fa fa-info-circle"></i> Veuillez remplir les champ requis et appuyez sur Enregistrer pour créer une commande</span>
+
+                        @if (ViewBag.ErrorMessage != null)
+                        {
+                            <label class="error-msg ltl-consign">Please select at least one role.</label>
+                        }
+                        
+                        <div class="dashCreate-user item-container">
+
+                            <div class="center_blc">
+                                @using (Html.BeginForm("CreateCommande", "Commandes", FormMethod.Post, new { @class = "form-horizontal", role = "form", @id = "createcommande" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <fieldset>
+                                        <div class="inline-form clr">
+                                            <div>
+                                                <label>
+                                                    <span>Projet</span>
+                                                    @Html.DropDownListFor(x => Model.listprojetId, new SelectList(Model.ListProjet, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "SelectItemProjet" })
+              
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <label>
+                                                    <span>Thèmatique</span>
+                                                    @Html.DropDownListFor(x => Model.listThemeId, new SelectList(Model.ListTheme, "Value", "Text"), htmlAttributes: new { @class = "form-control", id = "SelectItemTheme" })
+                                                        
+                                                    
+                                                    
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <label>
+                                                    <span>Rédacteur</span>
+                                                    @Html.DropDownListFor(x => Model.listRedacteurId, new SelectList(Model.ListRedacteur, "Value", "Text"), htmlAttributes: new { @class = "form-control", id = "SelectItemRedacteur" })
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <label>
+                                                    <span>Type de texte</span>
+                                                    @Html.DropDownListFor(x => Model.listCommandeTypeId, new SelectList(Model.ListCommandeType, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "SelectItemCommandeType" })
+                                                </label>
+                                            </div>
+                                            <div>Mots clés </div>
+                                            <div> 
+                                                <label>
+                                                    <span>Mot clé principal</span>
+                                                    @Html.TextBoxFor(x => x.mot_cle_pricipal, new {@class = "input", @required = true, @name = "name"})
+                                                </label>
+                                            </div>
+                                            <div> 
+                                                <label>
+                                                    <span>Mot clé secondaire</span>
+                                                    @Html.TextBoxFor(x => x.mot_cle_secondaire, new {@class = "input", @required = true, @name = "name"})
+                                                </label>
+                                            </div>
+                                            <div> 
+                                                <label>
+                                                    <span>Texte d'ancrage</span>
+                                                    @Html.TextBoxFor(x => x.texte_ancrage, new {@class = "input", @required = true, @name = "name"})
+                                                </label>
+                                            </div>
+                                            
+                                            <div> 
+                                                <label>
+                                                    <span>Nombre de mots</span>
+                                                    @Html.TextBoxFor(x => x.nombre_mots, new {@class = "input", @required = true, @name = "name"})
+                                                </label>
+                                            </div>
+                                            <div>Consignes </div>
+                                            <div> 
+                                                <label>
+                                                    <span>Références</span>
+                                                    @Html.TextBoxFor(x => x.consigne_references, new {@class = "input", @required = true, @name = "name"})
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <label>
+                                                    <span>Autres</span>
+                                                    @Html.TextBoxFor(x => x.consigne_autres, new { @class = "input", @required = true, @name = "name" })
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <label>
+                                                    <span>Type du contenu</span>
+                                                    @Html.DropDownListFor(x => Model.listContenuTypeId, new SelectList(Model.ListContenuType, "Value", "Text"), htmlAttributes: new { @class = "form-control", @id = "SelectItemContenuType" })
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <label>
+                                                    <span>Date de livraison</span>
+                                                    @Html.TextBoxFor(x => x.date_livraison, "{0:dd/MM/yyyy}", new { @class = "input form-control", type = "text" })
+                                                    @Html.ValidationMessageFor(m => m.date_livraison)
+                                                </label>
+                                            </div>
+                                           
+                                            <div>
+                                                <label>
+                                                    <span>Notifier via SMS ?</span>
+                                                    <input id="responsable" name="checkResp"  type="checkbox" />
+                                                </label>
+                                            </div>
+                                          
+                                            <div class="clear"></div>
+                                        
+                                            <div id="divCampaignManager left_b1">
+
+                                                <div class="divisionSelect">
+                                                    <div class="btn-submit sav_us1">
+                                                      
+                                                            <button type="submit" value="Save">Save</button>
+
+                                                        @Html.ActionLink("Cancel", "ListCommandes", "Commandes", new { }, new { @class = "resetbtn cacel_us1 left_b1" })
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </fieldset>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</main>
+<!--  Dialogue succès ajout user   -->
+<div id="addUserPopUp">
+   
+</div>
+
+<!--  Dialogue error valid data   -->
+<div id="errorValidDataUserPopUp">
+  
+</div>
+

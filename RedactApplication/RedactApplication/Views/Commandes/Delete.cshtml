@@ -1,0 +1,136 @@
+﻿@model RedactApplication.Models.COMMANDE
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>COMMANDE</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.date_cmde)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.date_cmde)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.date_livraison)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.date_livraison)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.sites)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.sites)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.nombre_mots)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.nombre_mots)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mot_cles)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mot_cles)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.consigne_sujets)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.consigne_sujets)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.consigne_autres)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.consigne_autres)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.texte_livres)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.texte_livres)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.remarque_redacteur)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.remarque_redacteur)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.remarque_referenceur)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.remarque_referenceur)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.etat_paiement)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.etat_paiement)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.COMMANDE_TYPE.Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.COMMANDE_TYPE.Type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CONTENU_TYPE.Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CONTENU_TYPE.Type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UTILISATEUR.userNom)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UTILISATEUR.userNom)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

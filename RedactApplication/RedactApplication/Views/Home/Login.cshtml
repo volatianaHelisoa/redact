@@ -1,0 +1,14 @@
+﻿@model CustomerApplication.Models.CLIENTViewModel
+@{
+    ViewBag.Title = "Contact";
+}
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+
+<div class="container">
+    @Html.DropDownListFor(x=>x.clientId,ViewBag.ClientListe as SelectList,"selectionner votre nom",new {@class="form-control" })
+    @Html.TextBoxFor(x=>x.clientNom, new { @class = "form-control", @placeholder = "Noms"})
+    @Html.TextBoxFor(x => x.clientPrenom, new { @class = "form-control", @placeholder = "Prenoms"})
+
+    <input type="submit" value="valider" class="btn btn-block btn-primary">
+</div>

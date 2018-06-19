@@ -1,0 +1,98 @@
+﻿@model CustomerApplication.Models.SOUSDIVISIONViewModel
+@{
+    ViewBag.Title = "Sous divisions";
+}
+<link href="~/Content/bootstrap.css" rel="stylesheet">
+<h2>@ViewBag.Title</h2> 
+
+<div class="container" style="width:80%">
+    @using (Html.BeginForm("enregistrerSousDivision", "Home", FormMethod.Post))
+    {
+        @Html.DropDownListFor(x => x.sousDivPere, ViewBag.DivisionListe as SelectList, "Divisions", new { @class = "form-control",@required = true })
+        @Html.TextBoxFor(x => x.sousDivNom, new { @class = "form-control", @placeholder = "Nom", @required = true})
+        @Html.TextBoxFor(x => x.sousDivDescription, new { @class = "form-control", @placeholder = "Description", @required = true})
+
+        <br />
+        <input type="submit" value="Sauvegarder" class="btn btn-block btn-primary">
+        <br />
+    }
+    @using (Html.BeginForm("annulerEnregSousDivision", "Home", FormMethod.Post))
+    {
+        <input type="submit" value="Annuler" class="btn btn-block btn-danger">
+    }
+</div>
+
+<br/><br/>
+
+<div class="container">
+    @if (ViewBag.listeDivisionVms != null){
+        <table class="table table-striped">
+            <tr>
+                <th>IDENTIFIANT</th>
+                <th>DIVISION</th>
+                <th>SOUS DIVISION</th>
+                <th>DESCRIPTION</th>
+                <th></th>
+            </tr>
+            <tbody>
+                @foreach (var item in ViewBag.listeDivisionVms)
+                {
+                    <tr>
+                        <td>@item.sousDivId</td>
+                        <td>@item.sousDivPere</td>
+                        <td>@item.sousDivNom</td>
+                        <td>@item.sousDivDescription</td>
+                        <td>
+                            <a href="#" onclick="modifDivision(@item.sousDivId)" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i> </a>
+                            <a href="#" onclick="confirmDelete(@item.sousDivId)" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> </a>                                               
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <input type="hidden" id="DivIdSelected">
+    <input type="hidden" id="DivNomSelected">
+    <input type="hidden" id="DivDescSelected">
+
+</div>
+<script src="~/Scripts/jquery-3.1.0.min.js"></script>
+<script>
+
+    var confirmDelete = function (sousDivId) {
+        console.log(sousDivId);
+        $("DivIdSelected").val(sousDivId);
+
+        var r = confirm("Voulez-vous vraiment supprimer?!");
+        if (r == true) {
+            console.log('Valider la suppression');
+            $.ajax({
+                type: 'POST',
+                url: '/Home/supprSousDivision',
+                data: { divid: sousDivId },
+                success: function () {
+                    document.location.href = "";
+                }
+            })
+        } else {
+            console.log('Annuler la suppression');
+        }
+    };
+
+    var modifDivision = function (divisionId) {
+        console.log("passage");
+        console.log(divisionId);
+        var divids = divisionId * 1;
+        alert(divids);
+
+        $.ajax({
+            type: 'POST',
+            url: '/Home/ModifDivision',
+            data: { divid: divisionId },
+            success: function () {
+            }
+        })
+
+    };
+</script>

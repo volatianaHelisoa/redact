@@ -1,0 +1,176 @@
+﻿@model CustomerApplication.Models.DIVISIONViewModel
+@{
+    ViewBag.Title = "Divisions";
+    var grid = new WebGrid(ViewBag.listeDivisionVms);
+}
+
+
+<link href="~/Content/bootstrap.css" rel="stylesheet">
+<h2>@ViewBag.Title</h2>
+
+<div class="container" style="width:80%">
+    @using (Html.BeginForm("enregistrerDivision", "Home", FormMethod.Post))
+    {
+
+        @Html.TextBoxFor(x => x.divisionNom, new { @class = "form-control", @placeholder = "Nom", @required = true, @id = "DivNom" })
+        @Html.TextBoxFor(x => x.divisionDesc, new { @class = "form-control", @placeholder = "Description", @required = true, @id = "DivDesc" })
+
+        <br />
+        <input type="submit" value="Sauvegarder" class="btn btn-block btn-primary">
+        <br />
+    }
+    @using (Html.BeginForm("annulerEnregDivision", "Home", FormMethod.Post))
+    {
+        <input type="submit" value="Annuler" class="btn btn-block btn-danger">
+    }
+</div>
+
+<br /><br />
+
+<div class="container">
+    @if (ViewBag.listeDivisionVms != null)
+    {
+        <table id="myDataTable" class="table table-striped">
+            <tr>
+                <th>IDENTIFIANT</th>
+                <th>NOM</th>
+                <th>DESCRIPTION</th>
+                <th></th>
+            </tr>
+            <tbody>
+                @foreach (var item in ViewBag.listeDivisionVms)
+                {
+                    <tr>
+                        <td>@item.divisionId</td>
+                        <td>@item.divisionNom</td>
+                        <td>@item.divisionDesc</td>
+                        <td>
+                            <a href="#" onclick="modifDivision(@item.divisionId)" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i> </a>
+                            <a href="#" onclick="confirmDelete(@item.divisionId)" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <input type="hidden" id="DivIdSelected">
+    <input type="hidden" id="DivNomSelected">
+    <input type="hidden" id="DivDescSelected">
+
+</div>
+
+@if (ViewBag.listeDivisionVms != null)
+{
+    <div id="gridContent" style="padding:20px; ">
+        @grid.GetHtml(
+            tableStyle: "table table-responsive backcolor",
+            headerStyle: "webgrid-header",
+            footerStyle: "webgrid-footer",
+            alternatingRowStyle: "webgrid-alternating-row",
+            selectedRowStyle: "webgrid-selected-row",
+            rowStyle: "webgrid-row-style",
+            mode: WebGridPagerModes.All,
+            columns:
+                grid.Columns(
+                    grid.Column("ID", "IDENTIFIANT",format: @<text>  <span class="display-mode">@item.divisionId </span> 
+                        <label id="UserID" class="edit-mode">@item.divisionId</label> </text>, style: "col1Width"),
+
+                    grid.Column("Name", "NOM", format: @<text>  <span class="display-mode"> <label id="lblName">@item.divisionNom</label> </span>
+                        <input type="text" id="Name" value="@item.divisionNom" class="edit-mode form-control" /></text>, style: "col2Width"),
+
+                    grid.Column("SurName", "DESCRIPTION", format: @<text> <span class="display-mode"> <label id="lblSurName">@item.divisionDesc</label> </span>  
+                        <input type="text" id="SurName" value="@item.divisionDesc" class="edit-mode form-control" /> </text>, style: "col2Width"),
+
+                    grid.Column("ACTION", "ACTION",format: @<text>
+                        <button class="edit-user display-mode btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></button>
+                        <button class="save-user edit-mode btn btn-success"><i class="glyphicon glyphicon-ok"></i></button>
+                        <button class="cancel-user edit-mode btn btn-warning"><i class="glyphicon glyphicon-remove"></i></button>
+                        <button onclick="confirmDelete(@item.divisionId)" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
+                    </text>, style: "col3Width", canSort: false)
+               )
+        )
+    </div>
+}
+    
+
+
+<script src="~/Scripts/jquery-3.1.0.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.edit-mode').hide();
+
+        $('.edit-user, .cancel-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            tr.find('.edit-mode, .display-mode').toggle();
+        });
+
+        $('.save-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+
+            var Name = tr.find("#Name").val();
+            var SurName = tr.find("#SurName").val();
+            var UserID = tr.find("#UserID").html();
+
+            tr.find("#lblName").text(Name);
+            tr.find("#lblSurName").text(SurName);
+            tr.find('.edit-mode, .display-mode').toggle();
+            var UserModel =
+            {
+                "ID": UserID,
+                "Name": Name,
+                "SurName": SurName
+            };
+            $.ajax({
+                url: '/User/ChangeUser/',
+                data: JSON.stringify(UserModel),
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    alert(data);
+                }
+            });
+
+        });
+    })
+</script> 
+
+<script>
+
+    var confirmDelete = function (divisionId) {
+        console.log(divisionId);
+        $("DivIdSelected").val(divisionId);
+
+        var r = confirm("Voulez-vous vraiment supprimer?!");
+        if (r == true) {
+            console.log('Valider la suppression');
+            $.ajax({
+                type: 'POST',
+                url: '/Home/supprDivision',
+                data: { divid: divisionId },
+                success: function () {
+                    document.location.href = "";
+                }
+            })
+        } else {
+            console.log('Annuler la suppression');
+        }
+    };
+
+    var modifDivision = function (divisionId) {
+        console.log("passage");
+        console.log(divisionId);
+        var divids = divisionId * 1;
+        alert(divids);
+
+        $.ajax({
+            type: 'POST',
+            url: '/Home/ModifDivision',
+            data: { divid: divisionId },
+            success: function () {
+            }
+        })
+
+    };
+</script>
+

@@ -1,0 +1,35 @@
+﻿@model RedactApplication.Models.UTILISATEURViewModel
+@{
+    ViewBag.Title = "Contact";
+}
+
+<div class="box-pop-up-envoye login-container-envoye innerpopup">
+    <div class="item-container  resetmessage">
+        <div class="icone_type">
+            <img src="~/images/icon-error.png" alt="Photo error">
+        </div>
+        <div class="center_blc resetmessage">
+            <div class="formfields">
+                <div class="done-request">
+
+                    <h3><strong>Oups !</strong></h3>
+                    <span class="ltl-consign messlab">
+                        <i class="fa fa-3x fa-info-circle"></i>
+                        The link you just have clicked has expired. Please restart the recovery process to receive a new link.
+                    </span>
+                    <div class="btn-submit">
+                        @using (Html.BeginForm("DoSendMail", "Login", FormMethod.Post))
+                        {
+                            <input type="submit" class="messok" value="Ok">
+                        }
+                    </div>
+                </div>
+
+            </div>
+            <div id="foot-notes">
+                <span style="font-weight: bold; font-size: 14px;"><i class="fa fa-3x fa-info-circle fa-mess"></i>Note about spam filters</span>
+                <span style="position:relative; top:10px;" class="ltl-consign">If you dont receive an email form us within a few minutes, please check your spam filter.</span>
+            </div>
+        </div>
+    </div>
+</div>

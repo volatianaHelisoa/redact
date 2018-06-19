@@ -1,0 +1,22 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error configuration email";
+}
+<div class="popupModal">
+    <div class="icone_type">
+        <img src="~/images/icon-error.png" alt="Photo error">
+    </div>
+    <div class="pop_content">
+        <h3>OUPS !</h3>
+        <span class="ltl-consign"><i class="fa fa-info-circle"></i>Sending email is failed, please verify your configuration or contact your administrator.</span>
+        <ul class="bouttons_area">
+            <li><button type="submit" value="Send" class="blue_hit" onclick="redirectForgotten();">Ok</button></li>
+        </ul>
+    </div>
+</div>
+<script>
+    function redirectForgotten(parameters) {
+        window.location.href = "/Login/MotDePasseOublie";
+    }
+</script>

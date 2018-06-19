@@ -1,0 +1,51 @@
+﻿@model RedactApplication.Models.UTILISATEURViewModel
+@{
+    ViewBag.Title = "Accueil";
+}
+
+<div class="page" id="">
+    <div class="login-container">
+        <div class="heading-ttl">
+            <h2>Mediaclick</h2>
+            <span>Redact application</span>
+        </div>
+        <div class="avatar_customer">
+            <img src="@Session["logoUrl"]" alt="Photo profil">
+        </div>
+        <div class="item-container">
+            <div class="login_page center_blc">
+
+
+                <h3>Login</h3>
+                @using (Html.BeginForm("AuthentificationUser", "Login", FormMethod.Post, new { @class = "formfields" }))
+                {
+                    @Html.TextBoxFor(x => x.userMail, new { @class = "input", @placeholder = "Email", @required = true })
+                    @Html.PasswordFor(x => x.userMotdepasse, new { @class = "input", @placeholder = "Password", @required = true })
+
+                    <div class="remind">
+                        @Html.CheckBoxFor(x => x.saveOnComputer, new { @checked = "checked" })
+                        <p>Remember me on this computer ?</p>
+                    </div>
+                    <div class="btn-submit">
+                        <input type="submit" value="Login" class="btn btn-block btn-primary">
+                    </div>
+                }
+                <div class="a-forgot-pass">
+                    @Html.ActionLink("I can't sign in or forgot my password ?", "ForgotPassword", "Login")
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (Model != null)
+{
+    <script>
+        document.getElementById('userMotdepasse').value = '@Model.userMotdepasse';
+    </script>
+}
+
+
+

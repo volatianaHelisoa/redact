@@ -1,0 +1,37 @@
+﻿@model RedactApplication.Models.UTILISATEURViewModel
+@{
+    ViewBag.Title = "EditUserConfirmation";
+    if (Model != null)
+    {
+        
+        ViewBag.userId = Model.userId;
+    }
+
+    Layout = "~/Views/Shared/LayoutFullPage.cshtml";
+}
+<main class="wrapperpages">
+    <div class="page pagesUser clear">
+        <section class="column2 rightDivision fullWidth">
+            <div class="rowpad">
+                <div id="divisionContent">
+                    <div class="breadcrumb">
+                        <span>User management > Edit user</span>
+                        <hr />
+                    </div>
+                    <div class="popupModal">
+                        <div class="icone_type">
+                            <img src="~/images/icon-done.png" alt="Photo done">
+                        </div>
+                        <div class="pop_content">
+                            <h3>Done !</h3>
+                            <span class="ltl-consign"><i class="fa fa-info-circle"></i>The user has been sucessfully updated!</span>
+                            <ul class="bouttons_area">
+                                <li><button type="submit" class="blue_hit" onclick="@("window.location.href='" + @Url.RouteUrl("Home", new {controller = "Home", action = "ListeUser"}) + "'");">Ok</button></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
