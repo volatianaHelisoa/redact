@@ -236,6 +236,12 @@
       <DependentUpon>redactapplicationEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Encryptor.cs" />
+    <Compile Include="Models\FACTURE.cs">
+      <DependentUpon>redactapplicationEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FACTURE_COMMANDE.cs">
+      <DependentUpon>redactapplicationEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\MailClient.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -295,6 +301,7 @@
     <Content Include="Content\css\dataTables.css" />
     <Content Include="Content\css\jquery-ui.css" />
     <Content Include="Content\css\jquery.dataTables.css" />
+    <Content Include="Content\css\summernote.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\GererPage.css" />
     <Content Include="Content\icon\home.ico" />
@@ -448,6 +455,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\summernote.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -531,6 +539,9 @@
     <Content Include="Views\Commandes\ExpiredLink.cshtml" />
     <Content Include="Views\Commandes\EditCommandeConfirmation.cshtml" />
     <Content Include="Views\Shared\_MessagesList.cshtml" />
+    <Content Include="Views\Commandes\ListCommandeAValider.cshtml" />
+    <Content Include="Views\Commandes\DetailsCommandeAValider.cshtml" />
+    <Content Include="Views\Commandes\CommandeConfirmationVolume.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

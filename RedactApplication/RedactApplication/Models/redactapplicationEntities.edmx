@@ -32,6 +32,7 @@
           <Property Name="commandeToken" Type="uniqueidentifier" />
           <Property Name="dateToken" Type="datetime" />
           <Property Name="commandeREF" Type="int" />
+          <Property Name="dateLivraisonReel" Type="datetime" />
         </EntityType>
         <EntityType Name="COMMANDE_TYPE">
           <Key>
@@ -46,6 +47,25 @@
           </Key>
           <Property Name="contenuTypeId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Type" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="FACTURE">
+          <Key>
+            <PropertyRef Name="factureId" />
+          </Key>
+          <Property Name="factureId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="factureNumero" Type="int" Nullable="false" />
+          <Property Name="dateEmission" Type="datetime" Nullable="false" />
+          <Property Name="periode" Type="nvarchar" MaxLength="150" />
+          <Property Name="montant" Type="nvarchar" MaxLength="150" />
+          <Property Name="etat" Type="bit" />
+        </EntityType>
+        <EntityType Name="FACTURE_COMMANDE">
+          <Key>
+            <PropertyRef Name="factureCommandeId" />
+          </Key>
+          <Property Name="factureCommandeId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="factureId" Type="uniqueidentifier" />
+          <Property Name="commandeId" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="NOTIFICATION">
           <Key>
@@ -208,6 +228,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_FACTURE_COMMANDE_COMMANDE">
+          <End Role="COMMANDE" Type="Self.COMMANDE" Multiplicity="0..1" />
+          <End Role="FACTURE_COMMANDE" Type="Self.FACTURE_COMMANDE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMMANDE">
+              <PropertyRef Name="commandeId" />
+            </Principal>
+            <Dependent Role="FACTURE_COMMANDE">
+              <PropertyRef Name="commandeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FACTURE_COMMANDE_FACTURE">
+          <End Role="FACTURE" Type="Self.FACTURE" Multiplicity="0..1" />
+          <End Role="FACTURE_COMMANDE" Type="Self.FACTURE_COMMANDE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FACTURE">
+              <PropertyRef Name="factureId" />
+            </Principal>
+            <Dependent Role="FACTURE_COMMANDE">
+              <PropertyRef Name="factureId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_NOTIFICATION_COMMANDE">
           <End Role="COMMANDE" Type="Self.COMMANDE" Multiplicity="0..1" />
           <End Role="NOTIFICATION" Type="Self.NOTIFICATION" Multiplicity="*" />
@@ -296,6 +340,8 @@
           <EntitySet Name="COMMANDE" EntityType="Self.COMMANDE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="COMMANDE_TYPE" EntityType="Self.COMMANDE_TYPE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CONTENU_TYPE" EntityType="Self.CONTENU_TYPE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FACTURE" EntityType="Self.FACTURE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FACTURE_COMMANDE" EntityType="Self.FACTURE_COMMANDE" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NOTIFICATION" EntityType="Self.NOTIFICATION" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PROJETS" EntityType="Self.PROJETS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="REDACT_THEME" EntityType="Self.REDACT_THEME" Schema="dbo" store:Type="Tables" />
@@ -331,6 +377,14 @@
           <AssociationSet Name="FK_COMMANDE_UTILISATEUR" Association="Self.FK_COMMANDE_UTILISATEUR">
             <End Role="UTILISATEUR" EntitySet="UTILISATEUR" />
             <End Role="COMMANDE" EntitySet="COMMANDE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FACTURE_COMMANDE_COMMANDE" Association="Self.FK_FACTURE_COMMANDE_COMMANDE">
+            <End Role="COMMANDE" EntitySet="COMMANDE" />
+            <End Role="FACTURE_COMMANDE" EntitySet="FACTURE_COMMANDE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FACTURE_COMMANDE_FACTURE" Association="Self.FK_FACTURE_COMMANDE_FACTURE">
+            <End Role="FACTURE" EntitySet="FACTURE" />
+            <End Role="FACTURE_COMMANDE" EntitySet="FACTURE_COMMANDE" />
           </AssociationSet>
           <AssociationSet Name="FK_NOTIFICATION_COMMANDE" Association="Self.FK_NOTIFICATION_COMMANDE">
             <End Role="COMMANDE" EntitySet="COMMANDE" />
@@ -433,6 +487,16 @@
             <End Role="UTILISATEUR" EntitySet="UTILISATEURs" />
             <End Role="NOTIFICATION" EntitySet="NOTIFICATIONs" />
           </AssociationSet>
+          <EntitySet Name="FACTUREs" EntityType="redactapplicationModel.FACTURE" />
+          <EntitySet Name="FACTURE_COMMANDE" EntityType="redactapplicationModel.FACTURE_COMMANDE" />
+          <AssociationSet Name="FK_FACTURE_COMMANDE_COMMANDE" Association="redactapplicationModel.FK_FACTURE_COMMANDE_COMMANDE">
+            <End Role="COMMANDE" EntitySet="COMMANDEs" />
+            <End Role="FACTURE_COMMANDE" EntitySet="FACTURE_COMMANDE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FACTURE_COMMANDE_FACTURE" Association="redactapplicationModel.FK_FACTURE_COMMANDE_FACTURE">
+            <End Role="FACTURE" EntitySet="FACTUREs" />
+            <End Role="FACTURE_COMMANDE" EntitySet="FACTURE_COMMANDE" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="COMMANDE">
           <Key>
@@ -469,6 +533,8 @@
           <NavigationProperty Name="REFERENCEUR" ToRole="UTILISATEUR" FromRole="COMMANDE" Relationship="redactapplicationModel.FK_COMMANDE_UTILISATEUR" />
           <NavigationProperty Name="NOTIFICATIONs" Relationship="redactapplicationModel.FK_NOTIFICATION_COMMANDE" FromRole="COMMANDE" ToRole="NOTIFICATION" />
           <Property Name="commandeREF" Type="Int32" />
+          <Property Name="dateLivraisonReel" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="FACTURE_COMMANDE" Relationship="redactapplicationModel.FK_FACTURE_COMMANDE_COMMANDE" FromRole="COMMANDE" ToRole="FACTURE_COMMANDE" />
         </EntityType>
         <EntityType Name="COMMANDE_TYPE">
           <Key>
@@ -749,6 +815,52 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="FACTURE">
+          <Key>
+            <PropertyRef Name="factureId" />
+          </Key>
+          <Property Name="factureId" Type="Guid" Nullable="false" />
+          <Property Name="factureNumero" Type="Int32" Nullable="false" />
+          <Property Name="dateEmission" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="periode" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="montant" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="etat" Type="Boolean" />
+          <NavigationProperty Name="FACTURE_COMMANDE" Relationship="redactapplicationModel.FK_FACTURE_COMMANDE_FACTURE" FromRole="FACTURE" ToRole="FACTURE_COMMANDE" />
+        </EntityType>
+        <EntityType Name="FACTURE_COMMANDE">
+          <Key>
+            <PropertyRef Name="factureCommandeId" />
+          </Key>
+          <Property Name="factureCommandeId" Type="Guid" Nullable="false" />
+          <Property Name="factureId" Type="Guid" />
+          <Property Name="commandeId" Type="Guid" />
+          <NavigationProperty Name="COMMANDE" Relationship="redactapplicationModel.FK_FACTURE_COMMANDE_COMMANDE" FromRole="FACTURE_COMMANDE" ToRole="COMMANDE" />
+          <NavigationProperty Name="FACTURE" Relationship="redactapplicationModel.FK_FACTURE_COMMANDE_FACTURE" FromRole="FACTURE_COMMANDE" ToRole="FACTURE" />
+        </EntityType>
+        <Association Name="FK_FACTURE_COMMANDE_COMMANDE">
+          <End Type="redactapplicationModel.COMMANDE" Role="COMMANDE" Multiplicity="0..1" />
+          <End Type="redactapplicationModel.FACTURE_COMMANDE" Role="FACTURE_COMMANDE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="COMMANDE">
+              <PropertyRef Name="commandeId" />
+            </Principal>
+            <Dependent Role="FACTURE_COMMANDE">
+              <PropertyRef Name="commandeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FACTURE_COMMANDE_FACTURE">
+          <End Type="redactapplicationModel.FACTURE" Role="FACTURE" Multiplicity="0..1" />
+          <End Type="redactapplicationModel.FACTURE_COMMANDE" Role="FACTURE_COMMANDE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FACTURE">
+              <PropertyRef Name="factureId" />
+            </Principal>
+            <Dependent Role="FACTURE_COMMANDE">
+              <PropertyRef Name="factureId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -758,6 +870,7 @@
           <EntitySetMapping Name="COMMANDEs">
             <EntityTypeMapping TypeName="redactapplicationModel.COMMANDE">
               <MappingFragment StoreEntitySet="COMMANDE">
+                <ScalarProperty Name="dateLivraisonReel" ColumnName="dateLivraisonReel" />
                 <ScalarProperty Name="commandeREF" ColumnName="commandeREF" />
                 <ScalarProperty Name="dateToken" ColumnName="dateToken" />
                 <ScalarProperty Name="commandeToken" ColumnName="commandeToken" />
@@ -882,6 +995,27 @@
                 <ScalarProperty Name="statut" ColumnName="statut" />
                 <ScalarProperty Name="commandeId" ColumnName="commandeId" />
                 <ScalarProperty Name="notificationId" ColumnName="notificationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FACTUREs">
+            <EntityTypeMapping TypeName="redactapplicationModel.FACTURE">
+              <MappingFragment StoreEntitySet="FACTURE">
+                <ScalarProperty Name="etat" ColumnName="etat" />
+                <ScalarProperty Name="montant" ColumnName="montant" />
+                <ScalarProperty Name="periode" ColumnName="periode" />
+                <ScalarProperty Name="dateEmission" ColumnName="dateEmission" />
+                <ScalarProperty Name="factureNumero" ColumnName="factureNumero" />
+                <ScalarProperty Name="factureId" ColumnName="factureId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FACTURE_COMMANDE">
+            <EntityTypeMapping TypeName="redactapplicationModel.FACTURE_COMMANDE">
+              <MappingFragment StoreEntitySet="FACTURE_COMMANDE">
+                <ScalarProperty Name="commandeId" ColumnName="commandeId" />
+                <ScalarProperty Name="factureId" ColumnName="factureId" />
+                <ScalarProperty Name="factureCommandeId" ColumnName="factureCommandeId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

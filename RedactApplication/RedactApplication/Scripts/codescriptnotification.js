@@ -25,26 +25,46 @@
     {
         var tbl = $('#messagesTable');
         $('#notiContent').empty();
-        $('#notiContent').append($('<li>...</li>'));
+        $('#notiContent').append('<li>...</li>');
 
         $.ajax({
             type: 'GET',
             url: '/Commandes/GetNotifications',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+
+
             success: function(response) {
-                console.log(response);
+                console.log(response.d);
                 $('#notiContent').empty();
+               
                 if (response.length == 0) {
+                    
                     $('#notiContent').append($('<li>Aucune nouvelle notification.</li>'));
                 }
+
+                var tr_str = '';
                 $.each(response, function (index, value) {
-                    var tr_str = '<li> La commande  <a href="~/Commandes/DetailsCommande/"' + value.commandeId + '"> #' + value.commanderef + '</a> a été mis à jour par ' + value.fromUserName + ' le ' + value.datenotif + ' . </li>';
-                    $('#notiContent').append(tr_str);
+                    var link = $(location).attr('host') + "/Commandes/DetailsCommande/" + value.commandeId + "?not=" + value.notificationId;
+                    var dateStr = parseDate(value.datenotif);
+                   
+                    tr_str += '<li> La commande  <a href="' + link + '" id="submit-link"> #' + value.commanderef + '</a> a été mis à jour par ' + value.fromUserName + ' le ' + dateStr + ' . </li>';
                 });
+              
+                $('#notiContent').html(tr_str);
             },
             error: function(error) {
                 console.log(error);
             }
         });
+    }
+
+    function parseDate(value) {
+        var pattern = /Date\(([^)]+)\)/;
+        var results = pattern.exec(value);
+        var dt = new Date(parseFloat(results[1]));
+        return dt.getDate() +"/"+ (dt.getMonth() + 1) + "/" +  dt.getFullYear();
+
     }
 
 

@@ -42,17 +42,18 @@ namespace RedactApplication.Models
                         consigneType = consigneType.Type,
                         consigne_autres = commande.consigne_autres,
                         etat_paiement = commande.etat_paiement,
-                       
+                       commandeREF = commande.commandeREF,
                         ordrePriorite = priorite,
                         balise_titre = commande.balise_titre,
                         contenu_livre = commande.contenu_livre,
                         projet = projet.projet_name,
                         thematique = theme.theme_name,
-                        statut_cmde = statut.statut_cmde,
+                        statut_cmde = (statut != null)?statut.statut_cmde:"",
                         commandeThemeId = commande.commandeThemeId,
                         commandeStatutId = commande.commandeStatutId,
                         commandeTypeId = commande.commandeTypeId,
-                        consigne_type_contenuId = commande.consigne_type_contenuId
+                        consigne_type_contenuId = commande.consigne_type_contenuId,
+                        dateLivraisonReel = commande.dateLivraisonReel
 
             });
                 
@@ -105,7 +106,7 @@ namespace RedactApplication.Models
             var projet = GetProjet(commande.commandeProjetId);
             var theme = GetTheme(commande.commandeThemeId);
             var statut = (!string.IsNullOrEmpty(commande.commandeStatutId.ToString()))?GetStatutCommande(commande.commandeStatutId):GetStatutCommande(new Guid());
-            string statutcmde = (statut != null) ? statut.statut_cmde : "En attente";
+            string statutcmde = (statut != null) ? statut.statut_cmde : "A valider";
             var commandeVm = new COMMANDEViewModel();
 
                 commandeVm.commandeId = commande.commandeId;
@@ -123,7 +124,7 @@ namespace RedactApplication.Models
                 commandeVm.consigneType = consigneType.Type;
                 commandeVm.consigne_autres = commande.consigne_autres;
                 commandeVm.etat_paiement = commande.etat_paiement;
-               
+                commandeVm.commandeREF = commande.commandeREF;    
                 commandeVm.ordrePriorite = priorite;
                 commandeVm.balise_titre = commande.balise_titre;
                 commandeVm.contenu_livre = commande.contenu_livre;
@@ -131,12 +132,13 @@ namespace RedactApplication.Models
                 commandeVm.commandeProjetId = projet.projetId;
                 commandeVm.thematique = theme.theme_name;
                 commandeVm.commandeThemeId = theme.themeId;
-                commandeVm.statut_cmde = statut.statut_cmde;
+                commandeVm.statut_cmde = statutcmde;
 
                 commandeVm.commandeStatutId = commande.commandeStatutId;
                 commandeVm.commandeTypeId = commande.commandeTypeId;
                 commandeVm.consigne_type_contenuId = commande.consigne_type_contenuId;
-               
+            commandeVm.dateLivraisonReel = commande.dateLivraisonReel;
+
             return commandeVm;
 
         }
@@ -160,10 +162,20 @@ namespace RedactApplication.Models
             redactapplicationEntities db = new Models.redactapplicationEntities();
             var themesids = GetRelatedTheme(theme);
             var redactids =  db.REDACT_THEME.Where(r => themesids.Contains(r.themeId)).Select(t => t.userId).ToList();
-            var redacteurs = db.UTILISATEURs.Where(u => redactids.Contains(u.userId)).OrderByDescending(n=>n.redactNiveau).ToList();
-            var allredacteurs = db.UTILISATEURs.OrderByDescending(n => n.redactNiveau).ToList();
            
-            return redacteurs;
+           // var redacteurs = db.UTILISATEURs.Where(u => redactids.Contains(u.userId)).OrderByDescending(n=>n.redactNiveau).ToList();
+
+
+            var redacteurs = from c in db.UTILISATEURs
+                             from p in db.UserRoles
+                where p.idUser == c.userId && p.idRole == 2
+                select c;
+
+            var allredacteurs = redacteurs.OrderByDescending(n => n.redactNiveau).ToList();
+            var redacteurSpec = db.UTILISATEURs.Where(u => redactids.Contains(u.userId)).OrderByDescending(n => n.redactNiveau).ToList();
+
+            redacteurSpec.AddRange(allredacteurs);
+            return redacteurSpec.Distinct().ToList();
         }
 
         public COMMANDE_TYPE GetCommandeType(Guid? id)

@@ -3,6 +3,8 @@
 
 @{
     ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/LayoutConnected.cshtml";
+
 }
 
 @if (ViewBag.succes != null)
@@ -40,14 +42,17 @@
 
     <script type="text/javascript">
         jQuery(document).ready(function () {
-            var date_input = $('input[name="date_livraison"]'); //our date input has the name "date"
+             var date = new Date();
+			date.setDate(date.getDate());
+			 var date_input = $('input[name="date_livraison"]'); //our date input has the name "date"
             var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
             var options = {
                 format: 'dd/mm/yyyy',
                 container: container,
                 todayHighlight: true,
                 autoclose: true,
-                weekStart: 1
+                weekStart: 1,
+				startDate: date
             };
             date_input.datepicker(options);
 
@@ -126,6 +131,11 @@
                         {
                             <label class="error-msg ltl-consign">Please select at least one role.</label>
                         }
+                        @if (Session["VolumeInfo"] != null)
+                        {
+                            <label class="error-msg ltl-consign"> @Session["VolumeInfo"] </label>
+                        }
+                       
                         
                         <div class="dashCreate-user item-container">
 
@@ -146,8 +156,7 @@
                                                 <label>
                                                     <span>Thèmatique</span>
                                                     @Html.DropDownListFor(x => Model.listThemeId, new SelectList(Model.ListTheme, "Value", "Text"), htmlAttributes: new { @class = "form-control", id = "SelectItemTheme" })
-                                                        
-                                                    
+                                                   
                                                     
                                                 </label>
                                             </div>

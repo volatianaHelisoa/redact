@@ -92,23 +92,24 @@
                                             <div>
                                                 <label>
                                                     <span>Email </span>
-                                                    @Html.DisplayFor(model => model.redactSkype, new { @class = "input" })
+                                                    @Html.DisplayFor(model => model.userMail, new { @class = "input" })
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <label>
+                                                    <span>Skype </span>
+                                                    @Html.DisplayFor(model => model.redactSkype, new {@class = "input"})
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <label>
+                                                    <span>Téléphone </span>
+                                                    @Html.DisplayFor(model => model.redactPhone, new {@class = "input"})
                                                 </label>
                                             </div>
                                             @if (@ViewBag.userRole == 2) //if redacteur user
                                             {
-                                                <div>
-                                                    <label>
-                                                        <span>Skype </span>
-                                                        @Html.DisplayFor(model => model.redactSkype, new {@class = "input"})
-                                                    </label>
-                                                </div>
-                                                <div>
-                                                    <label>
-                                                        <span>Téléphone </span>
-                                                        @Html.DisplayFor(model => model.redactPhone, new {@class = "input"})
-                                                    </label>
-                                                </div>
+                                               
                                                 <div>
                                                     <label>
                                                         <span>Volume / jour</span>

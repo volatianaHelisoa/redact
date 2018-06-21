@@ -69,8 +69,7 @@
 
                         <div class="dashEdit-user item-container">
                             <i class="fa fa-3x"><img src="~/images/icon-create-custom.png" alt="Photo icon profil"></i>
-
-                           
+                            
                             @if (Model != null)
                             {
                                 <div class="center_blc">
@@ -92,7 +91,11 @@
                                             </div>
                                             <div>
                                                     <span>Date de livraison </span>
-                                                    @Html.DisplayFor(model => model.date_livraison, new { @class = "input" })
+                                                    @Html.DisplayFor(model => model.dateLivraisonReel, new { @class = "input" })
+                                                 @if (Model.dateLivraisonReel > Model.date_livraison)
+                                                 {
+                                                    <span>Livraison en retard (prévue le @Model.date_livraison)</span> 
+                                                 }
                                             </div>
                                             <div>
                                                 <span>Ordre de priorité</span>
@@ -174,8 +177,8 @@
                                             <div class="clear"></div>
 
                                             <div class="btn-submit sav_us1">
-                                                <button type="submit" value="Save">Save</button>
-                                                @Html.ActionLink("Cancel", "ListCommandes", "Commandes", new { }, new { @class = "resetbtn cacel_us1 left_b1" })
+                                              
+                                                @Html.ActionLink("Liste commande", "ListCommandes", "Commandes", new { }, new { @class = "resetbtn cacel_us1 left_b1" })
                                             </div>
 
                                         </div>

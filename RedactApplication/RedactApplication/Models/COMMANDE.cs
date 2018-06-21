@@ -18,6 +18,7 @@ namespace RedactApplication.Models
         public COMMANDE()
         {
             this.NOTIFICATIONs = new HashSet<NOTIFICATION>();
+            this.FACTURE_COMMANDE = new HashSet<FACTURE_COMMANDE>();
         }
     
         public System.Guid commandeId { get; set; }
@@ -43,6 +44,7 @@ namespace RedactApplication.Models
         public Nullable<System.Guid> commandeToken { get; set; }
         public Nullable<System.DateTime> dateToken { get; set; }
         public Nullable<int> commandeREF { get; set; }
+        public Nullable<System.DateTime> dateLivraisonReel { get; set; }
     
         public virtual COMMANDE_TYPE COMMANDE_TYPE { get; set; }
         public virtual CONTENU_TYPE CONTENU_TYPE { get; set; }
@@ -53,5 +55,7 @@ namespace RedactApplication.Models
         public virtual UTILISATEUR REFERENCEUR { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NOTIFICATION> NOTIFICATIONs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FACTURE_COMMANDE> FACTURE_COMMANDE { get; set; }
     }
 }

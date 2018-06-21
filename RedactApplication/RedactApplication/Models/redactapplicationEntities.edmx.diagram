@@ -30,6 +30,10 @@
         <AssociationConnector Association="redactapplicationModel.FK_NOTIFICATION_COMMANDE" />
         <AssociationConnector Association="redactapplicationModel.FK_NOTIFICATION_DEMANDEUR" />
         <AssociationConnector Association="redactapplicationModel.FK_NOTIFICATION_REDACTEUR" />
+        <EntityTypeShape EntityType="redactapplicationModel.FACTURE" Width="1.5" PointX="6" PointY="13.125" />
+        <EntityTypeShape EntityType="redactapplicationModel.FACTURE_COMMANDE" Width="1.5" PointX="8.25" PointY="10.375" />
+        <AssociationConnector Association="redactapplicationModel.FK_FACTURE_COMMANDE_COMMANDE" />
+        <AssociationConnector Association="redactapplicationModel.FK_FACTURE_COMMANDE_FACTURE" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

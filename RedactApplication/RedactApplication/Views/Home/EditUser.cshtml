@@ -102,14 +102,29 @@
                             {
                                 <div class="center_blc">
                                     <div class="btn-submit withpad">
-                                        <input type="submit" onclick="@("window.location.href='" + @Url.RouteUrl("Home", new {controller = "Home", action = "sendMailRecovery", hash = @ViewBag.userId}) + "'");" value="Reset password">
+                                        <input type="submit" onclick="@("window.location.href='" + @Url.RouteUrl("Home", new {controller = "Home", action = "sendMailRecovery", hash = @ViewBag.userId }) + "'");" value="Reset password">
                                     </div>
 
-                                    @using (Html.BeginForm("ModifierUtilisateur", "Home", FormMethod.Post, new {@class = "formfields"}))
+                                    @using (Html.BeginForm("ModifierUtilisateur", "Home", FormMethod.Post, new {@class = "formfields", enctype = "multipart/form-data" }))
                                     {
                                         <fieldset>
                                             <div class="inline-form clr">
                                                 <input type="hidden" value="@Model.userId" name="idUser">
+                                                <div>
+                                                    <label>
+                                                        <span>Logo</span>
+                                                        
+                                                       
+                                                        @if (!string.IsNullOrEmpty(Model.logoUrl))
+                                                        {
+                                                            <img src="@Model.logoUrl" alt="@Model.userNom" title="@Model.userNom" style="width: 81px;height: 81px" />
+                                                        }
+
+                                                       
+                                                        
+                                                        @Html.TextBoxFor(m => m.logoUrl, new { type = "file", name = "file" })
+                                                    </label>
+                                                </div>
                                                 <div>
                                                     <label>
                                                         <span>Nom (*)</span>

@@ -48,26 +48,7 @@
                                 <span>Commandes</span>
                                 <hr />
                             </div>
-                            @if (@Session["role"] != null && @Session["role"].ToString() == "2")
-                            {
-                                <a href="~/Home/ListeUser" class="admin-link">Utilisateurs</a>
-
-                                <div class="detlim">
-                                    <span class="detaildesc">Commande en cours : </span>
-                                    <span class="detaildesc_nbr">@ViewBag.commandesEnCours</span>
-                                    <span class="detaildesc"> | Commande en attente : </span>
-                                    <span class="detaildesc_nbr">@ViewBag.commandesEnAttente</span>
-                                    <span class="detaildesc"> | Commande en retard : </span>
-                                    <span class="detaildesc_nbr">@ViewBag.commandesEnRetard</span>
-                                    <span class="detaildesc"> | Commandes livrée : </span>
-                                    <span class="detaildesc_nbr">@ViewBag.commandesLivrer</span>
-                                    <span class="detaildesc"> | Commandes à valider : </span>
-                                    <span class="detaildesc_nbr">@ViewBag.commandesAValider</span>
-                                    <span class="detaildesc"> | Commande à facturer : </span>
-                                    <span class="detaildesc_nbr">@ViewBag.commandesFacturer</span>
-                                </div>
-                            } 
-                            <!-- top panel -->
+                                                        <!-- top panel -->
                             <div id="inner-top-panel" class="showpanel clear">
                                 <div class="left search-bloc">
                                     @using (Html.BeginForm("CommandesSearch", "Commandes", FormMethod.Post, new { @class = "usr-srch" }))
@@ -80,27 +61,10 @@
                                         <input class="usr-srch--submit" type="submit" value="&#xf002;" id="UserSearchSubmit">
                                     }
                                 </div>
-                                <div class="right usr-create">
-                                    <input type="submit" value="Valider commande" class="blue-btn" onclick="@(" window.location.href='" + @Url.RouteUrl("Home", new { controller = "Commandes", action = "ListCommandeAValider" }) + "' ");">
-                                </div>
-                                <div class="right usr-create">
-                                    <input type="submit" value="Créer commande" class="green-btn" onclick="@(" window.location.href='" + @Url.RouteUrl("Home", new { controller = "Commandes", action = "Create" }) + "' ");">
-                                </div>
+                               
                             </div>
                             <!-- end top panel -->
-                            <div class="select_cat">
-                                <span>Select</span>
-                                <ul>
-                                    <li><a href="#" onclick="CheckedCmdeClick()">Tout</a></li>
-                                    <li><a href="#" onclick="DecheckedCmdeClick()">Aucun</a></li>
-                                    <li class="line"></li>
-                                    <li><a href="#" onclick="DeleteAllCommandeSelected(@ViewBag.nbrow)">Supprimer selection</a></li>
-                                </ul>
-                                <ul class="LinkSearchClear">
-                                    <li class="line"></li>
-                                    <li><a href="~/Commandes/ListCommandes">Clear</a></li>
-                                </ul>
-                            </div>
+                           
                             <div class="tab_fx tab_fxs">
                                 <table id="myDataTable" class="trig_table table">
                                     <thead>
@@ -151,9 +115,8 @@
                                                 <td>
                                                     <!--ViewBag.numpage/ViewBag.nbrow-->
                                                     <div class="option">
-                                                        <a href="~/Commandes/DetailsCommande/@item.commandeId" title="Détails Commande"><i class="fa fa-eye"></i></a>
-                                                        <a href="~/Commandes/Edit/@item.commandeId" title="Edit user"><i class="fa fa-edit"></i></a>
-                                                        <a onclick="DeleteCommandeClick('@item.commandeId')" title="Delete commande"><i class="fa fa-trash"></i></a>
+                                                        <a href="~/Commandes/DetailsCommandeAValider/@item.commandeId" title="Détails Commande"><i class="fa fa-eye"></i></a>
+                                                       
                                                     </div>
                                                 </td>
                                             </tr>

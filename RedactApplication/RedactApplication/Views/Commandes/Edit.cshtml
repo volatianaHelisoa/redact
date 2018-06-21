@@ -2,7 +2,8 @@
 
 @{
     ViewBag.Title = "Edit";
-    Layout = "~/Views/Shared/LayoutFullPage.cshtml";
+    Layout = "~/Views/Shared/LayoutConnected.cshtml";
+    
 }
 
 
@@ -58,6 +59,10 @@
                         @if (ViewBag.ErrorMessage != null)
                         {
                             <label class="error-msg ltl-consign">Veuillez sélectionner un élément de chaque.</label>
+                        }
+                        @if (Session["VolumeInfo"] != null)
+                        {
+                            <label class="error-msg ltl-consign"> @Session["VolumeInfo"] </label>
                         }
 
                         <div class="dashCreate-user item-container">
@@ -157,6 +162,12 @@
                                                         <input id="responsable" name="checkResp" type="checkbox"/>
                                                     </label>
                                                 </div>
+                                                <div>
+                                                    <label>
+                                                        <span>Statut</span>
+                                                        @Html.DropDownListFor(x => Model.listStatutId, new SelectList(Model.ListStatut, "Value", "Text"), htmlAttributes: new {@class = "form-control", @id = "SelectItemStatut"})
+                                                    </label>
+                                                </div>
                                             }
 
                                          
@@ -174,12 +185,7 @@
                                                     <span class="left_char">0 sur <div id="data-limit-input">@Html.DisplayFor(model => model.nombre_mots)</div> caractère(s) utilisé(s)</span>
                                                    
                                                 </div>
-                                            <div>
-                                                <label>
-                                                    <span>Statut</span>
-                                                    @Html.DropDownListFor(x => Model.listStatutId, new SelectList(Model.ListStatut, "Value", "Text"), htmlAttributes: new {@class = "form-control", @id = "SelectItemStatut"})
-                                                </label>
-                                            </div>
+                                           
 
 
                                             <div class="clear"></div>
@@ -224,13 +230,31 @@
     <link rel="stylesheet" href="~/Content/css/bootstrap-datepicker3.css"/>
     <script type="text/javascript" src="~/Scripts/js/bootstrap-datepicker.min.js"></script>
     <script type="text/javascript" src="~/Scripts/scriptredacteur.js"></script>
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
-    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
+    <script type="text/javascript" src="~/Scripts/summernote.js"></script>
+    <link href="~/Content/css/summernote.css" rel="stylesheet">
     
 
     <script type="text/javascript">
         $(document).ready(function() {
-            
+            var date = new Date();
+			date.setDate(date.getDate());
+			 var date_input = $('input[name="date_livraison"]'); //our date input has the name "date"
+            var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+            var options = {
+                format: 'dd/mm/yyyy',
+                container: container,
+                todayHighlight: true,
+                autoclose: true,
+                weekStart: 1,
+				startDate: date
+            };
+            date_input.datepicker(options);
+
+			
+
+			
+			
+			
             //$('.textarea-editor').wysihtml5();
             $('.textarea-editor').summernote(
                 {

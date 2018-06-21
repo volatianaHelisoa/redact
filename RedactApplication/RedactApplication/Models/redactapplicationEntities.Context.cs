@@ -36,5 +36,7 @@ namespace RedactApplication.Models
         public virtual DbSet<UserRole> UserRoles { get; set; }
         public virtual DbSet<UTILISATEUR> UTILISATEURs { get; set; }
         public virtual DbSet<NOTIFICATION> NOTIFICATIONs { get; set; }
+        public virtual DbSet<FACTURE> FACTUREs { get; set; }
+        public virtual DbSet<FACTURE_COMMANDE> FACTURE_COMMANDE { get; set; }
     }
 }

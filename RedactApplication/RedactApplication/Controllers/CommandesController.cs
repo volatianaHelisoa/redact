@@ -69,12 +69,56 @@ namespace RedactApplication.Controllers
                 }
             }
 
-                ViewBag.listeNotifVms = new Notifications().GetListNotifications(_userId);
+               
                 return View();
         }
 
             return View("ErrorException");
         }
+
+
+        public ActionResult ListCommandeAValider()
+        {
+            // Exécute le suivi de session utilisateur
+            if (!string.IsNullOrEmpty(Request.QueryString["currentid"]))
+            {
+                _userId = Guid.Parse(Request.QueryString["currentid"]);
+                Session["currentid"] = Request.QueryString["currentid"];
+            }
+            else if (!string.IsNullOrEmpty(HttpContext.User.Identity.Name))
+            {
+                _userId = Guid.Parse(HttpContext.User.Identity.Name);
+
+                // Exécute le traitement de la pagination
+                Commandes val = new Commandes();
+
+                // Récupère la liste des commandes
+                var listeDataCmde = val.GetListCommande();
+                ViewBag.listeCommandeVms = listeDataCmde.Distinct().ToList();
+
+                var currentrole = (new Utilisateurs()).GetUtilisateurRoleToString(_userId);
+                if (currentrole != null)
+                {
+                    if (currentrole.Contains("2"))
+                    {
+                        ViewBag.listeCommandeVms = listeDataCmde
+                            .Where(x => x.commandeRedacteurId == _userId && x.commandeStatutId == null).ToList();
+                        //GetRedacteurInformations(_userId);
+                    }
+
+                    else
+                    {
+                        ViewBag.listeCommandeVms = listeDataCmde.Where(x => x.commandeStatutId == null).ToList();
+                    }
+
+                }
+
+                return View();
+            }
+
+            return View("ErrorException");
+        }
+
 
         [Authorize]
         [HttpGet]
@@ -94,7 +138,23 @@ namespace RedactApplication.Controllers
             
         }
 
+        private int GetVolumeEnCours(Guid? redactId)
+        {
+            var redact = db.UTILISATEURs.Find(redactId);
+            var now = DateTime.Now;
+            var startOfMonth = new DateTime(now.Year, now.Month, 1);
+            var daysInMonth = DateTime.DaysInMonth(now.Year, now.Month);
+            var lastDay = new DateTime(now.Year, now.Month, daysInMonth);
+            var commandes = db.COMMANDEs.Where(x => x.commandeRedacteurId == redactId && x.date_cmde >= startOfMonth &&
+                                                    x.date_cmde <= lastDay).ToList();
+            int volume = 0;
+            foreach (var commande in commandes)
+            {
+                volume += Convert.ToInt32(commande.nombre_mots);
+            }
 
+            return volume;
+        }
 
         private void GetRedacteurInformations(Guid redactId)
         {
@@ -120,6 +180,12 @@ namespace RedactApplication.Controllers
                                                                  (x.STATUT_COMMANDE != null && x.STATUT_COMMANDE.statut_cmde.Contains("En attente")));
 
                 ViewBag.commandesEnAttente = commandesEnAttente;
+
+                var commandesAValider = db.COMMANDEs.Count(x => x.date_cmde >= startOfMonth &&
+                                                                 x.date_cmde <= lastDay &&
+                                                                 (x.STATUT_COMMANDE == null && x.commandeStatutId == null));
+
+                ViewBag.commandesAValider = commandesAValider;
 
                 var commandesEnRetard = db.COMMANDEs.Count(x => x.date_cmde >= startOfMonth &&
                                                                 x.date_cmde <= lastDay &&
@@ -391,22 +457,95 @@ namespace RedactApplication.Controllers
             THEME selectedTheme = db.THEMES.SingleOrDefault(x=>x.themeId.ToString() == theme);
             //Your Code For Getting Physicans Goes Here
             var redactList = (selectedTheme != null)?(new Commandes().GetListRedacteurItem(selectedTheme.theme_name)): null;
-
-          
+    
             return Json(redactList, JsonRequestBehavior.AllowGet);
         }
 
-        // GET: COMMANDEs/Details/5
-        public ActionResult DetailsCommande(Guid? hash)
+        private COMMANDEViewModel SetCommandeViewModelDetails(COMMANDE commande)
         {
             Commandes val = new Commandes();
-            COMMANDEViewModel commandeVm = val.GetDetailsCommande(hash);
+            COMMANDEViewModel commandeVm = new COMMANDEViewModel();
+            if (commande != null)
+            {
+                commandeVm.ListProjet = val.GetListProjetItem();
+                commandeVm.ListTheme = val.GetListThemeItem();
+                commandeVm.ListRedacteur = val.GetListRedacteurItem();
+                commandeVm.ListCommandeType = val.GetListCommandeTypeItem();
+                commandeVm.ListContenuType = val.GetListContenuTypeItem();
+
+                if (commande.commandeProjetId != null)
+                    commandeVm.listprojetId = (Guid)commande.commandeProjetId;
+
+                if (commande.commandeThemeId != null)
+                    commandeVm.listThemeId = (Guid)commande.commandeThemeId;
+
+                if (commande.commandeTypeId != null)
+                    commandeVm.listCommandeTypeId = (Guid)commande.commandeTypeId;
+
+                if (commande.commandeRedacteurId != null)
+                    commandeVm.listRedacteurId = (Guid)commande.commandeRedacteurId;
+
+                if (commande.consigne_type_contenuId != null)
+                    commandeVm.listContenuTypeId = (Guid)commande.consigne_type_contenuId;
+
+
+                string referenceur = val.GetUtilisateurReferenceur(commande.commandeReferenceurId).userNom;
+                    string cmdeType = val.GetCommandeType(commande.commandeTypeId).Type;
+                    string consigneType = val.GetCommandeContenuType(commande.consigne_type_contenuId).Type;
+                    string redacteur = val.GetUtilisateurReferenceur(commande.commandeRedacteurId).userNom;
+                    string priorite = commande.ordrePriorite == "0" ? "Moyen" : "Haut";
+                    string projet = val.GetProjet(commande.commandeProjetId).projet_name;
+                    string theme = val.GetTheme(commande.commandeThemeId).theme_name;
+                    string statutcmde = (commande.commandeStatutId != null) ? val.GetStatutCommande(commande.commandeStatutId).statut_cmde:"";
+
+                    commandeVm.commandeId = commande.commandeId;
+                    commandeVm.commandeDemandeur = referenceur;
+                    commandeVm.date_cmde = commande.date_cmde;
+                    commandeVm.date_livraison = commande.date_livraison;
+                    commandeVm.commandeType = cmdeType;
+                    commandeVm.nombre_mots = commande.nombre_mots;
+                    commandeVm.mot_cle_pricipal = commande.mot_cle_pricipal;
+                    commandeVm.mot_cle_secondaire = commande.mot_cle_secondaire;
+                    commandeVm.consigne_references = commande.consigne_references;
+                    commandeVm.consigneType = consigneType;
+                    commandeVm.consigne_autres = commande.consigne_autres;
+                    commandeVm.etat_paiement = commande.etat_paiement;
+                    commandeVm.commandeRedacteur = redacteur;
+                    commandeVm.ordrePriorite = priorite;
+                    commandeVm.balise_titre = commande.balise_titre;
+                    commandeVm.contenu_livre = commande.contenu_livre;
+                    commandeVm.projet = projet;
+                    commandeVm.thematique = theme;
+                    commandeVm.statut_cmde = statutcmde;
+                    Session["cmdeEditModif"] = null;
+                
+
+                if (commandeVm.contenu_livre != null) ViewBag.ComptMetaContenu = commandeVm.contenu_livre.Length;
+
+                return commandeVm;
+            }
+
+            return null;
+        }
+
+        private COMMANDEViewModel SetCommandeDetails(Guid? commandeId)
+        {
+            if (!string.IsNullOrEmpty(Request.QueryString["not"]))
+            {
+                Guid? notificationId;
+                notificationId = Guid.Parse(Request.QueryString["not"]);
+                int res = UpdateStatutNotification(notificationId);
+            }
+
+
+            Commandes val = new Commandes();
+            COMMANDEViewModel commandeVm = val.GetDetailsCommande(commandeId);
 
             if (commandeVm != null)
             {
                 if (Session["cmdeEditModif"] != null)
                 {
-                    COMMANDEViewModel commande = (COMMANDEViewModel) Session["cmdeEditModif"];
+                    COMMANDEViewModel commande = (COMMANDEViewModel)Session["cmdeEditModif"];
                     string referenceur = val.GetUtilisateurReferenceur(commande.commandeReferenceurId).userNom;
                     string cmdeType = val.GetCommandeType(commande.commandeTypeId).Type;
                     string consigneType = val.GetCommandeContenuType(commande.consigne_type_contenuId).Type;
@@ -440,19 +579,40 @@ namespace RedactApplication.Controllers
 
                 if (commandeVm.contenu_livre != null) ViewBag.ComptMetaContenu = commandeVm.contenu_livre.Length;
 
-                return View(commandeVm);
+                return commandeVm;
             }
 
-            return View();
+            return null;
         }
+
+        // GET: COMMANDEs/Details/5
+        public ActionResult DetailsCommande(Guid? hash, string not ="")
+        {
+            COMMANDEViewModel commandeVm = SetCommandeDetails(hash);
+            if (commandeVm != null)
+            {
+              
+                return View(commandeVm);
+            }
+               
+            return View("ErrorException");
+        }
+
+
+        // GET: COMMANDEs/Details/5
+        public ActionResult DetailsCommandeAValider(Guid? hash, string not = "")
+        {
+            COMMANDEViewModel commandeVm = SetCommandeDetails(hash);
+            if (commandeVm != null)
+                return View(commandeVm);
+            return View("ErrorException");
+        }
+
 
         // GET: COMMANDEs/Create
         public ActionResult Create()
         {
-            ViewBag.commande_typeId = new SelectList(db.COMMANDE_TYPE, "commandeTypeId", "Type");
-            ViewBag.consigne_type_contenuId = new SelectList(db.CONTENU_TYPE, "contenuTypeId", "Type");
-            ViewBag.commandeReferenceurId = new SelectList(db.UTILISATEURs, "userId", "userNom");
-            ViewBag.commandeProjet = new SelectList(db.PROJETS, "projetId", "projet_name");
+           
             Commandes val = new Commandes();
             COMMANDEViewModel commandeVm = new COMMANDEViewModel();
             commandeVm.ListProjet = val.GetListProjetItem();
@@ -521,8 +681,19 @@ namespace RedactApplication.Controllers
               
                 newcommande.date_livraison = model.date_livraison;
                 newcommande.date_cmde = DateTime.Now;
-              
+                int? maxRef = db.COMMANDEs.Max(u => u.commandeREF);
+                newcommande.commandeREF = maxRef + 1;
                 newcommande.commandeId = Guid.NewGuid();
+                int? volume = GetVolumeEnCours(newcommande.commandeRedacteurId);
+                if (newcommande.REDACTEUR != null && volume > Convert.ToInt32(newcommande.REDACTEUR.redactVolume) && Session["VolumeInfo"] == null)
+                {
+                    Session["VolumeInfo"] = "Le volume maximal du mois pour le rédacteur " + newcommande.REDACTEUR.userNom + " est atteint. Vous confirmez l'envoi de la commande ? ";
+                    COMMANDEViewModel cmd = SetCommandeViewModelDetails(newcommande);
+                    return View("Create", cmd);
+                }
+
+                Session["VolumeInfo"] = null;
+
                 db.COMMANDEs.Add(newcommande);
                 try
                 {
@@ -595,9 +766,15 @@ namespace RedactApplication.Controllers
                                 int result = db.SaveChanges();
                                 if (result > 0)
                                 {
-                                    int commandenew = Convert.ToInt32(Session["commande"].ToString());
-                                    Session["commande"] = commandenew + 1;
-                                    return View("CreateCommandeConfirmation");
+                                    if (SendNotification(newcommande, newcommande.commandeReferenceurId, newcommande.commandeRedacteurId) > 0)
+                                        return View("CreateCommandeConfirmation");
+
+                                    return RedirectToRoute("Home", new RouteValueDictionary
+                                    {
+                                        {"controller", "Commandes"},
+                                        {"action", "Create"}
+                                    });
+
                                 }
                             }
                         }
@@ -614,11 +791,12 @@ namespace RedactApplication.Controllers
                 }
             }
 
-            return RedirectToRoute("Home", new RouteValueDictionary
-            {
-                {"controller", "Commandes"},
-                {"action", "Create"}
-            });
+            return View("ErrorException");
+        }
+
+        public ActionResult CommandeConfirmationVolume()
+        {
+            return View("CreateCommandeConfirmation");
         }
 
 
@@ -649,6 +827,7 @@ namespace RedactApplication.Controllers
             return View(commandeVm);
         }
 
+      
 
         /*pour aller a la page de modification du mot de passe*/
         public ActionResult AcceptCommande(Guid? hash)
@@ -699,6 +878,20 @@ namespace RedactApplication.Controllers
 
         }
 
+        public int UpdateStatutNotification(Guid? notificationId)
+        {
+            var notif =  db.NOTIFICATIONs.SingleOrDefault(x=>x.notificationId == notificationId);
+            
+            notif.statut = false;
+            
+            
+            var res = db.SaveChanges();
+
+            return res;
+
+        }
+
+
         // GET: COMMANDEs/Edit/5
         public ActionResult Edit(Guid? hash)
         {
@@ -735,12 +928,7 @@ namespace RedactApplication.Controllers
             if (currentCommande.consigne_type_contenuId != null)
                 currentCommande.listContenuTypeId = (Guid)currentCommande.consigne_type_contenuId;
 
-            if (Session["role"] != null && Session["role"].ToString() == "2")
-            {
-                string etat = "Livré";
-                var statut = db.STATUT_COMMANDE.SingleOrDefault(x => x.statut_cmde.Contains(etat));
-                currentCommande.listStatutId = statut.statutCommandeId;
-            }
+            
                
 
             Session["cmdeEditModif"] = null;
@@ -763,10 +951,14 @@ namespace RedactApplication.Controllers
                 bool notifSms = false;
                 if (Session["role"] != null && Session["role"].ToString() == "2")
                 {
+                    string etat = "Livré";
+                    var statut = db.STATUT_COMMANDE.SingleOrDefault(x => x.statut_cmde.Contains(etat));
+                    commande.commandeStatutId = statut.statutCommandeId;
+
                     commande.balise_titre = model.balise_titre;
                     commande.contenu_livre = model.contenu_livre;
-                    commande.commandeStatutId = model.listStatutId;
-                     
+
+                    commande.dateLivraisonReel = DateTime.Now;
                     toId = commande.commandeReferenceurId;
                 }
 
@@ -822,11 +1014,18 @@ namespace RedactApplication.Controllers
                         StatePageSingleton.SanitizeString(Sanitizer.GetSafeHtmlFragment(model.consigne_autres));
 
                     commande.date_livraison = model.date_livraison;
+                    int? volume = GetVolumeEnCours(commande.commandeRedacteurId);
+                    if (commande.REDACTEUR != null && volume > Convert.ToInt32(commande.REDACTEUR.redactVolume) && Session["VolumeInfo"] == null)
+                    {
+                        Session["VolumeInfo"] = "Le volume maximal du mois pour le rédacteur " + commande.REDACTEUR.userNom + " est atteint. Vous confirmez l'envoi de la commande ? ";
+                        COMMANDEViewModel cmd = SetCommandeViewModelDetails(commande);
+                        return View("Edit", cmd);
+                    }
                 }
             
-
             try
                 {
+                    Session["VolumeInfo"] = null;
                     int result = db.SaveChanges();
                     if (result > 0)
                     {

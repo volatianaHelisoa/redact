@@ -44,7 +44,7 @@ namespace RedactApplication.Controllers
                     FormsAuthentication.SetAuthCookie(utilisateur.userId.ToString(), model.saveOnComputer);/*CREATION COOKIES*/
                     //Session["mail"] = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(utilisateur.userMail);
                     //Session["pass"] = pwdCrypte;
-                    //Session["logoUrl"] = utilisateur.logoUrl;
+                    Session["logoUrl"] = utilisateur.logoUrl;
                     Session["name"] = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(utilisateur.userNom);
                     Session["surname"] = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(utilisateur.userPrenom);
                     Session["role"] = (new Utilisateurs()).GetUtilisateurRoleToString(utilisateur.userId);
@@ -55,7 +55,7 @@ namespace RedactApplication.Controllers
                         trigerAuths.Values["password"] = Encryptor.Decrypt(utilisateur.userMotdepasse);
                         trigerAuths.Expires = DateTime.Now.AddDays(Convert.ToInt32(ConfigurationManager.AppSettings["cookiesValidity"]));
                         Response.Cookies.Add(trigerAuths);
-                        Session["logoUrl"] = utilisateur.logoUrl;
+                       
                     }
                 }
                 else

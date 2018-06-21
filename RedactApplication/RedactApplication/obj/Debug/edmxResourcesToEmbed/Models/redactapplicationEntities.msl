@@ -4,6 +4,7 @@
     <EntitySetMapping Name="COMMANDEs">
       <EntityTypeMapping TypeName="redactapplicationModel.COMMANDE">
         <MappingFragment StoreEntitySet="COMMANDE">
+          <ScalarProperty Name="dateLivraisonReel" ColumnName="dateLivraisonReel" />
           <ScalarProperty Name="commandeREF" ColumnName="commandeREF" />
           <ScalarProperty Name="dateToken" ColumnName="dateToken" />
           <ScalarProperty Name="commandeToken" ColumnName="commandeToken" />

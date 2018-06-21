@@ -1,0 +1,153 @@
+﻿@model RedactApplication.Models.COMMANDEViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+@section Scripts{
+<script type="text/javascript" src="~/Scripts/js/clipboard.min.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+
+            var clipboard = new ClipboardJS('.btn-copy', {
+                text: function () {
+                    var htmlBlock = document.querySelector('.contenu-livre');
+                    return htmlBlock.innerHTML;
+                }
+            });
+            clipboard.on('success', function (e) {
+                console.log(e);
+            });
+            clipboard.on('error', function (e) {
+                console.log(e);
+            });
+           
+        });
+
+    </script>
+}
+
+
+
+
+<main class="wrapperpages">
+    <div class="page pagesDivision clear">
+
+        <section class="column2 rightDivision fullWidth">
+            <div class="rowpad">
+                <div>
+                    <div class="admin-link-menu">
+
+                        <a href="~/Home/ListeUser" class="admin-link ">Utilisateurs</a>
+                        <a href="~/Commandes/ListCommandes" class="admin-link active">Commandes</a>
+                    </div>
+                    <!-- end admin menu -->
+                </div>
+                <div id="divisionContent">
+                    <div class="breadcrumb">
+                        <span>Commande > Détails de la commande</span>
+                        <hr />
+                    </div>
+                   
+
+                    <div class="useredits innerform-container">
+
+                        <div class="dashEdit-user item-container">
+                            <i class="fa fa-3x"><img src="~/images/icon-create-custom.png" alt="Photo icon profil"></i>
+
+                           
+                            @if (Model != null)
+                            {
+                                <div class="center_blc">
+                                   
+                                    
+                                       
+                                        <fieldset>
+                                            <div class="inline-form clr">
+                                                <input type="hidden" value="@Model.commandeId" name="idCommande">
+                                                <div>
+                                                    <span>Demandeur</span>
+                                                    @Html.DisplayFor(model => model.commandeDemandeur, new {@class = "input"})
+                                                </div>
+                                                <div>
+                                                    <span>Rédacteur</span>
+                                                    @Html.DisplayFor(model => model.commandeRedacteur, new {@class = "input"})
+                                                </div>
+                                                <div>
+                                                    <span>Date de commande </span>
+                                                    @Html.DisplayFor(model => model.date_cmde, new {@class = "input"})
+                                                </div>
+                                                <div>
+                                                    <span>Date de livraison </span>
+                                                    @Html.DisplayFor(model => model.date_livraison, new {@class = "input"})
+                                                </div>
+                                                <div>
+                                                    <span>Ordre de priorité</span>
+                                                    @Html.DisplayFor(model => model.ordrePriorite, new {@class = "input"})
+                                                </div>
+                                                <div>
+                                                    <span>Site </span>
+                                                    @Html.DisplayFor(model => model.projet, new {@class = "input"})
+                                                </div>
+                                                <div>
+                                                    <span>Thème </span>
+                                                    @Html.DisplayFor(model => model.thematique, new {@class = "input"})
+                                                </div>
+                                                <div>
+                                                    <span>Type de Textes </span>
+                                                    @Html.DisplayFor(model => model.commandeType, new {@class = "input"})
+                                                </div>
+                                                <div>
+                                                    <span>Nombre de mots</span>
+                                                    @Html.DisplayFor(model => model.nombre_mots, new {@class = "input"})
+                                                </div>
+                                                <div>
+                                                    <span>Mots clé principal</span>
+                                                    <p> @Html.DisplayFor(model => model.mot_cle_pricipal, new {@class = "input"})</p>
+                                                    <span>Mots clé secondaire</span>
+                                                    <p> @Html.DisplayFor(model => model.mot_cle_secondaire, new {@class = "input"})</p>
+                                                    <span>Texte d’ancrage</span>
+                                                    <p> @Html.DisplayFor(model => model.texte_ancrage, new {@class = "input"})</p>
+                                                </div>
+
+                                                <div>
+                                                    <span>Consignes </span>
+                                                    @Html.DisplayFor(model => model.consigne_references, new {@class = "input"})
+                                                    <br/>
+                                                    @Html.DisplayFor(model => model.consigneType, new {@class = "input"})
+                                                    <br/>
+                                                    @Html.DisplayFor(model => model.consigne_autres, new {@class = "input"})
+
+                                                </div>
+                                                
+
+                                               
+
+                                                <div class="clear"></div>
+
+                                                <div class="btn-submit sav_us1">
+                                                    <button type="submit" class="green_hit" onclick="@("window.location.href='" + @Url.Action("AcceptCommande", "Commandes", new {hash = Model.commandeId}) + "' ");">Accepter</button>
+                                                    @Html.ActionLink("Cancel", "ListCommandes", "Commandes", new {}, new {@class = "resetbtn cacel_us1 left_b1"})
+                                                </div>
+
+                                            </div>
+                                        </fieldset>
+                                    
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+
+
+
+
+
+
+
+

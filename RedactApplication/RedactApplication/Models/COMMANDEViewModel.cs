@@ -22,6 +22,9 @@ namespace RedactApplication.Models
         public Nullable<System.Guid> consigne_type_contenuId { get; set; }
         public string consigne_autres { get; set; }
         public string balise_titre { get; set; }
+        
+        public Nullable<int> commandeREF { get; set; }
+        public Nullable<System.DateTime> dateLivraisonReel { get; set; }
 
         [AllowHtml]
         public string contenu_livre { get; set; }
@@ -41,7 +44,8 @@ namespace RedactApplication.Models
         public string thematique { get; set; }
         public string statut_cmde { get; set; }
 
-     
+
+        
 
         [Required]
         [Display(Name = "SelectItemProjet")]

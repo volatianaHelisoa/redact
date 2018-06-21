@@ -104,6 +104,7 @@
     <NavigationProperty Name="REFERENCEUR" ToRole="UTILISATEUR" FromRole="COMMANDE" Relationship="redactapplicationModel.FK_COMMANDE_UTILISATEUR" />
     <NavigationProperty Name="NOTIFICATIONs" Relationship="redactapplicationModel.FK_NOTIFICATION_COMMANDE" FromRole="COMMANDE" ToRole="NOTIFICATION" />
     <Property Name="commandeREF" Type="Int32" />
+    <Property Name="dateLivraisonReel" Type="DateTime" Precision="3" />
   </EntityType>
   <EntityType Name="COMMANDE_TYPE">
     <Key>

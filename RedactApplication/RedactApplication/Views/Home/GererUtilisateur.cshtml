@@ -144,13 +144,19 @@
                             <div class="dashCreate-user item-container">
 
                                 <div class="center_blc">
-                                    @using (Html.BeginForm("EnregistrerUtilisateur", "Home", FormMethod.Post, new {@class = "formfields", @id = "enregistrerUtilisateur"}))
+                                    @using (Html.BeginForm("EnregistrerUtilisateur", "Home", FormMethod.Post, new {@class = "formfields", @id = "enregistrerUtilisateur", enctype = "multipart/form-data" }))
                                     {
                                         <fieldset>
 
                                             <div class="inline-form clr">
 
-
+                                                <div>
+                                                    <label>
+                                                        <span>Logo</span>
+                                                        
+                                                        @Html.TextBoxFor(m => m.logoUrl, new { type = "file", name = "file" })
+                                                    </label>
+                                                </div>
                                                 <div>
                                                     <label>
                                                         <span>Nom (*)</span>
@@ -171,22 +177,21 @@
                                                         @Html.TextBoxFor(x => x.userMail, new {@class = "input", @required = true, @name = "name", @type = "email", pattern = "/^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}" })
                                                     </label>
                                                 </div>
+                                                <div>
+                                                    <label>
+                                                        <span>Skype </span>
+                                                        @Html.TextBoxFor(x => x.redactSkype, new { @class = "input", @name = "name" })
+
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <label>
+                                                        <span>Téléphone </span>
+                                                        @Html.TextBoxFor(x => x.redactPhone, new { @class = "input", @name = "name" })
+
+                                                    </label>
+                                                </div>
                                                 <div class="select_cat usr-sel" id="CheckEditRedacteur">
-                                                    
-                                                    <div>
-                                                        <label>
-                                                            <span>Skype </span>
-                                                            @Html.TextBoxFor(x => x.redactSkype, new { @class = "input", @name = "name" })
-
-                                                        </label>
-                                                    </div>
-                                                    <div>
-                                                        <label>
-                                                            <span>Téléphone </span>
-                                                            @Html.TextBoxFor(x => x.redactPhone, new { @class = "input", @name = "name" })
-
-                                                        </label>
-                                                    </div>
                                                     <div>
                                                         <label>
                                                             <span>Volume / jour</span>
@@ -214,6 +219,7 @@
                                                             <span>Niveau </span>
                                                             @Html.DropDownListFor(x => x.redactNiveau,
                                                                 new List<SelectListItem> {
+                                                                    new SelectListItem { Value = " " , Text = "Selectionner niveau" },
                                                                     new SelectListItem { Value = "Bas" , Text = "Bas" },
                                                                     new SelectListItem { Value = "Moyen" , Text = "Moyen" },
                                                                     new SelectListItem { Value = "Avancé" , Text = "Avancé" }
@@ -236,6 +242,7 @@
 
                                                             @Html.DropDownListFor(x => x.redactModePaiement,
                                                                 new List<SelectListItem> {
+                                                                    new SelectListItem { Value = " " , Text = "Selectionner mode de paiement" },
                                                                     new SelectListItem { Value = "Chèque" , Text = "Chèque" },
                                                                     new SelectListItem { Value = "E-money" , Text = "E-money" },
                                                                     new SelectListItem { Value = "Virement bacaire" , Text = "Virement bacaire" }

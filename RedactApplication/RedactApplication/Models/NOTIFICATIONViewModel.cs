@@ -16,7 +16,7 @@ namespace RedactApplication.Models
 
         public int commanderef { get; set; }
         public string fromUserName { get; set; }
-      
+        public  string permalink { get; set; }
 
         public virtual COMMANDE COMMANDE { get; set; }
         public virtual UTILISATEUR FROMUSER { get; set; }

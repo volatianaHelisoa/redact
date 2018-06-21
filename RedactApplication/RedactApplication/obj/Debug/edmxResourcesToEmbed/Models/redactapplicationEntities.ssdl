@@ -27,6 +27,7 @@
     <Property Name="commandeToken" Type="uniqueidentifier" />
     <Property Name="dateToken" Type="datetime" />
     <Property Name="commandeREF" Type="int" />
+    <Property Name="dateLivraisonReel" Type="datetime" />
   </EntityType>
   <EntityType Name="COMMANDE_TYPE">
     <Key>

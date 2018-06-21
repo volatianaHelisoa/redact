@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using RedactApplication.Models;
@@ -134,7 +136,8 @@ namespace RedactApplication.Controllers
                     userVm.redactReferenceur = currentuser.redactReferenceur;
                     userVm.redactThemes = currentuser.redactThemes;
                     userVm.redactVolume = currentuser.redactVolume;
-                    
+                    userVm.logoUrl = currentuser.logoUrl;
+                    Session["logoUrl"] = currentuser.logoUrl;
                     return View(userVm);
                 }
 
@@ -277,6 +280,23 @@ namespace RedactApplication.Controllers
             return View(currentUser);
         }
 
+        private void SaveRedactThemes(string themes,Guid redactGuid)
+        {
+            var listids = new List<Guid>();
+            var listThemes = themes.Split(',');
+            redactapplicationEntities db = new Models.redactapplicationEntities();
+            foreach (var theme in listThemes)
+            {
+                var _theme = db.THEMES.SingleOrDefault(x => x.theme_name.Contains(theme));
+                if (_theme != null)
+                {
+                    REDACT_THEME redactTheme = new REDACT_THEME{themeId = _theme.themeId,userId = redactGuid };
+                    db.REDACT_THEME.Add(redactTheme);
+                   
+                }
+            }
+        }
+
         /// <summary>
         /// Retourne la vue d'édition d'Utilisateur.
         /// </summary>
@@ -327,7 +347,7 @@ namespace RedactApplication.Controllers
                     userVm.redactThemes = utilisateur.redactThemes;
                     userVm.redactVolume = utilisateur.redactVolume;
                     userVm.redactTarif = utilisateur.redactTarif;
-
+                    userVm.logoUrl =  utilisateur.logoUrl; 
                     if (Session["userEditModif"] != null)
                     {
                         UTILISATEURViewModel model = (UTILISATEURViewModel) Session["userEditModif"];
@@ -340,6 +360,7 @@ namespace RedactApplication.Controllers
                         userVm.redactPhone = model.redactPhone;
                         userVm.redactReferenceur = model.redactReferenceur;
                         userVm.redactThemes = model.redactThemes;
+                       
                         userVm.redactVolume = model.redactVolume;
                         userVm.redactTarif = model.redactTarif;
                         Session["userEditModif"] = null;
@@ -666,7 +687,8 @@ namespace RedactApplication.Controllers
         /// <returns>View</returns>
         [Authorize]
         [ValidateInput(false)]
-        public ActionResult EnregistrerUtilisateur(UTILISATEURViewModel model, int[] selectedDiv, string[] selectedRole)
+        [HttpPost]
+        public ActionResult EnregistrerUtilisateur(UTILISATEURViewModel model, int[] selectedDiv, string[] selectedRole, HttpPostedFileBase logoUrl)
         {
             model.userNom = StatePageSingleton.SanitizeString(Sanitizer.GetSafeHtmlFragment(model.userNom));
             model.userPrenom = StatePageSingleton.SanitizeString(Sanitizer.GetSafeHtmlFragment(model.userPrenom));
@@ -680,6 +702,20 @@ namespace RedactApplication.Controllers
 
             Guid user = Guid.Parse(HttpContext.User.Identity.Name);
             ViewBag.userRole = (new Utilisateurs()).GetUtilisateurRoleToString(user);
+            
+
+            string path = Server.MapPath("~/images/Logo/");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            if (logoUrl != null)
+            {
+                string fileName = Path.GetFileName(logoUrl.FileName);
+                logoUrl.SaveAs(path + fileName);
+                model.logoUrl = "/images/Logo/" + fileName;
+            }
 
             redactapplicationEntities db = new Models.redactapplicationEntities();
 
@@ -706,15 +742,19 @@ namespace RedactApplication.Controllers
                     utilisateur.userNom = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(model.userNom.ToLower());
                     utilisateur.userPrenom = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(model.userPrenom.ToLower());
                     utilisateur.userMail = model.userMail;
+                    utilisateur.logoUrl = model.logoUrl;
 
                     utilisateur.redactSkype = model.redactSkype;
                     utilisateur.redactModePaiement = model.redactModePaiement;
                     utilisateur.redactNiveau = model.redactNiveau;
-                    utilisateur.redactPhone = model.redactPhone;
                     utilisateur.redactReferenceur = model.redactReferenceur;
                     utilisateur.redactThemes = model.redactThemes;
+                    SaveRedactThemes(model.redactThemes, utilisateur.userId);
                     utilisateur.redactVolume = model.redactVolume;
                     utilisateur.redactTarif = model.redactTarif;
+
+                    utilisateur.redactPhone = model.redactPhone;
+                    
 
                     utilisateur.userId = Guid.NewGuid();
                     db.UTILISATEURs.Add(utilisateur);
@@ -781,7 +821,8 @@ namespace RedactApplication.Controllers
         /// <returns>View</returns>
         [Authorize]
         [ValidateInput(false)]
-        public ActionResult ModifierUtilisateur(UTILISATEURViewModel model, int[] selectedDiv, string[] selectedRole, Guid idUser)
+        [HttpPost]
+        public ActionResult ModifierUtilisateur(UTILISATEURViewModel model, int[] selectedDiv, string[] selectedRole, Guid idUser, HttpPostedFileBase logoUrl)
         {
             model.userNom = StatePageSingleton.SanitizeString(Sanitizer.GetSafeHtmlFragment(model.userNom));
             model.userPrenom = StatePageSingleton.SanitizeString(Sanitizer.GetSafeHtmlFragment(model.userPrenom));
@@ -795,6 +836,20 @@ namespace RedactApplication.Controllers
             model.redactThemes = StatePageSingleton.SanitizeString(Sanitizer.GetSafeHtmlFragment(model.redactThemes));
             model.redactVolume = StatePageSingleton.SanitizeString(Sanitizer.GetSafeHtmlFragment(model.redactVolume));
             model.redactTarif = StatePageSingleton.SanitizeString(Sanitizer.GetSafeHtmlFragment(model.redactTarif));
+
+
+            string path = Server.MapPath("~/images/Logo/");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            if (logoUrl != null)
+            {
+                string fileName = Path.GetFileName(logoUrl.FileName);
+                logoUrl.SaveAs(path + fileName);
+                model.logoUrl = "/images/Logo/" + fileName;
+            }
 
             if (string.IsNullOrEmpty(model.userNom) || string.IsNullOrEmpty(model.userPrenom) || string.IsNullOrEmpty(model.userMail))
             {
@@ -888,9 +943,10 @@ namespace RedactApplication.Controllers
                     user.redactPhone = model.redactPhone;
                     user.redactReferenceur = model.redactReferenceur;
                     user.redactThemes = model.redactThemes;
+                    SaveRedactThemes(model.redactThemes, user.userId);
                     user.redactVolume = model.redactVolume;
                     user.redactTarif = model.redactTarif;
-                    
+                    user.logoUrl = model.logoUrl;
                     db.SaveChanges();
                 }
                 catch (Exception ex)

@@ -76,21 +76,26 @@ namespace RedactApplication.Models
                         UTILISATEUR fromUser = GetUtilisateur((Guid) reader["fromId"]);
                         UTILISATEUR toUser = GetUtilisateur((Guid)reader["toId"]);
                         COMMANDE commande = GetCommande((Guid) reader["commandeId"]);
-
-                        messages.Add(item: new NOTIFICATIONViewModel()
+                        if ((bool) reader["statut"])
                         {
-                            notificationId = (Guid)reader["notificationId"],
-                            commandeId = (Guid)reader["commandeId"],
-                            commanderef = (int) commande.commandeREF,
-                            statut = (bool)reader["statut"],
-                            fromId = (Guid)reader["fromId"] ,
-                            fromUserName = fromUser.userNom,
-                            toId = (Guid)reader["toId"],
-                            datenotif = Convert.ToDateTime(reader["datenotif"])
-                        });
+
+                            messages.Add(item: new NOTIFICATIONViewModel()
+                            {
+                                notificationId = (Guid) reader["notificationId"],
+                                commandeId = (Guid) reader["commandeId"],
+                                commanderef = (int) commande.commandeREF,
+                                statut = (bool) reader["statut"],
+                                fromId = (Guid) reader["fromId"],
+                                fromUserName = fromUser.userNom,
+                                toId = (Guid) reader["toId"],
+
+                                datenotif = Convert.ToDateTime(reader["datenotif"])
+                            });
+                        }
                     }
                 }
             }
+
             return messages;
         }
 
