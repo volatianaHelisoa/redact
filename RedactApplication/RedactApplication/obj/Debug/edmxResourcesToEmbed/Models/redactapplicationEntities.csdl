@@ -4,10 +4,13 @@
     <EntitySet Name="COMMANDEs" EntityType="redactapplicationModel.COMMANDE" />
     <EntitySet Name="COMMANDE_TYPE" EntityType="redactapplicationModel.COMMANDE_TYPE" />
     <EntitySet Name="CONTENU_TYPE" EntityType="redactapplicationModel.CONTENU_TYPE" />
+    <EntitySet Name="FACTUREs" EntityType="redactapplicationModel.FACTURE" />
+    <EntitySet Name="NOTIFICATIONs" EntityType="redactapplicationModel.NOTIFICATION" />
     <EntitySet Name="PROJETS" EntityType="redactapplicationModel.PROJET" />
     <EntitySet Name="REDACT_THEME" EntityType="redactapplicationModel.REDACT_THEME" />
     <EntitySet Name="ROLEs" EntityType="redactapplicationModel.ROLE" />
     <EntitySet Name="STATUT_COMMANDE" EntityType="redactapplicationModel.STATUT_COMMANDE" />
+    <EntitySet Name="TEMPLATEs" EntityType="redactapplicationModel.TEMPLATE" />
     <EntitySet Name="THEMES" EntityType="redactapplicationModel.THEME" />
     <EntitySet Name="UserRoles" EntityType="redactapplicationModel.UserRole" />
     <EntitySet Name="UTILISATEURs" EntityType="redactapplicationModel.UTILISATEUR" />
@@ -17,6 +20,10 @@
     </AssociationSet>
     <AssociationSet Name="FK_COMMANDE_CONTENU_TYPE" Association="redactapplicationModel.FK_COMMANDE_CONTENU_TYPE">
       <End Role="CONTENU_TYPE" EntitySet="CONTENU_TYPE" />
+      <End Role="COMMANDE" EntitySet="COMMANDEs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_COMMANDE_FACTURE" Association="redactapplicationModel.FK_COMMANDE_FACTURE">
+      <End Role="FACTURE" EntitySet="FACTUREs" />
       <End Role="COMMANDE" EntitySet="COMMANDEs" />
     </AssociationSet>
     <AssociationSet Name="FK_COMMANDE_PROJETS" Association="redactapplicationModel.FK_COMMANDE_PROJETS">
@@ -39,6 +46,22 @@
       <End Role="UTILISATEUR" EntitySet="UTILISATEURs" />
       <End Role="COMMANDE" EntitySet="COMMANDEs" />
     </AssociationSet>
+    <AssociationSet Name="FK_NOTIFICATION_COMMANDE" Association="redactapplicationModel.FK_NOTIFICATION_COMMANDE">
+      <End Role="COMMANDE" EntitySet="COMMANDEs" />
+      <End Role="NOTIFICATION" EntitySet="NOTIFICATIONs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NOTIFICATION_DEMANDEUR" Association="redactapplicationModel.FK_NOTIFICATION_DEMANDEUR">
+      <End Role="UTILISATEUR" EntitySet="UTILISATEURs" />
+      <End Role="NOTIFICATION" EntitySet="NOTIFICATIONs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NOTIFICATION_REDACTEUR" Association="redactapplicationModel.FK_NOTIFICATION_REDACTEUR">
+      <End Role="UTILISATEUR" EntitySet="UTILISATEURs" />
+      <End Role="NOTIFICATION" EntitySet="NOTIFICATIONs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TEMPLATE_PROJETS" Association="redactapplicationModel.FK_TEMPLATE_PROJETS">
+      <End Role="PROJET" EntitySet="PROJETS" />
+      <End Role="TEMPLATE" EntitySet="TEMPLATEs" />
+    </AssociationSet>
     <AssociationSet Name="FK_REDACT_THEME_THEMES" Association="redactapplicationModel.FK_REDACT_THEME_THEMES">
       <End Role="THEME" EntitySet="THEMES" />
       <End Role="REDACT_THEME" EntitySet="REDACT_THEME" />
@@ -51,22 +74,17 @@
       <End Role="ROLE" EntitySet="ROLEs" />
       <End Role="UserRole" EntitySet="UserRoles" />
     </AssociationSet>
+    <AssociationSet Name="FK_TEMPLATE_THEMES" Association="redactapplicationModel.FK_TEMPLATE_THEMES">
+      <End Role="THEME" EntitySet="THEMES" />
+      <End Role="TEMPLATE" EntitySet="TEMPLATEs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TEMPLATE_UTILISATEUR" Association="redactapplicationModel.FK_TEMPLATE_UTILISATEUR">
+      <End Role="UTILISATEUR" EntitySet="UTILISATEURs" />
+      <End Role="TEMPLATE" EntitySet="TEMPLATEs" />
+    </AssociationSet>
     <AssociationSet Name="FK_UserRole_UTILISATEUR" Association="redactapplicationModel.FK_UserRole_UTILISATEUR">
       <End Role="UTILISATEUR" EntitySet="UTILISATEURs" />
       <End Role="UserRole" EntitySet="UserRoles" />
-    </AssociationSet>
-    <EntitySet Name="NOTIFICATIONs" EntityType="redactapplicationModel.NOTIFICATION" />
-    <AssociationSet Name="FK_NOTIFICATION_COMMANDE" Association="redactapplicationModel.FK_NOTIFICATION_COMMANDE">
-      <End Role="COMMANDE" EntitySet="COMMANDEs" />
-      <End Role="NOTIFICATION" EntitySet="NOTIFICATIONs" />
-    </AssociationSet>
-    <AssociationSet Name="FK_NOTIFICATION_DEMANDEUR" Association="redactapplicationModel.FK_NOTIFICATION_DEMANDEUR">
-      <End Role="UTILISATEUR" EntitySet="UTILISATEURs" />
-      <End Role="NOTIFICATION" EntitySet="NOTIFICATIONs" />
-    </AssociationSet>
-    <AssociationSet Name="FK_NOTIFICATION_REDACTEUR" Association="redactapplicationModel.FK_NOTIFICATION_REDACTEUR">
-      <End Role="UTILISATEUR" EntitySet="UTILISATEURs" />
-      <End Role="NOTIFICATION" EntitySet="NOTIFICATIONs" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="COMMANDE">
@@ -95,16 +113,18 @@
     <Property Name="commandeThemeId" Type="Guid" />
     <Property Name="commandeToken" Type="Guid" />
     <Property Name="dateToken" Type="DateTime" Precision="3" />
+    <Property Name="commandeREF" Type="Int32" />
+    <Property Name="dateLivraisonReel" Type="DateTime" Precision="3" />
+    <Property Name="factureId" Type="Guid" />
     <NavigationProperty Name="COMMANDE_TYPE" Relationship="redactapplicationModel.FK_COMMANDE_COMMANDE_TYPE" FromRole="COMMANDE" ToRole="COMMANDE_TYPE" />
     <NavigationProperty Name="CONTENU_TYPE" Relationship="redactapplicationModel.FK_COMMANDE_CONTENU_TYPE" FromRole="COMMANDE" ToRole="CONTENU_TYPE" />
+    <NavigationProperty Name="FACTURE" Relationship="redactapplicationModel.FK_COMMANDE_FACTURE" FromRole="COMMANDE" ToRole="FACTURE" />
     <NavigationProperty Name="PROJET" Relationship="redactapplicationModel.FK_COMMANDE_PROJETS" FromRole="COMMANDE" ToRole="PROJET" />
     <NavigationProperty Name="REDACTEUR" Relationship="redactapplicationModel.FK_COMMANDE_REDACTEUR" FromRole="COMMANDE" ToRole="UTILISATEUR" />
     <NavigationProperty Name="STATUT_COMMANDE" Relationship="redactapplicationModel.FK_COMMANDE_STATUT_COMMANDE" FromRole="COMMANDE" ToRole="STATUT_COMMANDE" />
     <NavigationProperty Name="THEME" Relationship="redactapplicationModel.FK_COMMANDE_THEMES" FromRole="COMMANDE" ToRole="THEME" />
-    <NavigationProperty Name="REFERENCEUR" ToRole="UTILISATEUR" FromRole="COMMANDE" Relationship="redactapplicationModel.FK_COMMANDE_UTILISATEUR" />
+    <NavigationProperty Name="REFERENCEUR" Relationship="redactapplicationModel.FK_COMMANDE_UTILISATEUR" FromRole="COMMANDE" ToRole="UTILISATEUR" />
     <NavigationProperty Name="NOTIFICATIONs" Relationship="redactapplicationModel.FK_NOTIFICATION_COMMANDE" FromRole="COMMANDE" ToRole="NOTIFICATION" />
-    <Property Name="commandeREF" Type="Int32" />
-    <Property Name="dateLivraisonReel" Type="DateTime" Precision="3" />
   </EntityType>
   <EntityType Name="COMMANDE_TYPE">
     <Key>
@@ -122,6 +142,33 @@
     <Property Name="Type" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="COMMANDEs" Relationship="redactapplicationModel.FK_COMMANDE_CONTENU_TYPE" FromRole="CONTENU_TYPE" ToRole="COMMANDE" />
   </EntityType>
+  <EntityType Name="FACTURE">
+    <Key>
+      <PropertyRef Name="factureId" />
+    </Key>
+    <Property Name="factureId" Type="Guid" Nullable="false" />
+    <Property Name="factureNumero" Type="Int32" Nullable="false" />
+    <Property Name="dateEmission" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="dateDebut" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="dateFin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="montant" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="etat" Type="Boolean" />
+    <NavigationProperty Name="COMMANDEs" Relationship="redactapplicationModel.FK_COMMANDE_FACTURE" FromRole="FACTURE" ToRole="COMMANDE" />
+  </EntityType>
+  <EntityType Name="NOTIFICATION">
+    <Key>
+      <PropertyRef Name="notificationId" />
+    </Key>
+    <Property Name="notificationId" Type="Guid" Nullable="false" />
+    <Property Name="commandeId" Type="Guid" />
+    <Property Name="statut" Type="Boolean" />
+    <Property Name="fromId" Type="Guid" />
+    <Property Name="toId" Type="Guid" />
+    <Property Name="datenotif" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="COMMANDE" Relationship="redactapplicationModel.FK_NOTIFICATION_COMMANDE" FromRole="NOTIFICATION" ToRole="COMMANDE" />
+    <NavigationProperty Name="FROMUSER" Relationship="redactapplicationModel.FK_NOTIFICATION_DEMANDEUR" FromRole="NOTIFICATION" ToRole="UTILISATEUR" />
+    <NavigationProperty Name="TOUSER" Relationship="redactapplicationModel.FK_NOTIFICATION_REDACTEUR" FromRole="NOTIFICATION" ToRole="UTILISATEUR" />
+  </EntityType>
   <EntityType Name="PROJET">
     <Key>
       <PropertyRef Name="projetId" />
@@ -129,6 +176,7 @@
     <Property Name="projetId" Type="Guid" Nullable="false" />
     <Property Name="projet_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="COMMANDEs" Relationship="redactapplicationModel.FK_COMMANDE_PROJETS" FromRole="PROJET" ToRole="COMMANDE" />
+    <NavigationProperty Name="TEMPLATEs" Relationship="redactapplicationModel.FK_TEMPLATE_PROJETS" FromRole="PROJET" ToRole="TEMPLATE" />
   </EntityType>
   <EntityType Name="REDACT_THEME">
     <Key>
@@ -156,6 +204,23 @@
     <Property Name="statut_cmde" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="COMMANDEs" Relationship="redactapplicationModel.FK_COMMANDE_STATUT_COMMANDE" FromRole="STATUT_COMMANDE" ToRole="COMMANDE" />
   </EntityType>
+  <EntityType Name="TEMPLATE">
+    <Key>
+      <PropertyRef Name="templateId" />
+    </Key>
+    <Property Name="templateId" Type="Guid" Nullable="false" />
+    <Property Name="projetId" Type="Guid" />
+    <Property Name="themeId" Type="Guid" />
+    <Property Name="url" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="ftpUser" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="ftpPassword" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="dateCreation" Type="DateTime" Precision="0" />
+    <Property Name="userId" Type="Guid" />
+    <Property Name="html" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="PROJET" Relationship="redactapplicationModel.FK_TEMPLATE_PROJETS" FromRole="TEMPLATE" ToRole="PROJET" />
+    <NavigationProperty Name="THEME" Relationship="redactapplicationModel.FK_TEMPLATE_THEMES" FromRole="TEMPLATE" ToRole="THEME" />
+    <NavigationProperty Name="UTILISATEUR" Relationship="redactapplicationModel.FK_TEMPLATE_UTILISATEUR" FromRole="TEMPLATE" ToRole="UTILISATEUR" />
+  </EntityType>
   <EntityType Name="THEME">
     <Key>
       <PropertyRef Name="themeId" />
@@ -164,6 +229,7 @@
     <Property Name="theme_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="COMMANDEs" Relationship="redactapplicationModel.FK_COMMANDE_THEMES" FromRole="THEME" ToRole="COMMANDE" />
     <NavigationProperty Name="REDACT_THEME" Relationship="redactapplicationModel.FK_REDACT_THEME_THEMES" FromRole="THEME" ToRole="REDACT_THEME" />
+    <NavigationProperty Name="TEMPLATEs" Relationship="redactapplicationModel.FK_TEMPLATE_THEMES" FromRole="THEME" ToRole="TEMPLATE" />
   </EntityType>
   <EntityType Name="UserRole">
     <Key>
@@ -198,10 +264,11 @@
     <Property Name="redactVolumeRestant" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="COMMANDEs" Relationship="redactapplicationModel.FK_COMMANDE_REDACTEUR" FromRole="UTILISATEUR" ToRole="COMMANDE" />
     <NavigationProperty Name="COMMANDEs1" Relationship="redactapplicationModel.FK_COMMANDE_UTILISATEUR" FromRole="UTILISATEUR" ToRole="COMMANDE" />
-    <NavigationProperty Name="REDACT_THEME" Relationship="redactapplicationModel.FK_REDACT_THEME_UTILISATEUR" FromRole="UTILISATEUR" ToRole="REDACT_THEME" />
-    <NavigationProperty Name="UserRoles" Relationship="redactapplicationModel.FK_UserRole_UTILISATEUR" FromRole="UTILISATEUR" ToRole="UserRole" />
     <NavigationProperty Name="NOTIFICATIONs" Relationship="redactapplicationModel.FK_NOTIFICATION_DEMANDEUR" FromRole="UTILISATEUR" ToRole="NOTIFICATION" />
     <NavigationProperty Name="NOTIFICATIONs1" Relationship="redactapplicationModel.FK_NOTIFICATION_REDACTEUR" FromRole="UTILISATEUR" ToRole="NOTIFICATION" />
+    <NavigationProperty Name="REDACT_THEME" Relationship="redactapplicationModel.FK_REDACT_THEME_UTILISATEUR" FromRole="UTILISATEUR" ToRole="REDACT_THEME" />
+    <NavigationProperty Name="TEMPLATEs" Relationship="redactapplicationModel.FK_TEMPLATE_UTILISATEUR" FromRole="UTILISATEUR" ToRole="TEMPLATE" />
+    <NavigationProperty Name="UserRoles" Relationship="redactapplicationModel.FK_UserRole_UTILISATEUR" FromRole="UTILISATEUR" ToRole="UserRole" />
   </EntityType>
   <Association Name="FK_COMMANDE_COMMANDE_TYPE">
     <End Type="redactapplicationModel.COMMANDE_TYPE" Role="COMMANDE_TYPE" Multiplicity="0..1" />
@@ -224,6 +291,18 @@
       </Principal>
       <Dependent Role="COMMANDE">
         <PropertyRef Name="consigne_type_contenuId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_COMMANDE_FACTURE">
+    <End Type="redactapplicationModel.FACTURE" Role="FACTURE" Multiplicity="0..1" />
+    <End Type="redactapplicationModel.COMMANDE" Role="COMMANDE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FACTURE">
+        <PropertyRef Name="factureId" />
+      </Principal>
+      <Dependent Role="COMMANDE">
+        <PropertyRef Name="factureId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -287,6 +366,54 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_NOTIFICATION_COMMANDE">
+    <End Type="redactapplicationModel.COMMANDE" Role="COMMANDE" Multiplicity="0..1" />
+    <End Type="redactapplicationModel.NOTIFICATION" Role="NOTIFICATION" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="COMMANDE">
+        <PropertyRef Name="commandeId" />
+      </Principal>
+      <Dependent Role="NOTIFICATION">
+        <PropertyRef Name="commandeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NOTIFICATION_DEMANDEUR">
+    <End Type="redactapplicationModel.UTILISATEUR" Role="UTILISATEUR" Multiplicity="0..1" />
+    <End Type="redactapplicationModel.NOTIFICATION" Role="NOTIFICATION" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UTILISATEUR">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="NOTIFICATION">
+        <PropertyRef Name="fromId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NOTIFICATION_REDACTEUR">
+    <End Type="redactapplicationModel.UTILISATEUR" Role="UTILISATEUR" Multiplicity="0..1" />
+    <End Type="redactapplicationModel.NOTIFICATION" Role="NOTIFICATION" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UTILISATEUR">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="NOTIFICATION">
+        <PropertyRef Name="toId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TEMPLATE_PROJETS">
+    <End Type="redactapplicationModel.PROJET" Role="PROJET" Multiplicity="0..1" />
+    <End Type="redactapplicationModel.TEMPLATE" Role="TEMPLATE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PROJET">
+        <PropertyRef Name="projetId" />
+      </Principal>
+      <Dependent Role="TEMPLATE">
+        <PropertyRef Name="projetId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_REDACT_THEME_THEMES">
     <End Type="redactapplicationModel.THEME" Role="THEME" Multiplicity="1" />
     <End Type="redactapplicationModel.REDACT_THEME" Role="REDACT_THEME" Multiplicity="*" />
@@ -323,6 +450,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_TEMPLATE_THEMES">
+    <End Type="redactapplicationModel.THEME" Role="THEME" Multiplicity="0..1" />
+    <End Type="redactapplicationModel.TEMPLATE" Role="TEMPLATE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="THEME">
+        <PropertyRef Name="themeId" />
+      </Principal>
+      <Dependent Role="TEMPLATE">
+        <PropertyRef Name="themeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TEMPLATE_UTILISATEUR">
+    <End Type="redactapplicationModel.UTILISATEUR" Role="UTILISATEUR" Multiplicity="0..1" />
+    <End Type="redactapplicationModel.TEMPLATE" Role="TEMPLATE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UTILISATEUR">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="TEMPLATE">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_UserRole_UTILISATEUR">
     <End Type="redactapplicationModel.UTILISATEUR" Role="UTILISATEUR" Multiplicity="0..1" />
     <End Type="redactapplicationModel.UserRole" Role="UserRole" Multiplicity="*" />
@@ -332,56 +483,6 @@
       </Principal>
       <Dependent Role="UserRole">
         <PropertyRef Name="idUser" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="NOTIFICATION">
-    <Key>
-      <PropertyRef Name="notificationId" />
-    </Key>
-    <Property Name="notificationId" Type="Guid" Nullable="false" />
-    <Property Name="commandeId" Type="Guid" />
-    <Property Name="statut" Type="Boolean" />
-    <Property Name="fromId" Type="Guid" />
-    <Property Name="toId" Type="Guid" />
-    <NavigationProperty Name="COMMANDE" Relationship="redactapplicationModel.FK_NOTIFICATION_COMMANDE" FromRole="NOTIFICATION" ToRole="COMMANDE" />
-    <NavigationProperty Name="FROMUSER" Relationship="redactapplicationModel.FK_NOTIFICATION_DEMANDEUR" FromRole="NOTIFICATION" ToRole="UTILISATEUR" />
-    <NavigationProperty Name="TOUSER" Relationship="redactapplicationModel.FK_NOTIFICATION_REDACTEUR" FromRole="NOTIFICATION" ToRole="UTILISATEUR" />
-    <Property Name="datenotif" Type="DateTime" Precision="0" />
-  </EntityType>
-  <Association Name="FK_NOTIFICATION_COMMANDE">
-    <End Type="redactapplicationModel.COMMANDE" Role="COMMANDE" Multiplicity="0..1" />
-    <End Type="redactapplicationModel.NOTIFICATION" Role="NOTIFICATION" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="COMMANDE">
-        <PropertyRef Name="commandeId" />
-      </Principal>
-      <Dependent Role="NOTIFICATION">
-        <PropertyRef Name="commandeId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_NOTIFICATION_DEMANDEUR">
-    <End Type="redactapplicationModel.UTILISATEUR" Role="UTILISATEUR" Multiplicity="0..1" />
-    <End Type="redactapplicationModel.NOTIFICATION" Role="NOTIFICATION" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="UTILISATEUR">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="NOTIFICATION">
-        <PropertyRef Name="fromId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_NOTIFICATION_REDACTEUR">
-    <End Type="redactapplicationModel.UTILISATEUR" Role="UTILISATEUR" Multiplicity="0..1" />
-    <End Type="redactapplicationModel.NOTIFICATION" Role="NOTIFICATION" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="UTILISATEUR">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="NOTIFICATION">
-        <PropertyRef Name="toId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

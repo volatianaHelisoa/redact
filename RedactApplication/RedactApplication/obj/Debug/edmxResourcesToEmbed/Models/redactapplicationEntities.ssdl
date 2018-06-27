@@ -28,6 +28,7 @@
     <Property Name="dateToken" Type="datetime" />
     <Property Name="commandeREF" Type="int" />
     <Property Name="dateLivraisonReel" Type="datetime" />
+    <Property Name="factureId" Type="uniqueidentifier" />
   </EntityType>
   <EntityType Name="COMMANDE_TYPE">
     <Key>
@@ -42,6 +43,18 @@
     </Key>
     <Property Name="contenuTypeId" Type="uniqueidentifier" Nullable="false" />
     <Property Name="Type" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="FACTURE">
+    <Key>
+      <PropertyRef Name="factureId" />
+    </Key>
+    <Property Name="factureId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="factureNumero" Type="int" Nullable="false" />
+    <Property Name="dateEmission" Type="datetime" Nullable="false" />
+    <Property Name="dateDebut" Type="datetime" Nullable="false" />
+    <Property Name="dateFin" Type="datetime" Nullable="false" />
+    <Property Name="montant" Type="nvarchar" MaxLength="150" />
+    <Property Name="etat" Type="bit" />
   </EntityType>
   <EntityType Name="NOTIFICATION">
     <Key>
@@ -82,6 +95,20 @@
     </Key>
     <Property Name="statutCommandeId" Type="uniqueidentifier" Nullable="false" />
     <Property Name="statut_cmde" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="TEMPLATE">
+    <Key>
+      <PropertyRef Name="templateId" />
+    </Key>
+    <Property Name="templateId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="projetId" Type="uniqueidentifier" />
+    <Property Name="themeId" Type="uniqueidentifier" />
+    <Property Name="url" Type="varchar" MaxLength="250" />
+    <Property Name="ftpUser" Type="varchar" MaxLength="250" />
+    <Property Name="ftpPassword" Type="varchar" MaxLength="250" />
+    <Property Name="dateCreation" Type="date" />
+    <Property Name="userId" Type="uniqueidentifier" />
+    <Property Name="html" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="THEMES">
     <Key>
@@ -141,6 +168,18 @@
       </Principal>
       <Dependent Role="COMMANDE">
         <PropertyRef Name="consigne_type_contenuId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_COMMANDE_FACTURE">
+    <End Role="FACTURE" Type="Self.FACTURE" Multiplicity="0..1" />
+    <End Role="COMMANDE" Type="Self.COMMANDE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FACTURE">
+        <PropertyRef Name="factureId" />
+      </Principal>
+      <Dependent Role="COMMANDE">
+        <PropertyRef Name="factureId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -264,6 +303,42 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_TEMPLATE_PROJETS">
+    <End Role="PROJETS" Type="Self.PROJETS" Multiplicity="0..1" />
+    <End Role="TEMPLATE" Type="Self.TEMPLATE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PROJETS">
+        <PropertyRef Name="projetId" />
+      </Principal>
+      <Dependent Role="TEMPLATE">
+        <PropertyRef Name="projetId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TEMPLATE_THEMES">
+    <End Role="THEMES" Type="Self.THEMES" Multiplicity="0..1" />
+    <End Role="TEMPLATE" Type="Self.TEMPLATE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="THEMES">
+        <PropertyRef Name="themeId" />
+      </Principal>
+      <Dependent Role="TEMPLATE">
+        <PropertyRef Name="themeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TEMPLATE_UTILISATEUR">
+    <End Role="UTILISATEUR" Type="Self.UTILISATEUR" Multiplicity="0..1" />
+    <End Role="TEMPLATE" Type="Self.TEMPLATE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UTILISATEUR">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="TEMPLATE">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_UserRole_ROLE">
     <End Role="ROLE" Type="Self.ROLE" Multiplicity="0..1" />
     <End Role="UserRole" Type="Self.UserRole" Multiplicity="*" />
@@ -292,11 +367,13 @@
     <EntitySet Name="COMMANDE" EntityType="Self.COMMANDE" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="COMMANDE_TYPE" EntityType="Self.COMMANDE_TYPE" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CONTENU_TYPE" EntityType="Self.CONTENU_TYPE" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FACTURE" EntityType="Self.FACTURE" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="NOTIFICATION" EntityType="Self.NOTIFICATION" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PROJETS" EntityType="Self.PROJETS" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="REDACT_THEME" EntityType="Self.REDACT_THEME" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ROLE" EntityType="Self.ROLE" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="STATUT_COMMANDE" EntityType="Self.STATUT_COMMANDE" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TEMPLATE" EntityType="Self.TEMPLATE" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="THEMES" EntityType="Self.THEMES" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserRole" EntityType="Self.UserRole" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UTILISATEUR" EntityType="Self.UTILISATEUR" Schema="dbo" store:Type="Tables" />
@@ -306,6 +383,10 @@
     </AssociationSet>
     <AssociationSet Name="FK_COMMANDE_CONTENU_TYPE" Association="Self.FK_COMMANDE_CONTENU_TYPE">
       <End Role="CONTENU_TYPE" EntitySet="CONTENU_TYPE" />
+      <End Role="COMMANDE" EntitySet="COMMANDE" />
+    </AssociationSet>
+    <AssociationSet Name="FK_COMMANDE_FACTURE" Association="Self.FK_COMMANDE_FACTURE">
+      <End Role="FACTURE" EntitySet="FACTURE" />
       <End Role="COMMANDE" EntitySet="COMMANDE" />
     </AssociationSet>
     <AssociationSet Name="FK_COMMANDE_PROJETS" Association="Self.FK_COMMANDE_PROJETS">
@@ -347,6 +428,18 @@
     <AssociationSet Name="FK_REDACT_THEME_UTILISATEUR" Association="Self.FK_REDACT_THEME_UTILISATEUR">
       <End Role="UTILISATEUR" EntitySet="UTILISATEUR" />
       <End Role="REDACT_THEME" EntitySet="REDACT_THEME" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TEMPLATE_PROJETS" Association="Self.FK_TEMPLATE_PROJETS">
+      <End Role="PROJETS" EntitySet="PROJETS" />
+      <End Role="TEMPLATE" EntitySet="TEMPLATE" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TEMPLATE_THEMES" Association="Self.FK_TEMPLATE_THEMES">
+      <End Role="THEMES" EntitySet="THEMES" />
+      <End Role="TEMPLATE" EntitySet="TEMPLATE" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TEMPLATE_UTILISATEUR" Association="Self.FK_TEMPLATE_UTILISATEUR">
+      <End Role="UTILISATEUR" EntitySet="UTILISATEUR" />
+      <End Role="TEMPLATE" EntitySet="TEMPLATE" />
     </AssociationSet>
     <AssociationSet Name="FK_UserRole_ROLE" Association="Self.FK_UserRole_ROLE">
       <End Role="ROLE" EntitySet="ROLE" />

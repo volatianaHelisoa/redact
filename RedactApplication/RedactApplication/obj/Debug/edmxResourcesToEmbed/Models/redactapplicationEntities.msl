@@ -4,6 +4,7 @@
     <EntitySetMapping Name="COMMANDEs">
       <EntityTypeMapping TypeName="redactapplicationModel.COMMANDE">
         <MappingFragment StoreEntitySet="COMMANDE">
+          <ScalarProperty Name="factureId" ColumnName="factureId" />
           <ScalarProperty Name="dateLivraisonReel" ColumnName="dateLivraisonReel" />
           <ScalarProperty Name="commandeREF" ColumnName="commandeREF" />
           <ScalarProperty Name="dateToken" ColumnName="dateToken" />
@@ -47,6 +48,31 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="FACTUREs">
+      <EntityTypeMapping TypeName="redactapplicationModel.FACTURE">
+        <MappingFragment StoreEntitySet="FACTURE">
+          <ScalarProperty Name="etat" ColumnName="etat" />
+          <ScalarProperty Name="montant" ColumnName="montant" />
+          <ScalarProperty Name="dateFin" ColumnName="dateFin" />
+          <ScalarProperty Name="dateDebut" ColumnName="dateDebut" />
+          <ScalarProperty Name="dateEmission" ColumnName="dateEmission" />
+          <ScalarProperty Name="factureNumero" ColumnName="factureNumero" />
+          <ScalarProperty Name="factureId" ColumnName="factureId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NOTIFICATIONs">
+      <EntityTypeMapping TypeName="redactapplicationModel.NOTIFICATION">
+        <MappingFragment StoreEntitySet="NOTIFICATION">
+          <ScalarProperty Name="datenotif" ColumnName="datenotif" />
+          <ScalarProperty Name="toId" ColumnName="toId" />
+          <ScalarProperty Name="fromId" ColumnName="fromId" />
+          <ScalarProperty Name="statut" ColumnName="statut" />
+          <ScalarProperty Name="commandeId" ColumnName="commandeId" />
+          <ScalarProperty Name="notificationId" ColumnName="notificationId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="PROJETS">
       <EntityTypeMapping TypeName="redactapplicationModel.PROJET">
         <MappingFragment StoreEntitySet="PROJETS">
@@ -77,6 +103,21 @@
         <MappingFragment StoreEntitySet="STATUT_COMMANDE">
           <ScalarProperty Name="statut_cmde" ColumnName="statut_cmde" />
           <ScalarProperty Name="statutCommandeId" ColumnName="statutCommandeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TEMPLATEs">
+      <EntityTypeMapping TypeName="redactapplicationModel.TEMPLATE">
+        <MappingFragment StoreEntitySet="TEMPLATE">
+          <ScalarProperty Name="html" ColumnName="html" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="dateCreation" ColumnName="dateCreation" />
+          <ScalarProperty Name="ftpPassword" ColumnName="ftpPassword" />
+          <ScalarProperty Name="ftpUser" ColumnName="ftpUser" />
+          <ScalarProperty Name="url" ColumnName="url" />
+          <ScalarProperty Name="themeId" ColumnName="themeId" />
+          <ScalarProperty Name="projetId" ColumnName="projetId" />
+          <ScalarProperty Name="templateId" ColumnName="templateId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -117,18 +158,6 @@
           <ScalarProperty Name="userPrenom" ColumnName="userPrenom" />
           <ScalarProperty Name="userNom" ColumnName="userNom" />
           <ScalarProperty Name="userId" ColumnName="userId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="NOTIFICATIONs">
-      <EntityTypeMapping TypeName="redactapplicationModel.NOTIFICATION">
-        <MappingFragment StoreEntitySet="NOTIFICATION">
-          <ScalarProperty Name="datenotif" ColumnName="datenotif" />
-          <ScalarProperty Name="toId" ColumnName="toId" />
-          <ScalarProperty Name="fromId" ColumnName="fromId" />
-          <ScalarProperty Name="statut" ColumnName="statut" />
-          <ScalarProperty Name="commandeId" ColumnName="commandeId" />
-          <ScalarProperty Name="notificationId" ColumnName="notificationId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

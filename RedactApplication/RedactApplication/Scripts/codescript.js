@@ -44,3 +44,28 @@ function DecheckedCmdeClick() {
         $(this).prop("checked", false);
     });
 }
+
+
+
+//Select all Commande in ListCommande when the checkbox is selected.
+function ClickAllFactureInListFacture() {
+    if (document.getElementById('checkAllFacture').checked) {
+        CheckedFactureClick();
+    }
+    else {
+        DecheckedFactureClick();
+    }
+}
+
+function CheckedFactureClick() {
+    $('input[name="selectedFacture"]').each(function () {
+        $(this).prop("checked", true);
+    });
+}
+
+function DecheckedFactureClick() {
+    $('checkAllFacture').prop("checked", false);
+    $('input[name="selectedFacture"]:checked').each(function () {
+        $(this).prop("checked", false);
+    });
+}

@@ -369,6 +369,12 @@ namespace RedactApplication.Controllers
                     COMMANDE cmde = db.COMMANDEs.SingleOrDefault(x => x.commandeId == hash);
                     if (cmde != null)
                     {
+                        var notifications = db.NOTIFICATIONs.Where(x => x.commandeId == hash).ToList();
+                        foreach(var notif in notifications)
+                        {
+                            db.NOTIFICATIONs.Remove(notif);
+                        }
+                       
                         db.COMMANDEs.Remove(cmde);
                         db.SaveChanges();
                         return View();

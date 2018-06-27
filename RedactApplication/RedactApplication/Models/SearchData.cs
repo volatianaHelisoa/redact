@@ -169,9 +169,71 @@ namespace RedactApplication.Models
             }
             return null;
         }
-    
 
-    
-        
+
+        /// <summary>
+        /// Retourne une liste des commandes suivant la recherche.
+        /// </summary>
+        /// <param name="valeur">chaine de recherche</param>
+        /// <returns>List<COMMANDE></returns>
+        public List<FACTUREViewModel> FactureSearch(string valeur)
+        {
+            if (string.IsNullOrEmpty(valeur) || (valeur.Trim() == ""))
+            {
+                return null;
+            }
+            Func<List<FACTUREViewModel>, string, List<FACTUREViewModel>> testFactureContaints = (facturedata, factureValue) =>
+            {
+                if (facturedata != null)
+                {
+                    return (from facture in facturedata
+                            where (
+                            facture.factureNumero.ToString().ToLower().Contains(factureValue.ToLower()) ||
+                            facture.dateEmission.ToString().ToLower().Contains(factureValue.ToLower()) ||
+                             facture.montant.ToString().ToLower().Contains(factureValue.ToLower()) ||
+                               facture.etat.ToString().ToLower().Contains(factureValue.ToLower()) ||
+                            facture.periode.ToString().ToLower().Contains(factureValue.ToLower()))
+                            select facture).Distinct().OrderBy(x => x.dateEmission).ToList();
+                }
+                return null;
+            };
+            List<string> str = new List<string>();
+            int test = 0;
+            if (valeur.Contains(" "))
+            {
+                str = valeur.Split(' ').ToList();
+                test = 1;
+            }
+            redactapplicationEntities db = new redactapplicationEntities();
+            List<FACTUREViewModel> tempFacture = new List<FACTUREViewModel>();
+            foreach (var u in new Factures().GetListFacture())
+            {
+                var uCommande = db.FACTUREs.FirstOrDefault(x => x.factureId == u.factureId);
+                if (uCommande != null)
+                {
+                    tempFacture.Add(u);
+                }
+            }
+
+            switch (test)
+            {
+                case 0:
+                    return testFactureContaints(tempFacture, valeur);
+                case 1:
+                    List<FACTUREViewModel> data = new List<FACTUREViewModel>();
+                    List<FACTUREViewModel> tempcmd = new List<FACTUREViewModel>();
+                    foreach (var val in str)
+                    {
+                        data.AddRange(testFactureContaints(tempFacture, val));
+                        data.AddRange(tempcmd);
+                    }
+                    return data.Distinct().OrderBy(x => x.dateEmission).ToList();
+            }
+            return null;
+        }
+
+
+
+
     }
 }

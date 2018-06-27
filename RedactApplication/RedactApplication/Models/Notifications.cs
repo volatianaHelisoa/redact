@@ -75,7 +75,7 @@ namespace RedactApplication.Models
                     {
                         UTILISATEUR fromUser = GetUtilisateur((Guid) reader["fromId"]);
                         UTILISATEUR toUser = GetUtilisateur((Guid)reader["toId"]);
-                        COMMANDE commande = GetCommande((Guid) reader["commandeId"]);
+                        COMMANDE commande = (!string.IsNullOrEmpty(reader["commandeId"].ToString()))? GetCommande((Guid) reader["commandeId"]) : new COMMANDE();
                         if ((bool) reader["statut"])
                         {
 

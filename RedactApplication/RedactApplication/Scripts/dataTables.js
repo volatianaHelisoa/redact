@@ -25,6 +25,14 @@
             $(".cancelText").css('visibility', 'hidden')
     });
 
+    $('.facture-srch').submit(function (e) {
+        
+        e.preventDefault();
+    })
+
+
+
+    
     if (jQuery('#myDataTableListCampaign').length > 0) {
         $('#myDataTableListCampaign').dataTable({
             "dom": '<"top"f>rt<"bottom"ipl><"clear">',

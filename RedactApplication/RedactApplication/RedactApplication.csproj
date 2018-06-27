@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -214,6 +215,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\FactureController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -226,8 +228,10 @@
     <Compile Include="Models\COMMANDE.cs">
       <DependentUpon>redactapplicationEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Factures.cs" />
     <Compile Include="Models\Commandes.cs" />
     <Compile Include="Models\BaseviewModelCommande.cs" />
+    <Compile Include="Models\FACTUREViewModel.cs" />
     <Compile Include="Models\COMMANDEViewModel.cs" />
     <Compile Include="Models\COMMANDE_TYPE.cs">
       <DependentUpon>redactapplicationEntities.tt</DependentUpon>
@@ -237,9 +241,6 @@
     </Compile>
     <Compile Include="Models\Encryptor.cs" />
     <Compile Include="Models\FACTURE.cs">
-      <DependentUpon>redactapplicationEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\FACTURE_COMMANDE.cs">
       <DependentUpon>redactapplicationEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
@@ -277,6 +278,9 @@
     <Compile Include="Models\SearchData.cs" />
     <Compile Include="Models\StatePageSingleton.cs" />
     <Compile Include="Models\STATUT_COMMANDE.cs">
+      <DependentUpon>redactapplicationEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TEMPLATE.cs">
       <DependentUpon>redactapplicationEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\THEME.cs">
@@ -542,6 +546,13 @@
     <Content Include="Views\Commandes\ListCommandeAValider.cshtml" />
     <Content Include="Views\Commandes\DetailsCommandeAValider.cshtml" />
     <Content Include="Views\Commandes\CommandeConfirmationVolume.cshtml" />
+    <Content Include="Views\Facture\Create.cshtml" />
+    <Content Include="Views\Facture\Details.cshtml" />
+    <Content Include="Views\Facture\ListFacture.cshtml" />
+    <Content Include="Views\Facture\ErrorNoSelection.cshtml" />
+    <Content Include="Views\Facture\DeleteFacture.cshtml" />
+    <Content Include="Views\Facture\DeletedAllFactureConfirmation.cshtml" />
+    <Content Include="Views\Facture\DeletedFactureConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

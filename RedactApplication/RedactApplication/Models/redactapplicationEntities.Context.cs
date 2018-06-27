@@ -28,15 +28,15 @@ namespace RedactApplication.Models
         public virtual DbSet<COMMANDE> COMMANDEs { get; set; }
         public virtual DbSet<COMMANDE_TYPE> COMMANDE_TYPE { get; set; }
         public virtual DbSet<CONTENU_TYPE> CONTENU_TYPE { get; set; }
+        public virtual DbSet<FACTURE> FACTUREs { get; set; }
+        public virtual DbSet<NOTIFICATION> NOTIFICATIONs { get; set; }
         public virtual DbSet<PROJET> PROJETS { get; set; }
         public virtual DbSet<REDACT_THEME> REDACT_THEME { get; set; }
         public virtual DbSet<ROLE> ROLEs { get; set; }
         public virtual DbSet<STATUT_COMMANDE> STATUT_COMMANDE { get; set; }
+        public virtual DbSet<TEMPLATE> TEMPLATEs { get; set; }
         public virtual DbSet<THEME> THEMES { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
         public virtual DbSet<UTILISATEUR> UTILISATEURs { get; set; }
-        public virtual DbSet<NOTIFICATION> NOTIFICATIONs { get; set; }
-        public virtual DbSet<FACTURE> FACTUREs { get; set; }
-        public virtual DbSet<FACTURE_COMMANDE> FACTURE_COMMANDE { get; set; }
     }
 }

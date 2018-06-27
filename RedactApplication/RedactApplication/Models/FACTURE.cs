@@ -17,17 +17,18 @@ namespace RedactApplication.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public FACTURE()
         {
-            this.FACTURE_COMMANDE = new HashSet<FACTURE_COMMANDE>();
+            this.COMMANDEs = new HashSet<COMMANDE>();
         }
     
         public System.Guid factureId { get; set; }
         public int factureNumero { get; set; }
         public System.DateTime dateEmission { get; set; }
-        public string periode { get; set; }
+        public System.DateTime dateDebut { get; set; }
+        public System.DateTime dateFin { get; set; }
         public string montant { get; set; }
         public Nullable<bool> etat { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<FACTURE_COMMANDE> FACTURE_COMMANDE { get; set; }
+        public virtual ICollection<COMMANDE> COMMANDEs { get; set; }
     }
 }

@@ -35,9 +35,10 @@
                     <div class="rowpad">
                         <div>
                             <div class="admin-link-menu">
-                             
+
                                 <a href="~/Home/ListeUser" class="admin-link active">Utilisateurs</a>
                                 <a href="~/Commandes/ListCommandes" class="admin-link">Commandes</a>
+                                <a href="~/Facture/ListFacture" class="admin-link">Factures</a>
                             </div>
                             <!-- end admin menu -->
                         </div>
@@ -50,15 +51,14 @@
                             <!-- top panel -->
                             <div id="inner-top-panel" class="showpanel clear">
                                 <div class="left search-bloc">
-                                    @using (Html.BeginForm("UserSearch", "Home", FormMethod.Post, new { @class = "usr-srch" }))
-                                    {
+                                  
                                         <div class="usr-srch--input-wrapper">
-                                            @Html.AntiForgeryToken()
+                                            
                                             <i class="fa fa-times-circle cancelText"></i>
                                             <input class="usr-srch--input" type="search" placeholder="Search" name="searchValue" id="ValUserSearch" title="Search by name,surname,email">
                                         </div>
                                         <input class="usr-srch--submit" type="submit" value="&#xf002;" id="UserSearchSubmit">
-                                    }                                    
+                                                                     
                                 </div>
                                 <div class="right usr-create">
                                     <input type="submit" value="Create user" class="green-btn" onclick="@("window.location.href='" + @Url.RouteUrl("Home", new { controller = "Home", action = "GotoCreateUser" }) + "'");">
