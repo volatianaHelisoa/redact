@@ -205,3 +205,10 @@ C:\Users\ramin\Documents\GitHub\redact\RedactApplication\RedactApplication\obj\D
 C:\Users\ramin\Documents\GitHub\redact\RedactApplication\RedactApplication\obj\Debug\RedactApplication.csproj.CoreCompileInputs.cache
 C:\Users\ramin\Documents\GitHub\redact\RedactApplication\RedactApplication\obj\Debug\RedactApplication.csproj.CopyComplete
 C:\Users\ramin\Documents\GitHub\redact\RedactApplication\RedactApplication\obj\Debug\RedactApplication.csprojAssemblyReference.cache
+C:\Users\ramin\Documents\GitHub\redact\RedactApplication\RedactApplication\bin\itextsharp.dll
+C:\Users\ramin\Documents\GitHub\redact\RedactApplication\RedactApplication\bin\itextsharp.xmlworker.dll
+C:\Users\ramin\Documents\GitHub\redact\RedactApplication\RedactApplication\bin\itextsharp.xml
+C:\Users\ramin\Documents\GitHub\redact\RedactApplication\RedactApplication\bin\fr\EntityFramework.resources.dll
+C:\Users\ramin\Documents\GitHub\redact\RedactApplication\RedactApplication\bin\fr\EntityFramework.SqlServer.resources.dll
+C:\Users\ramin\Documents\GitHub\redact\RedactApplication\RedactApplication\bin\fr\Microsoft.AspNet.SignalR.Core.resources.dll
+C:\Users\ramin\Documents\GitHub\redact\RedactApplication\RedactApplication\bin\fr\Microsoft.AspNet.SignalR.SystemWeb.resources.dll

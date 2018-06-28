@@ -1,7 +1,7 @@
 ﻿
 @{
     ViewBag.Title = "ListCommandes";
-    Layout = "~/Views/Shared/LayoutConnected.cshtml";
+    Layout = "~/Views/Shared/LayoutFullPage.cshtml";
 
 }
 
@@ -38,8 +38,9 @@
                                 @if (@Session["role"] != null && @Session["role"].ToString() != "2")
                                 {
                                     <a href="~/Home/ListeUser" class="admin-link">Utilisateurs</a>
-                                }  
+                                }
                                 <a href="~/Commandes/ListCommandes" class="admin-link active">Commandes</a>
+                                <a href="~/Facture/ListFacture" class="admin-link">Factures</a>
                             </div>
                             <!-- end admin menu -->
                         </div>

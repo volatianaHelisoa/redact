@@ -55,6 +55,8 @@
     <Property Name="dateFin" Type="datetime" Nullable="false" />
     <Property Name="montant" Type="nvarchar" MaxLength="150" />
     <Property Name="etat" Type="bit" />
+    <Property Name="redacteurId" Type="uniqueidentifier" />
+    <Property Name="createurId" Type="uniqueidentifier" />
   </EntityType>
   <EntityType Name="NOTIFICATION">
     <Key>
@@ -243,6 +245,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_FACTURE_UTILISATEUR">
+    <End Role="UTILISATEUR" Type="Self.UTILISATEUR" Multiplicity="0..1" />
+    <End Role="FACTURE" Type="Self.FACTURE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UTILISATEUR">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="FACTURE">
+        <PropertyRef Name="redacteurId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FACTURE_UTILISATEUR1">
+    <End Role="UTILISATEUR" Type="Self.UTILISATEUR" Multiplicity="0..1" />
+    <End Role="FACTURE" Type="Self.FACTURE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UTILISATEUR">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="FACTURE">
+        <PropertyRef Name="createurId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_NOTIFICATION_COMMANDE">
     <End Role="COMMANDE" Type="Self.COMMANDE" Multiplicity="0..1" />
     <End Role="NOTIFICATION" Type="Self.NOTIFICATION" Multiplicity="*" />
@@ -408,6 +434,14 @@
     <AssociationSet Name="FK_COMMANDE_UTILISATEUR" Association="Self.FK_COMMANDE_UTILISATEUR">
       <End Role="UTILISATEUR" EntitySet="UTILISATEUR" />
       <End Role="COMMANDE" EntitySet="COMMANDE" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FACTURE_UTILISATEUR" Association="Self.FK_FACTURE_UTILISATEUR">
+      <End Role="UTILISATEUR" EntitySet="UTILISATEUR" />
+      <End Role="FACTURE" EntitySet="FACTURE" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FACTURE_UTILISATEUR1" Association="Self.FK_FACTURE_UTILISATEUR1">
+      <End Role="UTILISATEUR" EntitySet="UTILISATEUR" />
+      <End Role="FACTURE" EntitySet="FACTURE" />
     </AssociationSet>
     <AssociationSet Name="FK_NOTIFICATION_COMMANDE" Association="Self.FK_NOTIFICATION_COMMANDE">
       <End Role="COMMANDE" EntitySet="COMMANDE" />

@@ -23,14 +23,114 @@
             });
            
         });
-
+   
     </script>
 }
 
+<main id="wrapper">
+    <div id="single-container">
+        <div class="onglets ease-in-out">
+            <ul>
+                <li><a href="">Utilisateurs</a></li>
+                <li><a href="" class="active">Commandes</a></li>
+                <li><a href="">Dolor sit amet</a></li>
+            </ul>
+        </div>
+        <div class="card back-office with-shadow">
+            <div class="head">
+                <h1>Commande n° 001</h1>
+            </div>
+
+            <!-- Champs -->
+            <div class="container clearfix">
+                <div class="row">
+                    <section class="col-md-7 commande-view">
+                        <div class="section-title">
+                            <span>livrable</span>
+                        </div>
+                        <div class="wrap">
+                            <span>
+                                <strong>Titre : </strong>Turpis sapien molestie sem, hendrerit aliquam
+                            </span>
+                            <span>
+                                <strong>Contenu : </strong>
+                                <div class="commande-contenu">
+                                    <p>Aenean consectetur lacinia mollis. In eleifend erat non neque maximus, sed posuere lectus imperdiet. Nullam dui ante, ullamcorper non consequat ut, pulvinar non arcu. Ut id ante a diam faucibus pharetra. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras metus nisl, tempor et tincidunt in, semper et dolor. Vestibulum cursus, neque at sodales ultrices, velit nibh maximus turpis, ut euismod lacus massa vehicula ipsum. Vivamus accumsan volutpat lorem, nec tristique lorem pharetra nec. Vestibulum id lectus purus.</p>
+                                    <p>Integer eleifend tellus vitae augue elementum condimentum. Cras vel facilisis felis. Aenean congue, justo a pharetra condimentum, turpis sapien molestie sem, hendrerit aliquam tellus massa eu dolor. Pellentesque gravida mattis mi, non egestas mauris luctus at. Pellentesque semper vestibulum diam. Quisque at tincidunt leo.</p>
+                                </div>
+                                <div class="contenu-footer flex-content flex-jsbet-acenter">
+                                    <span>354 sur 500 Caractère(s) utilisé(s)</span>
+                                    <span id="copy">Copier</span>
+                                </div>
+                            </span>
+                        </div>
+                    </section>
+                    <section class="col-md-5 commande-resume">
+                        <div class="section-title">
+                            <span>Récapitulatif</span>
+                        </div>
+                        <div class="wrap with-shadow">
+                            <span>
+                              <strong>Demandeur :</strong>
+                              @Html.DisplayFor(model => model.commandeDemandeur)
+                            </span>
+                            <span>
+                                <strong>Redacteur  :</strong>
+                                @Html.DisplayFor(model => model.commandeRedacteur)
+                            </span>
+                            <span>
+                              <strong>Date de Commande :</strong>
+                              @Html.DisplayFor(model => model.date_cmde)
+                            </span>
+                            <span>
+                              <strong>Date de livraison :</strong>
+                              @Html.DisplayFor(model => model.dateLivraisonReel)
+                            </span>
+                            <span>
+                               <strong>Ordre de priorité :</strong>
+                               @Html.DisplayFor(model => model.ordrePriorite)
+                            </span>                           
+                            <span>
+                                <strong>Site :</strong>
+                                @Html.DisplayFor(model => model.projet)
+                            </span>
+                            <span><strong>Thème :</strong>
+                                @Html.DisplayFor(model => model.thematique)
+                            </span>
+                            <span>
+                               <strong>Type de contenu :</strong>
+                               Lorem ipsum
+                            </span>
+                            <span><strong>Mot clé principal :</strong>
+                                @Html.DisplayFor(model => model.mot_cle_pricipal)
+                            </span>
+                            <span>
+                                <strong>Mot clé secondaire :</strong>
+                                @Html.DisplayFor(model => model.mot_cle_secondaire)
+                            </span>
+                            <span>
+                                <strong>Texte d'ancrage :</strong>
+                                @Html.DisplayFor(model => model.texte_ancrage)
+                            </span>
+                            <span>
+                                @Html.DisplayFor(model => model.consigne_references, new { @class = "input" })
+                                <br />
+                                @Html.DisplayFor(model => model.consigneType, new { @class = "input" })
+                                <br />
+                                @Html.DisplayFor(model => model.consigne_autres, new { @class = "input" })
+                            </span>
+                        </div>
+
+                    </section>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
 
 
-
-<main class="wrapperpages">
+@*<main class="wrapperpages">
     <div class="page pagesDivision clear">
 
         <section class="column2 rightDivision fullWidth">
@@ -192,7 +292,7 @@
             </div>
         </section>
     </div>
-</main>
+</main>*@
 
 
 

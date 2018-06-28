@@ -24,6 +24,8 @@ namespace RedactApplication.Models
             this.REDACT_THEME = new HashSet<REDACT_THEME>();
             this.TEMPLATEs = new HashSet<TEMPLATE>();
             this.UserRoles = new HashSet<UserRole>();
+            this.FACTUREs = new HashSet<FACTURE>();
+            this.FACTUREs1 = new HashSet<FACTURE>();
         }
     
         public System.Guid userId { get; set; }
@@ -58,5 +60,9 @@ namespace RedactApplication.Models
         public virtual ICollection<TEMPLATE> TEMPLATEs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserRole> UserRoles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FACTURE> FACTUREs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FACTURE> FACTUREs1 { get; set; }
     }
 }

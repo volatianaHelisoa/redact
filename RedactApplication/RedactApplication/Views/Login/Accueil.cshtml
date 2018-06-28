@@ -1,44 +1,46 @@
 ﻿@model RedactApplication.Models.UTILISATEURViewModel
 @{
-    ViewBag.Title = "Accueil";
+    ViewBag.Title = "Login";
+}
+@section Scripts
+{
+    <link rel="stylesheet" href="~/Content/css/elements/login.css">
+
 }
 
-<div class="page" id="">
-    <div class="login-container">
-        <div class="heading-ttl">
-            <h2>Mediaclick</h2>
-            <span>Redact application</span>
-        </div>
-        <div class="avatar_customer">
-            <img src="@Session["logoUrl"]" alt="Photo profil">
-        </div>
-        <div class="item-container">
-            <div class="login_page center_blc">
-
-
-                <h3>Login</h3>
-                @using (Html.BeginForm("AuthentificationUser", "Login", FormMethod.Post, new { @class = "formfields" }))
-                {
-                    @Html.TextBoxFor(x => x.userMail, new { @class = "input", @placeholder = "Email", @required = true })
-                    @Html.PasswordFor(x => x.userMotdepasse, new { @class = "input", @placeholder = "Password", @required = true })
-
-                    <div class="remind">
-                        @Html.CheckBoxFor(x => x.saveOnComputer, new { @checked = "checked" })
-                        <p>Remember me on this computer ?</p>
+<main>
+    <div class="login-container flex-content flex-jcenter-acenter flex-col">
+        <div class="login-form with-shadow">
+            <div class="head gradient-blue">
+                <h1>Bienvenue !</h1>
+                <p>Lorem ipsum dolor sit amet, Nunc posuere libero id auctor efficitur. Aenean posuere leo quis dolor iaculis</p>
+            </div>
+            <div class="content-section">
+               @using (Html.BeginForm("AuthentificationUser", "Login", FormMethod.Post, new { @class = "formfields" }))
+               {
+                    <label for="Myemail" class="mail-input">                       
+                        @Html.TextBoxFor(x => x.userMail, new {  @placeholder = "E-mail", @required = true,@type= "email" })
+                    </label>
+                    <label for="Mypassword" class="pass-input">
+                        @Html.PasswordFor(x => x.userMotdepasse, new { @placeholder = "Mot de passe", @required = true, @type ="password" })
+                    </label>
+                    <div class="flex-content flex-jcenter-acenter save-content">
+                        <span class="SavePass">
+                           @Html.CheckBoxFor(x => x.saveOnComputer, new { @checked = "checked",@type ="checkbox" })
+                            Se souvenir de moi
+                        </span>
+                       
+                        @Html.ActionLink("Mot de passe oublié ?", "ForgotPassword", "Login", new { @class = "link forgotPass" })
                     </div>
-                    <div class="btn-submit">
-                        <input type="submit" value="Login" class="btn btn-block btn-primary">
-                    </div>
+                    <input type="submit" value="Connexion" class="btn btn-primary">
                 }
-                <div class="a-forgot-pass">
-                    @Html.ActionLink("I can't sign in or forgot my password ?", "ForgotPassword", "Login")
-                </div>
-
             </div>
         </div>
+        <a href="#" class="watermark-mc">
+            <img src="/images/powered-by.jpg" alt="" srcset="">
+        </a>
     </div>
-</div>
-
+</main>
 
 @if (Model != null)
 {

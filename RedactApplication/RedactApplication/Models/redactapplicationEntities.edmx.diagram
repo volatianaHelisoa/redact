@@ -36,6 +36,8 @@
         <AssociationConnector Association="redactapplicationModel.FK_TEMPLATE_THEMES" />
         <AssociationConnector Association="redactapplicationModel.FK_TEMPLATE_UTILISATEUR" />
         <AssociationConnector Association="redactapplicationModel.FK_UserRole_UTILISATEUR" />
+        <AssociationConnector Association="redactapplicationModel.FK_FACTURE_UTILISATEUR" />
+        <AssociationConnector Association="redactapplicationModel.FK_FACTURE_UTILISATEUR1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

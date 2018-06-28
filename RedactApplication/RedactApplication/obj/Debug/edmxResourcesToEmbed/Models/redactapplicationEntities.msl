@@ -51,6 +51,8 @@
     <EntitySetMapping Name="FACTUREs">
       <EntityTypeMapping TypeName="redactapplicationModel.FACTURE">
         <MappingFragment StoreEntitySet="FACTURE">
+          <ScalarProperty Name="createurId" ColumnName="createurId" />
+          <ScalarProperty Name="redacteurId" ColumnName="redacteurId" />
           <ScalarProperty Name="etat" ColumnName="etat" />
           <ScalarProperty Name="montant" ColumnName="montant" />
           <ScalarProperty Name="dateFin" ColumnName="dateFin" />

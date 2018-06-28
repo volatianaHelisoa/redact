@@ -60,6 +60,8 @@
           <Property Name="dateFin" Type="datetime" Nullable="false" />
           <Property Name="montant" Type="nvarchar" MaxLength="150" />
           <Property Name="etat" Type="bit" />
+          <Property Name="redacteurId" Type="uniqueidentifier" />
+          <Property Name="createurId" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="NOTIFICATION">
           <Key>
@@ -248,6 +250,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_FACTURE_UTILISATEUR">
+          <End Role="UTILISATEUR" Type="Self.UTILISATEUR" Multiplicity="0..1" />
+          <End Role="FACTURE" Type="Self.FACTURE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UTILISATEUR">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="FACTURE">
+              <PropertyRef Name="redacteurId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FACTURE_UTILISATEUR1">
+          <End Role="UTILISATEUR" Type="Self.UTILISATEUR" Multiplicity="0..1" />
+          <End Role="FACTURE" Type="Self.FACTURE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UTILISATEUR">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="FACTURE">
+              <PropertyRef Name="createurId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_NOTIFICATION_COMMANDE">
           <End Role="COMMANDE" Type="Self.COMMANDE" Multiplicity="0..1" />
           <End Role="NOTIFICATION" Type="Self.NOTIFICATION" Multiplicity="*" />
@@ -414,6 +440,14 @@
             <End Role="UTILISATEUR" EntitySet="UTILISATEUR" />
             <End Role="COMMANDE" EntitySet="COMMANDE" />
           </AssociationSet>
+          <AssociationSet Name="FK_FACTURE_UTILISATEUR" Association="Self.FK_FACTURE_UTILISATEUR">
+            <End Role="UTILISATEUR" EntitySet="UTILISATEUR" />
+            <End Role="FACTURE" EntitySet="FACTURE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FACTURE_UTILISATEUR1" Association="Self.FK_FACTURE_UTILISATEUR1">
+            <End Role="UTILISATEUR" EntitySet="UTILISATEUR" />
+            <End Role="FACTURE" EntitySet="FACTURE" />
+          </AssociationSet>
           <AssociationSet Name="FK_NOTIFICATION_COMMANDE" Association="Self.FK_NOTIFICATION_COMMANDE">
             <End Role="COMMANDE" EntitySet="COMMANDE" />
             <End Role="NOTIFICATION" EntitySet="NOTIFICATION" />
@@ -545,6 +579,14 @@
             <End Role="UTILISATEUR" EntitySet="UTILISATEURs" />
             <End Role="UserRole" EntitySet="UserRoles" />
           </AssociationSet>
+          <AssociationSet Name="FK_FACTURE_UTILISATEUR" Association="redactapplicationModel.FK_FACTURE_UTILISATEUR">
+            <End Role="UTILISATEUR" EntitySet="UTILISATEURs" />
+            <End Role="FACTURE" EntitySet="FACTUREs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FACTURE_UTILISATEUR1" Association="redactapplicationModel.FK_FACTURE_UTILISATEUR1">
+            <End Role="UTILISATEUR" EntitySet="UTILISATEURs" />
+            <End Role="FACTURE" EntitySet="FACTUREs" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="COMMANDE">
           <Key>
@@ -613,6 +655,10 @@
           <Property Name="montant" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="etat" Type="Boolean" />
           <NavigationProperty Name="COMMANDEs" Relationship="redactapplicationModel.FK_COMMANDE_FACTURE" FromRole="FACTURE" ToRole="COMMANDE" />
+          <Property Name="redacteurId" Type="Guid" />
+          <NavigationProperty Name="REDACTEUR" Relationship="redactapplicationModel.FK_FACTURE_UTILISATEUR" FromRole="FACTURE" ToRole="UTILISATEUR" />
+          <Property Name="createurId" Type="Guid" />
+          <NavigationProperty Name="UTILISATEUR" Relationship="redactapplicationModel.FK_FACTURE_UTILISATEUR1" FromRole="FACTURE" ToRole="UTILISATEUR" />
         </EntityType>
         <EntityType Name="NOTIFICATION">
           <Key>
@@ -728,6 +774,8 @@
           <NavigationProperty Name="REDACT_THEME" Relationship="redactapplicationModel.FK_REDACT_THEME_UTILISATEUR" FromRole="UTILISATEUR" ToRole="REDACT_THEME" />
           <NavigationProperty Name="TEMPLATEs" Relationship="redactapplicationModel.FK_TEMPLATE_UTILISATEUR" FromRole="UTILISATEUR" ToRole="TEMPLATE" />
           <NavigationProperty Name="UserRoles" Relationship="redactapplicationModel.FK_UserRole_UTILISATEUR" FromRole="UTILISATEUR" ToRole="UserRole" />
+          <NavigationProperty Name="FACTUREs" Relationship="redactapplicationModel.FK_FACTURE_UTILISATEUR" FromRole="UTILISATEUR" ToRole="FACTURE" />
+          <NavigationProperty Name="FACTUREs1" Relationship="redactapplicationModel.FK_FACTURE_UTILISATEUR1" FromRole="UTILISATEUR" ToRole="FACTURE" />
         </EntityType>
         <Association Name="FK_COMMANDE_COMMANDE_TYPE">
           <End Type="redactapplicationModel.COMMANDE_TYPE" Role="COMMANDE_TYPE" Multiplicity="0..1" />
@@ -945,6 +993,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_FACTURE_UTILISATEUR">
+          <End Type="redactapplicationModel.UTILISATEUR" Role="UTILISATEUR" Multiplicity="0..1" />
+          <End Type="redactapplicationModel.FACTURE" Role="FACTURE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UTILISATEUR">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="FACTURE">
+              <PropertyRef Name="redacteurId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FACTURE_UTILISATEUR1">
+          <End Type="redactapplicationModel.UTILISATEUR" Role="UTILISATEUR" Multiplicity="0..1" />
+          <End Type="redactapplicationModel.FACTURE" Role="FACTURE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UTILISATEUR">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="FACTURE">
+              <PropertyRef Name="createurId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1001,6 +1073,8 @@
           <EntitySetMapping Name="FACTUREs">
             <EntityTypeMapping TypeName="redactapplicationModel.FACTURE">
               <MappingFragment StoreEntitySet="FACTURE">
+                <ScalarProperty Name="createurId" ColumnName="createurId" />
+                <ScalarProperty Name="redacteurId" ColumnName="redacteurId" />
                 <ScalarProperty Name="etat" ColumnName="etat" />
                 <ScalarProperty Name="montant" ColumnName="montant" />
                 <ScalarProperty Name="dateFin" ColumnName="dateFin" />

@@ -688,7 +688,7 @@ namespace RedactApplication.Controllers
                 newcommande.date_livraison = model.date_livraison;
                 newcommande.date_cmde = DateTime.Now;
                 int? maxRef = db.COMMANDEs.Max(u => u.commandeREF);
-                newcommande.commandeREF = maxRef + 1;
+                newcommande.commandeREF = (maxRef != null) ? maxRef + 1 : 1;
                 newcommande.commandeId = Guid.NewGuid();
                 int? volume = GetVolumeEnCours(newcommande.commandeRedacteurId);
                 if (newcommande.REDACTEUR != null && volume > Convert.ToInt32(newcommande.REDACTEUR.redactVolume) && Session["VolumeInfo"] == null)
@@ -978,6 +978,7 @@ namespace RedactApplication.Controllers
                     var selectedContentTypeId = model.listContenuTypeId;
                     var selectedReferenceurId = Guid.Parse(HttpContext.User.Identity.Name);
 
+                    var selectedStatut = model.listStatutId;
 
                     model.mot_cle_secondaire =
                         StatePageSingleton.SanitizeString(Sanitizer.GetSafeHtmlFragment(model.mot_cle_secondaire));
@@ -1007,6 +1008,8 @@ namespace RedactApplication.Controllers
                     commande.commandeTypeId = selectedCommandeTypeId;
                     commande.CONTENU_TYPE = db.CONTENU_TYPE.Find(selectedContentTypeId);
                     commande.consigne_type_contenuId = selectedContentTypeId;
+
+                    commande.commandeStatutId = selectedStatut;
                     commande.mot_cle_pricipal =
                         StatePageSingleton.SanitizeString(Sanitizer.GetSafeHtmlFragment(model.mot_cle_pricipal));
                     commande.mot_cle_secondaire =

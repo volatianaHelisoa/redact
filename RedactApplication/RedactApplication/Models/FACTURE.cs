@@ -27,8 +27,12 @@ namespace RedactApplication.Models
         public System.DateTime dateFin { get; set; }
         public string montant { get; set; }
         public Nullable<bool> etat { get; set; }
+        public Nullable<System.Guid> redacteurId { get; set; }
+        public Nullable<System.Guid> createurId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<COMMANDE> COMMANDEs { get; set; }
+        public virtual UTILISATEUR REDACTEUR { get; set; }
+        public virtual UTILISATEUR UTILISATEUR { get; set; }
     }
 }
