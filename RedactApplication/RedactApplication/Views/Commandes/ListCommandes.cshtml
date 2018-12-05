@@ -155,7 +155,7 @@
                                                     {
                                                         <a href="~/Commandes/Duplicate/@item.commandeId" title="Dupliquer"><i class="fa fa-copy"></i></a>
                                                     }
-                                                    @if (Session["role"] != null && Session["role"].ToString() != "2" && (@item.statut_cmde == "Dupliqué"))
+                                                    @if (Session["role"] != null && Session["role"].ToString() != "2" && (@item.statut_cmde == "Dupliqué" || @item.statut_cmde == "En attente"))
                                                     {
                                                         <a href="~/Commandes/EditDuplicateCommande/@item.commandeId" title="Editer"><i class="fa fa-edit"></i></a>
                                                     }
