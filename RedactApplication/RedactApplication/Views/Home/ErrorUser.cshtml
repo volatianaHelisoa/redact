@@ -1,19 +1,21 @@
-﻿@{
-    ViewBag.Title = "User Management";
+﻿
+@{
+    ViewBag.Title = "Gestion des utilisateurs";
+   
 }
-@section Scripts
-{
-    <script src="~/Scripts/GestionContact.js"></script>
-}
-<div class="popupModal">
-    <div class="icone_type">
-        <img src="~/images/icon-error.png" alt="Photo error">
+
+<div class="flex-content flex-jcenter-acenter flex-col pop-up">
+    <div class="popup-container with-shadow">
+        <div class="head gradient-blue">
+            <h1>OUPS !</h1>
+        </div>
+        <div class="content-section text-centered icon-bottom">
+            <i class="pop-icon green-bg"></i>
+            <p>Veuillez entrer des données valides</p>
+            
+                <input type="submit" data-dismiss="modal" value="Ok" class="btn btn-primary">
+            
+        </div>
     </div>
-    <div class="pop_content">
-        <h3>OUPS !</h3>
-        <span class="ltl-consign"><i class="fa fa-info-circle"></i>Please enter valid data.</span>
-        <ul class="bouttons_area">
-            <li><button type="submit" data-dismiss="modal" class="blue_hit">Ok</button></li>
-        </ul>
-    </div>
+
 </div>

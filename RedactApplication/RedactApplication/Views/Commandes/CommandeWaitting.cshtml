@@ -1,49 +1,36 @@
 ﻿   @model RedactApplication.Models.COMMANDEViewModel
 @{
-    ViewBag.Title = "ConfirmCommande";
+    ViewBag.Title = "Confirmer Commande";
     if (Model != null)
     {
         ViewBag.commandeId = Model.commandeId;
     }
-    Layout = "~/Views/Shared/LayoutFullPage.cshtml";
+    
  }
-<main class="wrapperpages">
-    <div class="page pagesUser clear">
-        <section class="column2 rightDivision fullWidth">
-            <div class="rowpad">
-                <div id="divisionContent">
-                    <!-- end top panel -->
-                    <div class="popupModal">
-                        <div class="icone_type">
-                            <img src="~/images/icon-bullhorn.png" alt="Photo warning">
-                        </div>
-                        <div class="pop_content">
-                            <h3>Confirmation !</h3>
-                            <span class="ltl-consign"><i class="fa fa-info-circle"></i>Voulez-vous accepter cette commande ?</span>
-                            <div>
-                                <span>Site : </span>
-                                @Html.DisplayFor(model => Model.projet, new { @class = "input" })
-                            </div>
-                            <div>
-                                <span>Thème : </span>
-                                @Html.DisplayFor(model => Model.thematique, new { @class = "input" })
-                            </div>
-                            <div>
-                                <span>Type de Textes : </span>
-                                @Html.DisplayFor(model => Model.commandeType, new { @class = "input" })
-                            </div>
-                            <div>
-                                <span>Nombre de mots : </span>
-                                @Html.DisplayFor(model => Model.nombre_mots, new { @class = "input" })
-                            </div>
-                            <ul class="bouttons_area">
-                                <li><button type="submit" class="green_hit" onclick="@("window.location.href='" + @Url.Action("AcceptCommande", "Commandes", new {hash = ViewBag.hashCmde}) + "' ");">Accepter</button></li>
-                                <li><button class="blue_hit" onclick="@("window.location.href='" + @Url.RouteUrl("Home", new {controller = "Commandes", action = "ListCommandes"}) + "' ");">Refuser</button></li>
-                            </ul>
-                        </div>
-                    </div>
+<main class="full">
+    <div class="medium-popup">
+        <section class="commande-view">            
+            <h1>Commande n° @Model.commandeREF</h1>
+            <div class="wrap">
+                <div class="commande-review">
+                    <span>
+                        <strong>Site : </strong>@Html.DisplayFor(model => Model.projet, new { @class = "input" })
+                    </span>
+                    <span>
+                        <strong>Thème : </strong> @Html.DisplayFor(model => Model.thematique, new { @class = "input" })
+                    </span>
+                    <span>
+                        <strong>Type de Textes :</strong> @Html.DisplayFor(model => Model.commandeType, new { @class = "input" })
+                    </span>
+                    <span>
+                        <strong>Nombre de mots : </strong>  @Html.DisplayFor(model => Model.nombre_mots, new { @class = "input" })
+                    </span>
                 </div>
             </div>
         </section>
+        <section class="clearfix submit-area">
+            <input type="submit" value="Accepter" class="btn btn-primary" onclick="@("window.location.href='" + @Url.Action("AcceptCommande", "Commandes", new {hash = ViewBag.hashCmde}) + "' ");">
+            @Html.ActionLink("Retour", "ListCommandes", "Commandes", new { @class = "btn btn-warning" })
+        </section>                    
     </div>
 </main>
