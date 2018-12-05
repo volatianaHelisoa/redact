@@ -1,43 +1,27 @@
-﻿@model RedactApplication.Models.UTILISATEURViewModel
+﻿
+
 @{
-    ViewBag.Title = "Contact";
+    ViewBag.Title = "Notification";
+ 
 }
 
-
-
-<div class="box-pop-up-envoye login-container-envoye innerpopup">
-    <div class="item-container  resetmessage">
-        <div class="iconmessrest">
-            <i class="fa fa-3x fa-check resetmsg "></i>
+<div class="flex-content flex-jcenter-acenter flex-col pop-up">
+    <div class="popup-container with-shadow">
+        <div class="head gradient-blue">
+            <h1>Terminé</h1>
         </div>
-        <div class="center_blc resetmessage">
-            <div class="formfields">
-                <div class="done-request">
-                   
-                    <h3><strong>Done !</strong></h3>
-                    <span class="ltl-consign messlab"><i class="fa fa-3x fa-info-circle"></i>We have just sent the reset password instructions to :</span>
-                    <div id="maildone">
-                        <a href="#" class="mail-reset-dest">
-                            @Model.userMail
-                        </a>
-                    </div>
-                    <div class="btn-submit">
+        <div class="content-section text-centered icon-bottom">
+            <i class="pop-icon green-bg"></i>
+            <p>Nous venons d'envoyer les instructions de réinitialisation du mot de passe à <strong class="green-text">@Model.userMail</strong></p>
+            
+                @using (Html.BeginForm("DoSendMail", "Login", FormMethod.Post))
+                {
+                    <input type="submit" class="btn btn-primary" value="Ok">
 
-                            @using (Html.BeginForm("DoSendMail", "Login", FormMethod.Post))
-                            {
-                                <input type="submit" class="messok" value="Ok">
-
-                            }
-                        </div>
-                    </div>
-
-            </div>
-            <div id="foot-notes">
-                <span style="font-weight: bold; font-size: 14px;"><i class="fa fa-3x fa-info-circle fa-mess"></i>Note about spam filters</span>
-                <span style="position:relative; top:10px;" class="ltl-consign">If you dont receive an email form us within a few minutes, please check your spam filter.</span>
-            </div>
+                }
+           
         </div>
     </div>
-</div>
 
+</div>
 

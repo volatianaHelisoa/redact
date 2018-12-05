@@ -1,19 +1,20 @@
 ﻿@{
     ViewBag.Title = "Commandes";
 }
-@section Scripts
-{
-    <script src="~/Scripts/GestionContact.js"></script>
-}
-<div class="popupModal">
-    <div class="icone_type">
-        <img src="~/images/icon-error.png" alt="Photo error">
+
+
+<div class="flex-content flex-jcenter-acenter flex-col pop-up">
+    <div class="popup-container with-shadow">
+        <div class="head gradient-blue">
+            <h1>OUPS !</h1>
+        </div>
+        <div class="content-section text-centered icon-bottom">
+            <i class="pop-icon green-bg"></i>
+            <p>Aucune selection trouvée.</p>
+            <form action="" method="post">
+                <button type="submit" class="btn btn-primary" onclick="@(" window.location.href='" + @Url.RouteUrl("Home", new {controller = "Commandes", action = "ListCommandes"}) + "' ");" >OK</button>
+            </form>
+        </div>
     </div>
-    <div class="pop_content">
-        <h3>OUPS !</h3>
-        <span class="ltl-consign"><i class="fa fa-info-circle"></i>No selection found.</span>
-        <ul class="bouttons_area">
-            <li><button type="submit" class="blue_hit" onclick="@(" window.location.href='" + @Url.RouteUrl("Home", new {controller = "Commandes", action = "ListCommandes"}) + "' ");">Ok</button></li>
-        </ul>
-    </div>
+
 </div>

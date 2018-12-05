@@ -2,17 +2,25 @@
 
 @{
     ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/LayoutConnected.cshtml";
 }
 
 @section Scripts{
-<script type="text/javascript" src="~/Scripts/js/clipboard.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/clipboard.min.js"></script>
+    <link rel="stylesheet" href="~/Content/css/elements/commandes.css">
+    <script type="text/javascript" src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+
     <script type="text/javascript">
         jQuery(document).ready(function () {
 
             var clipboard = new ClipboardJS('.btn-copy', {
                 text: function () {
-                    var htmlBlock = document.querySelector('.contenu-livre');
-                    return htmlBlock.innerHTML;
+                    var htmlBlock = document.querySelector('.commande-contenu');
+                    var balise_titre = $("#balise_titre").text();
+
+                    var res = "<h1>" + balise_titre + "</h1>" + htmlBlock.innerHTML;
+                    var contenu = res.replace(/(style="([^"]*)")/g, "");
+                    return contenu;
                 }
             });
             clipboard.on('success', function (e) {
@@ -21,284 +29,258 @@
             clipboard.on('error', function (e) {
                 console.log(e);
             });
-           
+
         });
-   
+
     </script>
+
 }
+@if (Session["name"] != null && @Session["role"] != null && @Session["role"].ToString() != "5")
+{
+    <main id="wrapper">
+        <div id="single-container">
+            <div class="onglets ease-in-out">
+                <ul>
+                    <li> @Html.ActionLink("Dashboard", "Dashboard", new { controller = "Home" }) </li>
+                    @if (@Session["role"] != null && @Session["role"].ToString() != "2" && @Session["role"].ToString() != "1")
+                    {
+                        <li> @Html.ActionLink("Utilisateurs", "ListeUser", new { controller = "Home" }) </li>
+                    }
+                    <li>@Html.ActionLink("Commandes", "ListCommandes", new { controller = "Commandes" }, new { @class = "active" })</li>
+                    @if (@Session["role"] != null && @Session["role"].ToString() != "1")
+                    {
+                        <li>@Html.ActionLink("Factures", "ListFacture", new { controller = "Facture" })</li>
 
-<main id="wrapper">
-    <div id="single-container">
-        <div class="onglets ease-in-out">
-            <ul>
-                <li><a href="">Utilisateurs</a></li>
-                <li><a href="" class="active">Commandes</a></li>
-                <li><a href="">Dolor sit amet</a></li>
-            </ul>
-        </div>
-        <div class="card back-office with-shadow">
-            <div class="head">
-                <h1>Commande n° 001</h1>
+                    }
+
+                </ul>
             </div>
-
-            <!-- Champs -->
-            <div class="container clearfix">
-                <div class="row">
-                    <section class="col-md-7 commande-view">
-                        <div class="section-title">
-                            <span>livrable</span>
-                        </div>
-                        <div class="wrap">
-                            <span>
-                                <strong>Titre : </strong>Turpis sapien molestie sem, hendrerit aliquam
-                            </span>
-                            <span>
-                                <strong>Contenu : </strong>
-                                <div class="commande-contenu">
-                                    <p>Aenean consectetur lacinia mollis. In eleifend erat non neque maximus, sed posuere lectus imperdiet. Nullam dui ante, ullamcorper non consequat ut, pulvinar non arcu. Ut id ante a diam faucibus pharetra. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras metus nisl, tempor et tincidunt in, semper et dolor. Vestibulum cursus, neque at sodales ultrices, velit nibh maximus turpis, ut euismod lacus massa vehicula ipsum. Vivamus accumsan volutpat lorem, nec tristique lorem pharetra nec. Vestibulum id lectus purus.</p>
-                                    <p>Integer eleifend tellus vitae augue elementum condimentum. Cras vel facilisis felis. Aenean congue, justo a pharetra condimentum, turpis sapien molestie sem, hendrerit aliquam tellus massa eu dolor. Pellentesque gravida mattis mi, non egestas mauris luctus at. Pellentesque semper vestibulum diam. Quisque at tincidunt leo.</p>
-                                </div>
-                                <div class="contenu-footer flex-content flex-jsbet-acenter">
-                                    <span>354 sur 500 Caractère(s) utilisé(s)</span>
-                                    <span id="copy">Copier</span>
-                                </div>
-                            </span>
-                        </div>
-                    </section>
-                    <section class="col-md-5 commande-resume">
-                        <div class="section-title">
-                            <span>Récapitulatif</span>
-                        </div>
-                        <div class="wrap with-shadow">
-                            <span>
-                              <strong>Demandeur :</strong>
-                              @Html.DisplayFor(model => model.commandeDemandeur)
-                            </span>
-                            <span>
-                                <strong>Redacteur  :</strong>
-                                @Html.DisplayFor(model => model.commandeRedacteur)
-                            </span>
-                            <span>
-                              <strong>Date de Commande :</strong>
-                              @Html.DisplayFor(model => model.date_cmde)
-                            </span>
-                            <span>
-                              <strong>Date de livraison :</strong>
-                              @Html.DisplayFor(model => model.dateLivraisonReel)
-                            </span>
-                            <span>
-                               <strong>Ordre de priorité :</strong>
-                               @Html.DisplayFor(model => model.ordrePriorite)
-                            </span>                           
-                            <span>
-                                <strong>Site :</strong>
-                                @Html.DisplayFor(model => model.projet)
-                            </span>
-                            <span><strong>Thème :</strong>
-                                @Html.DisplayFor(model => model.thematique)
-                            </span>
-                            <span>
-                               <strong>Type de contenu :</strong>
-                               Lorem ipsum
-                            </span>
-                            <span><strong>Mot clé principal :</strong>
-                                @Html.DisplayFor(model => model.mot_cle_pricipal)
-                            </span>
-                            <span>
-                                <strong>Mot clé secondaire :</strong>
-                                @Html.DisplayFor(model => model.mot_cle_secondaire)
-                            </span>
-                            <span>
-                                <strong>Texte d'ancrage :</strong>
-                                @Html.DisplayFor(model => model.texte_ancrage)
-                            </span>
-                            <span>
-                                @Html.DisplayFor(model => model.consigne_references, new { @class = "input" })
-                                <br />
-                                @Html.DisplayFor(model => model.consigneType, new { @class = "input" })
-                                <br />
-                                @Html.DisplayFor(model => model.consigne_autres, new { @class = "input" })
-                            </span>
-                        </div>
-
-                    </section>
+            <div class="card back-office with-shadow">
+                <div class="head">
+                    <h1>Commande n° @Model.commandeREF</h1>
                 </div>
-            </div>
 
-        </div>
-    </div>
-</main>
+                <!-- Champs -->
+                <div class="container clearfix">
+                    <div class="row">
+                        <section class="col-md-7 commande-view">
+                            <div class="section-title">
+                                <span>Livrable</span>
+                            </div>
+                            <div class="wrap">
+                                @if (@Session["role"] != null && @Session["role"].ToString() != "2")
+                                {
+                                    <div class="commande-not-delivered">
 
+                                        @if (Model.statut_cmde == "En cours" || Model.statut_cmde == "En attente")
+                                        {
+                                            <span>Livraison prévue le  @Model.date_livraison.Value.ToString("dd/MM/yyyy") </span>
+                                            <div class="flex-content flex-jsbet-acenter option">
+                                                <a class="item" onclick="@("window.location.href='" + @Url.Action("RelanceSMS", "Commandes", new {hash = Model.commandeId}) + "' ");">
+                                                    <span class="icon btn-warm"><i class="fa fa-paper-plane fa-2x"></i></span>
+                                                    Relancer par SMS
+                                                </a>
+                                                <a class="item" onclick="@("window.location.href='" + @Url.Action("RelanceMail", "Commandes", new {hash = Model.commandeId}) + "' ");">
+                                                    <span class="icon btn-primary"><i class="fa fa-envelope-open fa-2x"></i></span>
+                                                    Relancer par mail
+                                                </a>
 
-@*<main class="wrapperpages">
-    <div class="page pagesDivision clear">
-
-        <section class="column2 rightDivision fullWidth">
-            <div class="rowpad">
-                <div>
-                    <div class="admin-link-menu">
-
-                        <a href="~/Home/ListeUser" class="admin-link ">Utilisateurs</a>
-                        <a href="~/Commandes/ListCommandes" class="admin-link active">Commandes</a>
-                    </div>
-                    <!-- end admin menu -->
-                </div>
-                <div id="divisionContent">
-                    <div class="breadcrumb">
-                        <span>Commande > Détails de la commande</span>
-                        <hr />
-                    </div>
-                    <!-- top panel -->
-                    <div id="inner-top-panel" class="hidepanel clear">
-                        <div class="left search-bloc">
-                            <form method="get" action="" class="usr-srch">
-                                <div class="usr-srch--input-wrapper">
-                                    <input class="usr-srch--input" type="search" placeholder="Search" />
-                                </div>
-                                <input class="usr-srch--submit" type="submit" value="&#xf002;">
-                            </form>
-                        </div>
-
-                        <div class="right usr-create">
-                            <a href="#" title="Editer commande" class="green-btn">Editer commande</a>
-                        </div>
-                    </div>
-                    <!-- end top panel -->
-
-                    <div class="useredits innerform-container">
-
-                        <div class="dashEdit-user item-container">
-                            <i class="fa fa-3x"><img src="~/images/icon-create-custom.png" alt="Photo icon profil"></i>
-                            
-                            @if (Model != null)
-                            {
-                                <div class="center_blc">
-
-                                    <fieldset>
-                                        <div class="inline-form clr">
-                                            <input type="hidden" value="@Model.commandeId" name="idCommande">
-                                            <div>
-                                                    <span>Demandeur</span>
-                                                    @Html.DisplayFor(model => model.commandeDemandeur, new { @class = "input" })
-                                            </div>
-                                            <div>
-                                                    <span>Rédacteur</span>
-                                                    @Html.DisplayFor(model => model.commandeRedacteur, new { @class = "input" })
-                                            </div>
-                                            <div>
-                                                    <span>Date de commande </span>
-                                                    @Html.DisplayFor(model => model.date_cmde, new { @class = "input" })
-                                            </div>
-                                            <div>
-                                                    <span>Date de livraison </span>
-                                                    @Html.DisplayFor(model => model.dateLivraisonReel, new { @class = "input" })
-                                                 @if (Model.dateLivraisonReel > Model.date_livraison)
-                                                 {
-                                                    <span>Livraison en retard (prévue le @Model.date_livraison)</span> 
-                                                 }
-                                            </div>
-                                            <div>
-                                                <span>Ordre de priorité</span>
-                                                @Html.DisplayFor(model => model.ordrePriorite, new { @class = "input" })
-                                            </div>
-                                            <div>
-                                                <span>Site </span>
-                                                @Html.DisplayFor(model => model.projet, new { @class = "input" })
-                                            </div>
-                                            <div>
-                                                    <span>Thème </span>
-                                                    @Html.DisplayFor(model => model.thematique, new { @class = "input" })
-                                            </div>
-                                            <div>
-                                                    <span>Type de Textes </span>
-                                                    @Html.DisplayFor(model => model.commandeType, new { @class = "input" })
-                                            </div>
-                                            <div>
-                                                <span>Nombre de mots</span>
-                                                @Html.DisplayFor(model => model.nombre_mots, new { @class = "input" })
-                                            </div>
-                                            <div>
-                                                    <span>Mots clé principal</span>
-                                                    <p> @Html.DisplayFor(model => model.mot_cle_pricipal, new { @class = "input" })</p>
-                                                    <span>Mots clé secondaire</span>
-                                                    <p> @Html.DisplayFor(model => model.mot_cle_secondaire, new { @class = "input" })</p>
-                                                    <span>Texte d’ancrage</span>
-                                                    <p> @Html.DisplayFor(model => model.texte_ancrage, new { @class = "input" })</p>
-                                            </div>
-
-                                            <div>
-                                                    <span>Consignes </span>
-                                                    @Html.DisplayFor(model => model.consigne_references, new { @class = "input" })
-                                                    <br/>
-                                                    @Html.DisplayFor(model => model.consigneType, new { @class = "input" })
-                                                    <br/>
-                                                    @Html.DisplayFor(model => model.consigne_autres, new { @class = "input" })
-                                                
-                                            </div>
-                                            <div class="cmde-livre"> 
-                                                <div>
-                                                    <span>Titre </span>
-                                                    <p>@Html.DisplayFor(model => model.balise_titre, new {@class = "input"})</p>
-                                                </div>
-                                                <div>
-                                                    <span>Contenu </span>
-                                                 
-                                                    <div class="contenu-livre">@Html.Raw(Model.contenu_livre)</div>
-                                                   
-                                                   
-                                                    <span>@ViewBag.ComptMetaContenu / @Html.DisplayFor(model => model.nombre_mots, new { @class = "input" })</span>
-                                                    
-                                                    <button class="btn-copy" data-clipboard-action="copy" data-clipboard-target=".contenu-livre">Cut</button>
-                                                  
-                                                    
-                                                </div>
-                                                <div>
-                                                    <span>Statut de la commande </span>
-                                                    <p> @Html.DisplayFor(model => model.statut_cmde, new { @class = "input" })</p>
-                                                </div>
+                                                <a href="" title="Transferer commande" class="item" data-toggle="modal" data-target="#volumePopup">
+                                                    <span class="icon btn-success"><i class="fa fa-arrow-right fa-2x"></i></span>
+                                                    Transferer commande
+                                                </a>
+                                                <a class="item" onclick="@("window.location.href='" + @Url.Action("CommandeCancel", "Commandes", new {hash = Model.commandeId}) + "' ");">
+                                                    <span class="icon btn-warning"><i class="fa fa-undo fa-2x"></i></span>
+                                                    Annulation
+                                                </a>
 
                                             </div>
-                                          
-                                            <div>
-                                                
-                                                    <span>Notification paiement </span>
-                                                    @if (Model.etat_paiement == true)
-                                                    {
-                                                        <p>Payé</p>
-                                                    }
-                                                    else
-                                                    {
-                                                        <p>Non payé</p>
-                                                    }
-                                                  
-                                               
-                                            </div>
-                                           
-                                            <div class="clear"></div>
+                                        }
+                                        else if (Model.statut_cmde == "A corriger")
+                                        {
+                                            <span>Vous avez demandé une correction de la livraison prévue le  @Model.date_livraison.Value.ToString("dd/MM/yyyy").</span>
+                                        }
 
-                                            <div class="btn-submit sav_us1">
-                                              
-                                                @Html.ActionLink("Liste commande", "ListCommandes", "Commandes", new { }, new { @class = "resetbtn cacel_us1 left_b1" })
-                                            </div>
+                                        else if (Model.statut_cmde == "Annulé" || Model.statut_cmde == "Refusé")
+                                        {
+                                            <span>Livraison prévue le  @Model.date_livraison.Value.ToString("dd/MM/yyyy") a été annulée ou refusée.</span>
+                                        }
 
+                                    </div>
+                                }
+                                @if (Model.statut_cmde == "Livré" || Model.statut_cmde == "Validé" || Model.statut_cmde == "Refusé")
+                                {
+                                    <span>
+                                        <strong>Titre : </strong> <span id="balise_titre">
+                                            @Html.DisplayFor(model => model.balise_titre)
+                                        </span>
+                                    </span>
+                                    <div>
+                                        <strong>Contenu : </strong>
+                                        <div class="commande-contenu">
+                                            @Html.Raw(Model.contenu_livre)
                                         </div>
-                                    </fieldset>
 
-                                </div>
+                                        <div class="contenu-footer flex-content flex-jsbet-acenter">
+                                            <span> @ViewBag.ContentLength  sur @Html.DisplayFor(model => model.nombre_mots) mot(s) utilisé(s)</span>
+                                            <button class="btn-copy" data-clipboard-action="copy" data-clipboard-target=".commande-contenu">Copier</button>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </section>
+                        <section class="col-md-5 commande-resume">
+                            <div class="section-title">
+                                <span>@Html.DisplayFor(model => model.projet)</span>
+                            </div>
+                            <div class="wrap with-shadow">
+
+                                <span><strong>Demandeur :</strong>@Html.DisplayFor(model => model.commandeDemandeur)</span>
+                                <span><strong>Redacteur  :</strong>@Html.DisplayFor(model => model.commandeRedacteur)</span>
+
+                                <span>
+                                    <strong>Date de livraison :</strong> @Html.DisplayFor(model => model.date_livraison)
+                                    @if (Model.dateLivraisonReel > Model.date_livraison)
+                                    {
+                                        <span>Livraison en retard (prévue le @Model.date_livraison)</span>
+                                    }
+                                </span>
+
+                                <span><strong>Site :</strong> @Html.DisplayFor(model => model.site)</span>
+                                <span><strong>Tag :</strong> @Html.DisplayFor(model => model.tag)</span>
+                                <span><strong>Thème :</strong> @Html.DisplayFor(model => model.thematique)</span>
+                                <span><strong>Type de contenu :</strong>  @Html.DisplayFor(model => model.commandeType)</span>
+                                <span><strong>Mot clé principal :</strong> @Html.DisplayFor(model => model.mot_cle_pricipal)</span>
+
+                                <span><strong>Texte d'ancrage :</strong>@Html.DisplayFor(model => model.texte_ancrage)</span
+                            </div>
+
+                        </section>
+                        <div class="sep"></div>
+                        <span id="remarques">
+                            <div class="section-title">
+                                <span><i class="fa fa-exclamation-circle"></i>  Consignes et remarques</span>
+                            </div>
+                            <div class="contenu">
+                                <p>@Html.DisplayFor(model => model.consigne_references)</p>
+                                <p>@Html.DisplayFor(model => model.consigneType)</p>
+                                <p>@Html.DisplayFor(model => model.consigne_autres)</p>
+                                @if (Model.remarques != null)
+                                {
+                                    <p>
+                                        <span><strong>Remarques :</strong> @Html.DisplayFor(model => model.remarques)</span>
+                                    </p>
+                                }
+                            </div>
+                        </span>
+                        <section class="clearfix submit-area" id="toast">
+
+                            @if (Model.statut_cmde == "Livré" && Model.statut_cmde != "Annulé")
+                            {
+
+                                @Html.ActionLink("Accepter", "ValidCommande", "Commandes", new { @hash = Model.commandeId }, new { @class = "btn btn-success small" })
+
+                                <button type="submit" class="btn btn-warm small" onclick="UpdateCommandeClick(' @Model.commandeId ')">A corriger</button>
+
+                                <button type="submit" class="btn btn-warning small" onclick="RefuserCommandeClick(' @Model.commandeId ')">Refuser</button>
+
+                                @Html.ActionLink("Retour", "ListCommandes", "Commandes", new { }, new { @class = "btn btn-primary small" })
                             }
+                            else if (Model.statut_cmde != "Livré")
+                            {
+                                @Html.ActionLink("Retour", "ListCommandes", "Commandes", new { }, new { @class = "btn btn-primary" })
+                            }
+                        </section>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        @using (Html.BeginForm("CommandeTransfert", "Commandes", FormMethod.Post, new { role = "form", @id = "createcommande" }))
+        {
+            @Html.AntiForgeryToken()
+            <div id="volumePopup" style="" class="modal modal-popup in" aria-hidden="false">
+                <div class="flex-content flex-jcenter-acenter flex-col pop-up">
+                    <div class="popup-container with-shadow">
+                        <div class="content-section text-centered icon-bottom">
+                            <input type="hidden" name="idCommande" value="@Model.commandeId">
+                            <h2>Voulez-vous vraiment transférer cette commade ?</h2>
+                            <p> Confirmer le transfert en choisisssant un autre redacteur. </p>
+                            <label>
+
+                                @Html.DropDownListFor(x => Model.listOtherRedacteurId, new SelectList(Model.ListOtherRedacteur, "Value", "Text"), htmlAttributes: new { id = "SelectItemOtherRedacteur", placeholder = "Choisir Rédacteur" })
+                            </label>
+                            <section>
+                                <button type="submit" class="btn btn-warning" onclick="@("window.location.href='" + @Url.RouteUrl("Home", new { controller = "Commandes", action = "Choisir" }) + "'");">Changer rédacteur</button>
+
+                                <button type="button" class="btn btn-success" data-dismiss="modal">Annuler</button>
+                            </section>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+
+        }
+
+    </main>
+
+    <!--  Dialogue de modification   -->
+    <div id="updateCommandePoPup" style="display: none" class="popup-notif">
+        @Html.Partial("~/Views/Commandes/CommandeUpdateNote.cshtml")
     </div>
-</main>*@
+
+    <div id="refuserCommandePoPup" style="display: none" class="popup-notif">
+        @Html.Partial("~/Views/Commandes/CommandeRefuser.cshtml")
+    </div>
+}
+else
+{ Response.Redirect("~/Login/Accueil"); }
 
 
+<script>
+    /*pour la modifier commande*/
+    var UpdateCommandeClick = function (commande) {
+        //alert(user);
+        if (commande !== '') {
+
+            $.ajax({
+                type: 'POST',
+                url: '/Commandes/CommandeUpdateNote',
+                data: { hash: commande },
+                error: function (ex) {
+                    console.log(ex);
+                },
+                success: function () {
+                    $("#updateCommandePoPup").modal();
+                },
+                async: true,
+                processData: true
+            });
+        }
+    }
 
 
+    var RefuserCommandeClick = function (commande) {
+        //alert(user);
+        if (commande !== '') {
 
+            $.ajax({
+                type: 'POST',
+                url: '/Commandes/CommandeRefuser',
+                data: { hash: commande },
+                error: function (ex) {
+                    console.log(ex);
+                },
+                success: function () {
+                    $("#refuserCommandePoPup").modal();
+                },
+                async: true,
+                processData: true
+            });
+        }
+    }
 
+</script>
 
 
 

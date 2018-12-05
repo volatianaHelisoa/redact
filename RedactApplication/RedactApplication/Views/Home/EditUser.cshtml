@@ -8,32 +8,95 @@
     }
 
 
-    Layout = "~/Views/Shared/LayoutFullPage.cshtml";
-} 
-@section Scripts{   
-<script>
-    jQuery("div#CheckDivision").hide();
-    $("#checkContact").prop('checked', false);
-    $("#checkCampaign").prop('checked', false);
-    $("#checkClient").prop('checked', false);
-    @if ((@ViewBag.userRole == 1) || (@ViewBag.userRole == 4))
+    Layout = "~/Views/Shared/LayoutConnected.cshtml";
+}
+@section Scripts{
+
+    <link rel="stylesheet" href="~/Content/css/elements/profil.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css" rel="stylesheet" />
+
+    <script>
+    $("#checkReferenceur").prop('checked', false);
+    $("#checkRedacteur").prop('checked', false);
+    $("#checkManager").prop('checked', false);
+
+        @if (ViewBag.userRole == 1)
     {
-        @:jQuery("#checkContact").prop('checked', true);
+        @:jQuery("#checkReferenceur").prop('checked', true);
     }
-    @if ((@ViewBag.userRole == 2) || (@ViewBag.userRole == 4))
+    @if (ViewBag.userRole == 2)
     {
-        @:jQuery("#checkCampaign").prop('checked', true);
-        @:jQuery("div#CheckDivision").show();
+        @:jQuery("#checkRedacteur").prop('checked', true);
+
     }
     @if (@ViewBag.userRole == 3)
     {
-        @:jQuery("#checkClient").prop('checked', true);
+        @:jQuery("#checkManager").prop('checked', true);
     }
 
+    jQuery(document).ready(function () {
+
+        $('#SelectItemTheme').multiselect({
+            includeSelectAllOption: true,
+            enableFiltering : true
+        });
+
+        //var list = ["c435d8de-0cd4-49c9-b0a1-57220dbff08c", "5f93929a-350c-4d9d-a0cc-adba77d3af49"];
+        //$("#SelectItemTheme option").each(function (index, item) {
+
+        //    if (jQuery.inArray($(item).val(), list) != -1) {
+
+        //        $(this).prop("class", "active");
+        //    }
+        //})
+
+
+        jQuery("input[name='selectedRole']").change(function () {
+            var val = $(this).attr('id');
+
+            switch (val) {
+                case "checkReferenceur":
+                    if ($(this).is(':checked')) {
+                        $("#checkManager").prop('checked', false);
+                        $("#checkRedacteur").prop('checked', false);
+                        jQuery("#CheckEditRedacteur").hide();
+                    }
+                    break;
+                case "checkRedacteur":
+                    if ($(this).is(':checked')) {
+
+                        $("#checkManager").prop('checked', false);
+                        $("#checkReferenceur").prop('checked', false);
+
+                        $("#redactVolume").prop('required', 'required');
+                        $("#redactTarif").prop('required', 'required');
+                        jQuery("#CheckEditRedacteur").show();
+
+                    } else {
+                        $("#redactVolume").prop('required', '');
+                        $("#redactTarif").prop('required', '');
+                        jQuery("#CheckEditRedacteur").hide();
+                    }
+                    break;
+                case "checkManager":
+                    if ($(this).is(':checked')) {
+                        $("#checkReferenceur").prop('checked', false);
+                        $("#checkRedacteur").prop('checked', false);
+                        jQuery("#CheckEditRedacteur").hide();
+                    }
+                    break;
+            }
+        })
 
 
 
-</script>
+    });
+
+    </script>
+
+
+
 }
 @if (ViewBag.succes != null)
 {
@@ -45,235 +108,270 @@
         </script>
     }
 }
-<main class="wrapperpages">
-    <div class="page pagesDivision clear">
-     
+@if (Session["name"] != null && @Session["role"] != null  && @Session["role"].ToString() != "5")
+{
+    <main id="wrapper">
+        <div id="single-container">
+            <div class="onglets ease-in-out">
+                <ul>
+                    <li> @Html.ActionLink("Dashboard", "Dashboard", new { controller = "Home" }) </li>
+                    @if (@Session["role"] != null && @Session["role"].ToString() != "2")
+                    {
+                        <li> @Html.ActionLink("Utilisateurs", "ListeUser", new { controller = "Home" }, new { @class = "active" }) </li>
+                    }
+                    <li>@Html.ActionLink("Commandes", "ListCommandes", new { controller = "Commandes" })</li>
+                    @if (@Session["role"] != null && @Session["role"].ToString() != "1")
+                    {
+                        <li>@Html.ActionLink("Factures", "ListFacture", new { controller = "Facture" })</li>
+                    }
+                    </ul>
+            </div>
+            <div class="card back-office with-shadow">
+                <div class="head">
+                    <h1>Editer utilisateur</h1>
+                    <p>Veuillez remplir les champs Requis (*) et appuyez sur Enregistrer pour éditer un utilisateur</p>
+                </div>
 
-        <section class="column2 rightDivision fullWidth">
-            <div class="rowpad">
-               
-                <div id="divisionContent">
-                    <div class="breadcrumb">
-                        <span>User management > Edit user</span>
-                        <hr />
-                    </div>
-                    <!-- top panel -->
-                    <div id="inner-top-panel" class="hidepanel clear">
-                        <div class="left search-bloc">
-                            <form method="get" action="" class="usr-srch">
-                                <div class="usr-srch--input-wrapper">
-                                    <input class="usr-srch--input" type="search" placeholder="Search"/>
-                                </div>
-                                <input class="usr-srch--submit" type="submit" value="&#xf002;">
-                            </form>
-                        </div>
+                @if (ViewBag.ErrorUserCreation != null)
+                {
+                    <label class="error-msg ltl-consign text-centered">Cet adresse éléctronique existe déjà.</label>
+                }
 
-                        <div class="right usr-create">
-                            <a href="#" title="Create user" class="green-btn">Edit user</a>
-                        </div>
-                    </div>
-                    <!-- end top panel -->
 
-                    <div class="useredits innerform-container">
+                @using (Html.BeginForm("ModifierUtilisateur", "Home", FormMethod.Post, new { @class = "formfields", enctype = "multipart/form-data" }))
+                {
+                    <fieldset>
+                        <input type="hidden" value="@Model.userId" name="idUser">
+                        <div class="head">
+                            <div class="flex-content flex-jcenter-acenter edit-avatar">
+                                <span class="profil-thumb">
 
-                        <div class="dashEdit-user item-container">
-                            <i class="fa fa-3x"><img src="~/images/icon-create-custom.png" alt="Photo icon profil"></i>
-                            <h3>Edit user</h3>
-                            <span class="ltl-consign marg_span"><i class="fa fa-info-circle"></i> Please fill the required fields and press save to update the user data</span>
+                                    @if (!string.IsNullOrEmpty(Model.logoUrl))
+                                    {
+                                        <img id="new-profil-preview" src="@Model.logoUrl" alt="@Model.userNom" title="@Model.userNom" />
+                                    }
+                                    else
+                                    { <img id="new-profil-preview" src="~/images/avatar.png" alt="" srcset="" />}
+                                </span>
+                                <div class="flex-content flex-col change-avatar">
 
-                            @if (ViewBag.ErrorMail != null)
-                            {
-                                <label class="error-msg ltl-consign">The user mail is already exist.</label>
-                            }
-                            @if (ViewBag.ErrorMessage != null)
-                            {
-                                <label class="error-msg ltl-consign">Server error. Try later.</label>
-                            }
-                            @if (ViewBag.ErrorRole != null)
-                            {
-                                <label class="error-msg ltl-consign">You must choose the user role.</label>
-                            }
-                            @if (ViewBag.ErrorUserValidation != null)
-                            {
-                                <label class="error-msg ltl-consign">This email is not valid.</label>
-                            }
-
-                            @if (Model != null)
-                            {
-                                <div class="center_blc">
-                                    <div class="btn-submit withpad">
-                                        <input type="submit" onclick="@("window.location.href='" + @Url.RouteUrl("Home", new {controller = "Home", action = "sendMailRecovery", hash = @ViewBag.userId }) + "'");" value="Reset password">
+                                    <span class="file-name">Votre avatar</span>
+                                    @Html.TextBoxFor(m => m.logoUrl, new { type = "file", @class = "fileTriger", name = "file", id = "user-profil", accept = "image/*" })
+                                    <div class="input-custom">
+                                        <label for="user-profil" class="label-file">Choisir</label>
                                     </div>
 
-                                    @using (Html.BeginForm("ModifierUtilisateur", "Home", FormMethod.Post, new {@class = "formfields", enctype = "multipart/form-data" }))
-                                    {
-                                        <fieldset>
-                                            <div class="inline-form clr">
-                                                <input type="hidden" value="@Model.userId" name="idUser">
-                                                <div>
-                                                    <label>
-                                                        <span>Logo</span>
-                                                        
-                                                       
-                                                        @if (!string.IsNullOrEmpty(Model.logoUrl))
-                                                        {
-                                                            <img src="@Model.logoUrl" alt="@Model.userNom" title="@Model.userNom" style="width: 81px;height: 81px" />
-                                                        }
-
-                                                       
-                                                        
-                                                        @Html.TextBoxFor(m => m.logoUrl, new { type = "file", name = "file" })
-                                                    </label>
-                                                </div>
-                                                <div>
-                                                    <label>
-                                                        <span>Nom (*)</span>
-                                                        @Html.TextBoxFor(x => x.userNom, new {@class = "input", @required = true, @name = "name"})
-                                                    </label>
-                                                </div>
-
-                                                <div>
-                                                    <label>
-                                                        <span>Prénom</span>
-                                                        @Html.TextBoxFor(x => x.userPrenom, new {@class = "input",  @name = "name"})
-                                                    </label>
-                                                </div>
-
-                                                <div>
-                                                    <label>
-                                                        <span>Email (*)</span>
-                                                        @Html.TextBoxFor(x => x.userMail, new {@class = "input", @required = true, @name = "name", @type = "email", pattern = "/^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}" })
-                                                    </label>
-                                                </div>
-                                               @if (ViewBag.userRole == 2 ) //if redacteur user
-                                               {
-                                                <div>
-                                                    <label>
-                                                        <span>Skype </span>
-                                                        @Html.TextBoxFor(x => x.redactSkype, new {@class = "input", @required = true,  @name = "name"})
-                                                       
-                                                    </label>
-                                                </div>
-                                                <div>
-                                                    <label>
-                                                        <span>Téléphone </span>
-                                                        @Html.TextBoxFor(x => x.redactPhone, new {@class = "input",  @name = "name"})
-                                                    
-                                                    </label>
-                                                </div>
-                                                <div>
-                                                    <label>
-                                                        <span>Volume / jour</span>
-                                                        @Html.TextBoxFor(x => x.redactVolume, new {@class = "input", @required = true, @name = "name"})
-                                                      
-                                                    </label>
-                                                </div>
-                                                <div>
-                                                    <label>
-                                                        <span>Tarif</span>
-                                                        @Html.TextBoxFor(x => x.redactTarif, new {@class = "input", @required = true, @name = "name"})
-                                                    </label>
-                                                </div>
-
-                                                <div>
-                                                    <label>
-                                                        <span>Thèmes </span>
-                                                        @Html.TextBoxFor(x => x.redactThemes, new {@class = "input", @required = true, @name = "name"})
-                                                       
-                                                    </label>
-                                                </div>
-                                                if (ViewBag.userRoleEdit == "3")
-                                                {
-                                                    <div>
-                                                        <label>
-                                                            <span>Niveau </span>
-                                                            @Html.DropDownListFor(x => x.redactNiveau,
-                                                                new List<SelectListItem> {
-                                                                    new SelectListItem { Value = "Bas" , Text = "Bas" },
-                                                                    new SelectListItem { Value = "Moyen" , Text = "Moyen" },
-                                                                    new SelectListItem { Value = "Avancé" , Text = "Avancé" }
-                                                                },
-                                                                new { @class= "input" })
-                                                        </label>
-                                                    </div>
-                                                }
-
-                                                <div>
-                                                    <label>
-                                                        <span>Référenceur </span>
-                                                        @Html.TextBoxFor(x => x.redactReferenceur, new {@class = "input",  @name = "name"})
-                                                       
-                                                    </label>
-                                                </div>
-                                                    <div>
-                                                        <label>
-                                                            <span>Mode de paiement </span>
-                                                       
-                                                            @Html.DropDownListFor(x => x.redactModePaiement,
-                                                                new List<SelectListItem> {
-                                                                    new SelectListItem { Value = "Chèque" , Text = "Chèque" },
-                                                                    new SelectListItem { Value = "E-money" , Text = "E-money" },
-                                                                    new SelectListItem { Value = "Virement bacaire" , Text = "Virement bacaire" }
-                                                                },
-                                                                new { @class= "input" })
-                                                        </label>
-                                                    </div>
-                                               }
-                                                @if (ViewBag.userRoleEdit == "3")
-                                                {
-                                                    <div class="role">
-                                                        <label class="user-role-label">Role (*)</label>
-                                                        <div class="chkbox edt-chk">
-                                                            <span>
-                                                                <input type="checkbox" name="selectedRole" value="1" id="checkContact"/>
-                                                                <label for="Referenceur">Referenceur</label>
-                                                            </span>
-                                                            <span>
-                                                                <input type="checkbox" name="selectedRole" value="2" id="checkCampaign"/>
-                                                                <label for="Redacteur">Redacteur</label>
-                                                            </span>
-                                                            <span>
-                                                                <input type="checkbox" name="selectedRole" value="3" id="checkClient"/>
-                                                                <label for="Manager">Manager</label>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                }
-                                                <div class="clear"></div>
-                                            
-                                                <div class="btn-submit sav_us1">
-                                                    <button type="submit" value="Save">Save</button>
-                                                    @Html.ActionLink("Cancel", "ListeUser", "Home", new { }, new { @class = "resetbtn cacel_us1 left_b1" })
-                                                </div>
-                                                
-                                            </div>
-                                        </fieldset>
-                                    }
                                 </div>
-                            }
+                            </div>
                         </div>
-                    </div>
-                </div>
+
+                        <!-- Champs -->
+                        <section class="clearfix">
+                            <label for="" class="col-50 pull-left">
+                                Nom(*)
+                                @Html.TextBoxFor(x => x.userNom, new { @required = true })
+                            </label>
+                            <label for="" class="col-50 pull-right">
+                                Prénom
+                                @Html.TextBoxFor(x => x.userPrenom, new { @required = true })
+                            </label>
+                            <label for="" class="col-50 pull-left">
+                                E-mail(*)
+                                @Html.TextBoxFor(x => x.userMail, new { @required = true, @type = "email" })
+                                @if (ViewBag.ErrorUserValidation != null)
+                                {
+                                    <label class="error-msg ltl-consign input-error">Adresse mail invalide.</label>
+                                }
+
+                            </label>
+                            <label for="" class="col-50 pull-right">
+                                Skype
+                                @Html.TextBoxFor(x => x.redactSkype)
+                            </label>
+                            <label for="" class="col-50 pull-left">
+                                Téléphone
+                                @Html.TextBoxFor(x => x.redactPhone, new { @placeholder = "331110011", @maxlength = 9 })
+                                @if (ViewBag.ErrorPhoneValidation != null)
+                                {
+                                    <label class="error-msg ltl-consign input-error">Téléphone invalide.</label>
+                                }
+
+                            </label>
+                        </section>
+                        @if (@Session["role"] != null && @Session["role"].ToString() == "4")
+                        {
+
+                            <section class="clearfix">
+                                <div class="section-title">
+                                    <span>Role</span>
+                                </div>
+                                <label for="" class="col-100">
+                                    <label for="" class="col-100">
+                                        <input type="checkbox" name="selectedRole" value="1" id="checkReferenceur" style="display: inline-block; width: auto; vertical-align: middle; margin: 10px 0;" /> Referenceur
+                                    </label>
+
+                                    <label for="" class="col-100">
+
+                                        <input type="checkbox" name="selectedRole" value="2" id="checkRedacteur" style="display: inline-block; width: auto; vertical-align: middle; margin: 10px 0;" /> Redacteur
+                                    </label>
+                                    <label for="" class="col-100">
+
+                                        <input type="checkbox" name="selectedRole" value="3" id="checkManager" style="display: inline-block; width: auto; vertical-align: middle; margin: 10px 0;" />  Manager
+                                    </label>
+
+                                </label>
+                                <span class="sep"></span>
+                            </section>
+                        }
+                        else
+                        {
+                            <section class="clearfix">
+                                <div class="section-title">
+                                    <span>Role</span>
+
+                                </div>
+                                <label for="" class="col-100">
+                                    @if (ViewBag.ErrorMessage != null)
+                                    {
+                                        <label class="error-msg ltl-consign">Veuillez selectionner un role.</label>
+                                    }
+                                    <label for="" class="col-100">
+                                        <input type="checkbox" name="selectedRole" value="1" id="checkReferenceur" style="display: inline-block; width: auto; vertical-align: middle; margin: 10px 0;" disabled /> Referenceur
+                                    </label>
+
+                                    <label for="" class="col-100">
+
+                                        <input type="checkbox" name="selectedRole" value="2" id="checkRedacteur" style="display: inline-block; width: auto; vertical-align: middle; margin: 10px 0;" disabled /> Redacteur
+                                    </label>
+                                    <label for="" class="col-100">
+
+                                        <input type="checkbox" name="selectedRole" value="3" id="checkManager" style="display: inline-block; width: auto; vertical-align: middle; margin: 10px 0;" disabled />  Manager
+                                    </label>
+
+                                </label>
+                                <span class="sep"></span>
+                            </section>
+                        }
+                        @if (@Session["role"] != null && @Session["role"].ToString() != "2" && @Model.userRole == "2")
+                        {
+                            <section class="clearfix" id="CheckEditRedacteur">
+                                <div class="section-title">
+                                    <span>Redacteur informations</span>
+                                </div>
+                                <label for="" class="col-50 pull-right">
+                                    Volume / Jour
+                                    @Html.TextBoxFor(x => x.redactVolume, new { @type = "number" })
+                                </label>
+                                <label for="" class="col-50 pull-left">
+                                    Tarif (Ariary)
+                                    @Html.TextBoxFor(x => x.redactTarif, new { @type = "number" })
+                                </label>
+                                <label for="" class="col-50 pull-left">
+                                    Niveau
+                                    @Html.DropDownListFor(x => x.redactNiveau,
+                                                 new List<SelectListItem> {
+                                                                        new SelectListItem { Value = " " , Text = "Selectionner niveau" },
+                                                                        new SelectListItem { Value = "Bas" , Text = "Bas" },
+                                                                        new SelectListItem { Value = "Moyen" , Text = "Moyen" },
+                                                                        new SelectListItem { Value = "Avancé" , Text = "Avancé" }
+                                                 })
+                                </label>
+
+                                <label for="" class="col-50 pull-right">
+                                    Thèmes
+                                    <div class="clearfix dropdown-area">
+                                        @if (Model.listThemeId == null)
+                                        {
+                                            @Html.DropDownListFor(x => Model.listThemeId, new SelectList(Model.ListTheme, "Value", "Text"), htmlAttributes: new { id = "SelectItemTheme", multiple = "multiple" })
+                                        }
+                                        @if (Model.listThemeId != null)
+                                        {
+                                            @Html.ListBoxFor(model => model.listThemeId, Model.themeList, htmlAttributes: new { id = "SelectItemTheme", multiple = "multiple" })
+                                        }
+                                    </div>
+                                </label>
+
+                                <label for="" class="col-50 pull-left clearfix">
+                                    Mode de paiement
+                                    @Html.DropDownListFor(x => x.redactModePaiement,
+                                                  new List<SelectListItem> {
+                                                                         new SelectListItem { Value = " " , Text = "Selectionner mode de paiement" },
+                                                                         new SelectListItem { Value = "Chèque" , Text = "Chèque" },
+                                                                         new SelectListItem { Value = "E-money" , Text = "E-money" }
+                                                  })
+                                </label>
+
+                            </section>
+                        }
+
+                        @if (@Session["role"] != null && @Session["role"].ToString() == "2")
+                        {
+                            <section class="clearfix user-info" id="CheckEditRedacteur">
+                                <div class="section-title">
+                                    <span>Redacteur informations</span>
+                                </div>
+                                <label for="" class="col-50 pull-right">
+                                    <div class="item">
+                                        <strong>Volume / Jour</strong>
+                                        <span>@Html.DisplayFor(x => x.redactVolume, new { @type = "number" })</span>
+                                    </div>
+                                </label>
+                                <label for="" class="col-50 pull-left">
+                                    <div class="item">
+                                        <strong>Tarif (Ariary)</strong>
+                                        <span>@Html.DisplayFor(x => x.redactTarif, new { @type = "number" })</span>
+                                    </div>
+                                </label>
+                                <label for="" class="col-50 pull-right">
+                                    <div class="item">
+                                        <strong>Thèmes</strong>
+                                        <span>@Html.DisplayFor(x => x.redactThemes)</span>
+                                    </div>
+                                </label>
+                                <label for="" class="col-50 pull-left">
+                                    <div class="item">
+                                        <strong>Niveau</strong>
+                                        <span>@Html.DisplayFor(x => x.redactNiveau)</span>
+                                    </div>
+                                </label>
+
+                                <label for="" class="col-50 pull-left">
+                                    <div class="item">
+                                        <strong>Mode de paiement</strong>
+                                        <span>@Html.DisplayFor(x => x.redactModePaiement)</span>
+                                    </div>
+                                </label>
+                            </section>
+                        }
+                        @if (@Session["role"] != null && @Session["role"].ToString() != "2")
+                        {
+                            <section class="clearfix submit-area" id="toast">
+                                <input type="submit" value="Enregistrer" class="btn btn-success">
+                                @Html.ActionLink("Annuler", "ListeUser", "Home", new { }, new { @class = "btn btn-warning" })
+
+                            </section>
+                        }
+                        else
+                        {
+                            <section class="clearfix submit-area" id="toast">
+                                <input type="submit" value="Enregistrer" class="btn btn-success">
+                                @Html.ActionLink("Annuler", "DetailsRedacteurs", "Home", new { hash = Model.userId }, new { @class = "btn btn-warning" })
+
+                            </section>
+                        }
+                    </fieldset>
+                }
             </div>
-        </section>
+        </div>
+    </main>
+
+
+
+    <!--  Dialogue succès edit user   -->
+    <div id="EditUserPopUp" style="display:none" class="popup-notif">
+        @Html.Partial("~/Views/Home/EditUserConfirmation.cshtml")
     </div>
-</main>
- <!--  Dialogue succès edit user   -->
-<div id="EditUserPopUp">
-    @Html.Partial("~/Views/Home/EditUserConfirmation.cshtml")
-</div>
 
-
-
-<script>
-    
-
-
-    var GoToListUser = function (userId) {
-        document.location.href = "ListeUser";
-    };
-
-    var gotoSendMail = function () {
-        document.location.href = "sendMailRecovery?currentHash=" + @ViewBag.currentid;
-    }
-</script>
+}
+else
+{ Response.Redirect("~/Login/Accueil"); }
