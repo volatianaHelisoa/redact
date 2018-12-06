@@ -40,7 +40,7 @@
 
                 <!-- Champs -->
                 <div class="container clearfix">
-                    <section class="commande-resume">
+                    <section class="commande-resume large">
                         <div class="section-title">
                             <span>@Html.DisplayFor(model => model.projet)</span>
                         </div>
@@ -59,12 +59,11 @@
                                     </span>
                                   
                                     <span><strong>Site :</strong> @Html.DisplayFor(model => model.site)</span>
-                                </div>
-                                <div>
                                     <span><strong>Thème :</strong> @Html.DisplayFor(model => model.thematique)</span>
+                                <div>
+                                </div>
                                     <span><strong>Type de contenu :</strong>  @Html.DisplayFor(model => model.commandeType)</span>
                                     <span><strong>Mot clé principal :</strong> @Html.DisplayFor(model => model.mot_cle_pricipal)</span>
-                                    <span><strong>Mot clé secondaire :</strong>@Html.DisplayFor(model => model.mot_cle_secondaire)</span>
                                     <span><strong>Texte d'ancrage :</strong>@Html.DisplayFor(model => model.texte_ancrage)</span>
                                     <span><strong>Nombre de mots :</strong>@Html.DisplayFor(model => model.nombre_mots)</span>
                                 </div>
@@ -87,6 +86,18 @@
                                 }
                             </div>
                         </span>
+
+                        <span id="motcle2nd">
+                            <div class="section-title">
+                                <span><i class="fa fa-exclamation-circle"></i>  Mots clés secondaire</span>
+                            </div>
+                            <div class="contenu">
+                                <ul>
+                                    <li>@Html.DisplayFor(model => model.mot_cle_secondaire)</li>
+                                    <li>Lorem ipsum</li>
+                                </ul>
+                            </div>
+                        </span>
                     </section>
                 </div>
 
@@ -99,7 +110,6 @@
                     else
                     {
                         @Html.ActionLink("Retour", "ListCommandes", "Commandes", new { }, new { @class = "btn btn-primary" })
-
                     }
                 </div>
             </div>
